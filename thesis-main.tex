@@ -56,7 +56,7 @@ In a world where Internet of Things (\ac{IoT}) devices are becoming increasingly
     \begin{figure}
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/iot-devices.png}}
-        \caption{A variety of IoT devices communicating with each other.}
+        \caption{A variety of IoT devices communicating with each other in a real world scenario.}
         \label{fig:iot-devices}
     \end{figure}
     \Cref{fig:iot-devices}.
@@ -77,6 +77,43 @@ In a world where Internet of Things (\ac{IoT}) devices are becoming increasingly
 
 \subsection{Aggregate Programming}
 \textbf{Aggregate programming} is a distributed systems paradigm that simplifies programming large networks of devices by focusing on the global, system-level behavior rather than the individual behavior of each device.
+It shifts the abstraction to view the network as an aggregate, an agglomeration of nodes that collectively exhibit certain behaviors.
+This model is particularly well-suited for scenarios where devices need to coordinate and collaborate based on local interactions, such as in \ac{IoT} applications.
+As discussed in distributed field programming \cite{viroli2019aggregate}, there are principles to follow when designing large-scale systems:
+\begin{itemize}
+    \item The mechanisms ensuring robust coordination should operate transparently in the background, so that programmers don’t need to manage them directly.
+    \item The composition of modules and subsystems should be simple and predictable, allowing developers to clearly understand the consequences of combining components.
+    \item Large-scale distributed systems often consist of multiple heterogeneous subsystems, each of which may require different coordination strategies depending on the region or context in time.
+\end{itemize}
+Aggregate programming aims to overcome these challenges through three fundamental principles:
+\begin{enumerate}
+    \item The computational target is conceived as a region of the environment, with the underlying device-level details abstracted away, potentially even modeled as a continuous spatial domain.
+    \item The program logic is expressed as the manipulation of data structures that extend spatially and temporally across that region.
+    \item These computations are executed locally by individual devices within the region, which coordinate through resilient mechanisms and proximity-based interactions.
+\end{enumerate}
+The foundation of this paradigm lies on \textit{field calculus} \cite{beal2015aggregate},
+a core set of constructs modeling device behavior and interaction. These essential features are captured
+in a tiny universal language suitable for mathematical analysis.
+The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space–time domain to a scalar value.
+According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a function
+\[
+\phi : D \rightarrow L
+\]
+that maps each device $\delta$ in the domain $D$ to a local value $\ell$ in the range $L$.
+This value can change in time with a \textit{field evolution} that maps each point in time to a field value.
+\Cref{fig:layers-AP} shows how aggregate programming abstracts the complexity of the underlying distributed network and its
+ coordination challenges through a sequence of hierarchical abstraction layers.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/layers-AP.png}}
+    \caption{Layered structure of aggregate programming, illustrating the abstraction at each level.}
+    \label{fig:layers-AP}
+\end{figure}
+
+The messaging system developed in this thesis was implemented using \textit{Collektive} \cite{amslaurea31080}, an open-source framework for aggregate computing written in Kotlin. 
+This framework provides the developer-facing APIs (shown in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
+\subsection{Collektive}
+Collektive 
 
 
 \chapter{State of the art}
