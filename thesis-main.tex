@@ -27,6 +27,10 @@
   short = KMP,
   long  = Kotlin Multiplatform
 }
+\DeclareAcronym{DSL}{
+    short = DSL,
+    long  = Domain Specific Language
+}
 
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
@@ -126,11 +130,41 @@ Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to d
 \subsection{Collektive}
 Collektive is a framework with the purpose of simplifying the definition of Aggregate Computing systems.
 To achieve this, Collektive adopts the Field Calculus model, providing an intuitive way to define aggregate
-behavior without low-level coding. Built with \ac{KMP},it can be executed seamlessly on different targets.
+behavior without low-level coding. Built with \ac{KMP}, it can be executed seamlessly on different targets.
+Moreover, a compiler plugin was introduced to support function alignment, automatically annotating aligned functions to ensure consistent coordination among nodes
+\cite{amslaurea31080}.
+
+The main features of this framework can be summarized as follows \cite{collektive_docs}:
+\begin{itemize}
+\item \textbf{High-Level Abstraction}: Collektive streamlines the development of distributed behaviors by enabling developers to define coordination logic succinctly, without explicitly handling individual device states.
+\item \textbf{Declarative Programming}: The framework adopts a declarative paradigm, allowing developers to specify the desired system outcomes, while the underlying runtime manages the execution details.
+\item \textbf{Dynamic Adaptation}: Applications developed with Collektive can automatically adapt to network variations and external inputs, maintaining robustness in dynamic and unpredictable environments.
+\end{itemize}
+
+It provides a minimal \ac{DSL} where the developer can specify the
+collective behaviour of a network of devices and the devices can directly communicate with each other and execute the same program.
+
+\section{Motivations}
+In this section motivations for implementing a decentralized proximity-based messaging system will be illustrated.
+
+In recent years, the proliferation of \ac{IoT} and mobile devices has increased the need for local communication systems capable of operating even without stable network infrastructure. Centralized architectures, although efficient in connected environments, fail to guarantee reliability and resilience in dynamic or disconnected scenarios.
+As devices are becoming pervasive and ubiquitous, new models are required to enable coordination and information exchange without relying on fixed infrastructures.
+This need motivates the exploration of decentralized and distributed approaches, which can operate robustly in dynamic and connectivity-limited environments.
+
+% Describe what problem exists and why it’s challenging.
+% Focus on the technical or conceptual gap your thesis addresses.
+
+\subsection{Problem statement}
+
+% Give practical examples where your system or research could apply — 
+% this grounds your thesis in reality and shows relevance.
+\subsection{Real world use cases}
 
 
+% List what your thesis aims to achieve — clearly, concretely, and in your own scope.
+% This section connects the problem and use cases to your proposed solution.
 
-
+\subsection{Goal}
 \chapter{State of the art}
 
 
