@@ -4,7 +4,7 @@
 \usepackage{code-lstlistings}
 \usepackage{notes}
 \usepackage{shortcuts}
-\usepackage{acronym}
+\usepackage{acro}
 
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
@@ -14,13 +14,19 @@
 \subject{Programmazione ad Oggetti}
 \supervisor{Prof. Pianini Danilo}
 \cosupervisor{Dott.ssa Cortecchia Angela}
-% \morecosupervisor{Dott. CoSupervisor 2}
+
 \session{II}
 \academicyear{2024-2025}
 
-% Definition of acronyms
-\acrodef{IoT}{Internet of Thing}
-\acrodef{vm}[VM]{Virtual Machine}
+\acsetup{first-style=long-short}
+\DeclareAcronym{IoT}{
+  short = IoT,
+  long  = Internet of Things
+}
+\DeclareAcronym{KMP}{
+  short = KMP,
+  long  = Kotlin Multiplatform
+}
 
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
@@ -28,7 +34,6 @@
 \begin{document}
 
 \frontmatter\frontispiece
-
 
 \begin{abstract}	
 
@@ -51,34 +56,38 @@ To my family.
 \label{chap:introduction}
 %----------------------------------------------------------------------------------------
 \section{Context}
-In a world where Internet of Things (\ac{IoT}) devices are becoming increasingly prevalent,
+In a world where \ac{IoT} devices are becoming increasingly prevalent,
     the need for efficient and reliable communication systems is paramount
     \begin{figure}
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/iot-devices.png}}
-        \caption{A variety of IoT devices communicating with each other in a real world scenario.}
+        \caption{A variety of \ac{IoT} devices communicating with each other in a real world scenario.}
         \label{fig:iot-devices}
     \end{figure}
-    \Cref{fig:iot-devices}.
+    (\Cref{fig:iot-devices}).
+
     The interactions between neighboring devices play a crucial role in enabling seamless data exchange and coordination,
     so there is the need to design networks with infrastructures that support scalability, adaptability and reusability \cite{beal2015aggregate}.
     In the past, it was reasonable to use a programming model that focused on the
     individual computing device, and its relationship with one or more users.
     However, as systems have grown in scale and complexity with the number of computing devices rising,
     this method has become inadequate.
+
     Traditional network architectures, rely heavily on centralized
     infrastructures, making them unsuitable for scenarios such as disaster recovery or interactions with neighboring devices.
     The computational model of \textit{aggregate computing} provides a promising
     approach to address these challenges by enabling decentralized and self-organizing systems \cite{viroli2019aggregate}.
+    
     Building on this concept, this thesis explores how aggregate programming
     can support a proximity and decentralized messaging system in a network.
 
 
 
 \subsection{Aggregate Programming}
-\textbf{Aggregate programming} is a distributed systems paradigm that simplifies programming large networks of devices by focusing on the global, system-level behavior rather than the individual behavior of each device.
+\textbf{Aggregate Programming} is a distributed systems paradigm that simplifies programming large networks of devices by focusing on the global, system-level behavior rather than the individual behavior of each device.
 It shifts the abstraction to view the network as an aggregate, an agglomeration of nodes that collectively exhibit certain behaviors.
 This model is particularly well-suited for scenarios where devices need to coordinate and collaborate based on local interactions, such as in \ac{IoT} applications.
+
 As discussed in distributed field programming \cite{viroli2019aggregate}, there are principles to follow when designing large-scale systems:
 \begin{itemize}
     \item The mechanisms ensuring robust coordination should operate transparently in the background, so that programmers don’t need to manage them directly.
@@ -95,6 +104,7 @@ The foundation of this paradigm lies on \textit{field calculus} \cite{beal2015ag
 a core set of constructs modeling device behavior and interaction. These essential features are captured
 in a tiny universal language suitable for mathematical analysis.
 The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space–time domain to a scalar value.
+
 According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a function
 \[
 \phi : D \rightarrow L
@@ -110,10 +120,15 @@ This value can change in time with a \textit{field evolution} that maps each poi
     \label{fig:layers-AP}
 \end{figure}
 
-The messaging system developed in this thesis was implemented using \textit{Collektive} \cite{amslaurea31080}, an open-source framework for aggregate computing written in Kotlin. 
-This framework provides the developer-facing APIs (shown in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
+The messaging system developed in this thesis was implemented using \textit{Collektive} \cite{amslaurea31080}, 
+an open-source framework designed to simplify the development of distributed systems through the principles of Aggregate Programming. 
+Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
 \subsection{Collektive}
-Collektive 
+Collektive is a framework with the purpose of simplifying the definition of Aggregate Computing systems.
+To achieve this, Collektive adopts the Field Calculus model, providing an intuitive way to define aggregate
+behavior without low-level coding. Built with \ac{KMP},it can be executed seamlessly on different targets.
+
+
 
 
 \chapter{State of the art}
