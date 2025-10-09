@@ -8,7 +8,7 @@
 
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
-\title{Decentralized Messaging System with Aggregate Computing}
+\title{Multi-platform distributed systems with aggregate computing in Kotlin: the case of proximity messaging}
 \author{Luca Marchi}
 \date{\today}
 \subject{Programmazione ad Oggetti}
@@ -155,7 +155,18 @@ This need motivates the exploration of decentralized and distributed approaches,
 % Focus on the technical or conceptual gap your thesis addresses.
 
 \subsection{Problem statement}
+Traditional messaging systems and architectures often rely heavily on centralized servers and infrastructures, which are 
+unsuitable and vulnerable for scenarios where connectivity is not guaranteed. 
+These situations include \textbf{disaster recovery}, the process for restoring an organization's network infrastructure and operations after a disruptive event, such as a natural disaster, cyberattack, or system failure.
 
+In such environments there are several vulnerabilities and challenges to consider:
+\begin{itemize}
+    \item \textbf{Single point of failure}: Centralized systems are vulnerable to failures of the authority that makes decisions. This can lead to widespread service disruption and outages.
+    \item \textbf{Scalability issues}: As the number of devices increases, centralized systems may struggle to manage the growing volume of data and communication, leading to bottlenecks and delayed responses.
+    \item \textbf{Limited resilience}: Centralized architectures often lack the redundancy and fault tolerance needed to maintain functionality in the face of network disruptions or device failures.
+\end{itemize}
+The networks that need to overcome the issues above can benefit from Aggregate Computing principles, which provides
+a distributed architecture where the nodes can directly communicate with the neighbors.
 % Give practical examples where your system or research could apply — 
 % this grounds your thesis in reality and shows relevance.
 \subsection{Real world use cases}
