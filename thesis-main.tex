@@ -32,6 +32,11 @@
     long  = Domain Specific Language
 }
 
+\DeclareAcronym{UI}{
+    short = UI,
+    long  = User Interface
+}
+
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
@@ -104,7 +109,7 @@ Aggregate programming aims to overcome these challenges through three fundamenta
     \item The program logic is expressed as the manipulation of data structures that extend spatially and temporally across that region.
     \item These computations are executed locally by individual devices within the region, which coordinate through resilient mechanisms and proximity-based interactions.
 \end{enumerate}
-The foundation of this paradigm lies on \textit{field calculus} \cite{beal2015aggregate},
+The foundation of this paradigm lies in \textit{field calculus} \cite{beal2015aggregate},
 a core set of constructs modeling device behavior and interaction. These essential features are captured
 in a tiny universal language suitable for mathematical analysis.
 The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space–time domain to a scalar value.
@@ -167,16 +172,56 @@ In such environments there are several vulnerabilities and challenges to conside
 \end{itemize}
 The networks that need to overcome the issues above can benefit from Aggregate Computing principles, which provides
 a distributed architecture where the nodes can directly communicate with the neighbors.
+
 % Give practical examples where your system or research could apply — 
 % this grounds your thesis in reality and shows relevance.
 \subsection{Real world use cases}
+As mentioned in the previous sections, there are several scenarios where a decentralized proximity-based messaging system can be particularly beneficial.
 
+The main use case of such system is in emergency situations. 
+When natural disasters, or infrastructure failures occur, cellular networks and Internet connections often go down, making it difficult for people to communicate and coordinate rescue efforts.  
+Nearby devices can form ad-hoc Bluetooth or Wi-Fi Direct networks, allowing users in the same area to propagate and share messages without relying on centralized servers.
 
+This architecture can also be useful in large \ac{IoT} networks like sensors systems or drones swarms, operating in remote areas and with the need to communicate without continuous Internet access.
+
+The system's decentralized nature fits perfectly for:
+\begin{itemize}
+    \item Exchanging local environmental data (temperature, humidity, motion).
+    \item Maintaining distributed consensus or context awareness among nearby nodes.
+    \item Avoiding single points of failure.
+\end{itemize}
+A practical example includes a network of environmental sensors deployed in a forest to monitor conditions and detect wildfires (\Cref{fig:use-cases}), or sensors in a smart agriculture field that share humidity data to coordinate irrigation locally.
+\begin{figure}[h!]
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/The-proposed-architecture-for-forest-fire-detection.png}}
+    \caption{Real-world use case of a decentralized proximity-based messaging application built on Aggregate Computing principles.
+     In this scenario, sensors located near the fire detect the event and propagate an alert message to neighboring nodes within the network. \cite{inproceedings}}
+    \label{fig:use-cases}
+\end{figure}
 % List what your thesis aims to achieve — clearly, concretely, and in your own scope.
 % This section connects the problem and use cases to your proposed solution.
 
 \subsection{Goal}
-\chapter{State of the art}
+This thesis can be devided into two main goals:
+\begin{enumerate}
+    \item \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of Aggregate Computing. 
+    The network operates in a fully distributed manner, without any central server managing message exchange. 
+    Each node acts autonomously, coordinating with its neighbors through local interactions and collectively achieving self-organization, thereby eliminating single points of failure. 
+    Communication is proximity-based: devices can only interact with nearby nodes, and messages are propagated progressively across the network, layer by layer. 
+    The algorithm must also handle dynamic network topologies, where devices can join or leave the network at any time, ensuring robustness and adaptability. 
+    Message sources can define both an expiration time and a maximum propagation distance, enabling controlled diffusion and limiting unnecessary communication overhead. 
+    The system is implemented using the \textit{Collektive} framework \cite{amslaurea31080}, leveraging \ac{KMP} to ensure cross-platform compatibility across different targets including 
+    JVM, Javascript (browser), Android, iOS, and native versions (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
+
+    \item \textbf{Mobile application}: The second goal is to develop a multiplatform mobile application using \ac{KMP}. 
+    This application leverages the messaging algorithm as a core library to send and receive messages from devices in the network. 
+    The app must support both Android and iOS platforms providing a simple, user-friendly interface.
+    The \ac{UI} allows users to compose messages, configure parameters (expiration time and propagation distance), and view received messages in real-time.
+
+\end{enumerate}
+
+\section{State of Art}
+
 
 
 \chapter{Contribution}
