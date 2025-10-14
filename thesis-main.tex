@@ -222,6 +222,7 @@ This thesis can be devided into two main goals:
     This application leverages the messaging algorithm as a core library to send and receive messages from devices in the network. 
     The app must support both Android and iOS platforms providing a simple, user-friendly interface.
     The \ac{UI} allows users to compose messages, configure parameters (expiration time and propagation distance), and view received messages in real-time.
+    Another feature is the anonymization of the users, there is not any registration or login system, the users are completely anonymous. Anybody can use the app without providing any personal information.
 
 \end{enumerate}
 
@@ -229,6 +230,29 @@ This thesis can be devided into two main goals:
 In this section, it will be presented the state of the art in the field of decentralized communication systems.
  The focus will be on the main existing systems, aggregate computing frameworks, and lightweight \ac{P2P} protocols that enable infrastructure-less connectivity.
 \subsection{Existing systems}
+Several communication technologies and systems have been developed over the years to facilitate decentralized data exchange among devices.
+The software that has spread the most and gained significant attention includes: Briar, Bridgefy, FireChat.
+\subsubsection{Briar}
+\textbf{Briar} \cite{briar} is an open-source \ac{P2P} messaging platform designed for secure,
+ resilient communication without centralized servers.
+It supports multiple transport methods including Bluetooth, Wi-Fi, Tor, and removable storage (USB sticks), with all communication end-to-end encrypted.
+
+The primary target audience includes activists, journalists, and civil society members who require secure communication in restricted or infrastructure-limited environments.
+
+A notable feature is the ability to install Briar on an Android device directly from another device that already has it installed, facilitating deployment in disconnected scenarios.
+Nowadays the application is available only for Android devices, with no official iOS version.
+
+\subsubsection{Bridgefy}
+\textbf{Bridgefy} \cite{bridgefy} is a mobile messaging application that enables offline communication through Bluetooth mesh networking technology.
+
+The platform allows smartphones to connect directly with nearby devices, creating a decentralized mesh network that can relay messages across multiple hops without requiring Internet connectivity.
+Originally designed for emergency situations and large gatherings where cellular networks become congested, Bridgefy has been deployed in various crisis scenarios including natural disasters and political protests.
+
+Messages are automatically routed through intermediate devices, extending the effective communication range beyond direct Bluetooth connectivity (typically 100 meters).
+Bridgefy implements encryption protocols to secure message transmission, though the specific implementation has evolved across different versions of the platform.
+
+The service operates on both Android and iOS devices, with a user-friendly interface designed for rapid adoption during emergency situations.
+One limitation is the reliance on device density: the mesh network requires sufficient nearby users to establish reliable multi-hop communication paths.
 
 \subsection{Aggregate computing frameworks}
 
