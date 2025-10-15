@@ -58,6 +58,11 @@
     long  = Personal Area Network
 }
 
+\DeclareAcronym{MQTT}{
+    short = MQTT,
+    long  = Message Queuing Telemetry Transport
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -222,9 +227,9 @@ A practical example includes a network of environmental sensors deployed in a fo
 % This section connects the problem and use cases to your proposed solution.
 
 \subsection{Goal}
-This thesis can be devided into two main goals:
+This thesis can be divided into two main goals:
 \begin{enumerate}
-    \item \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of aggregate computing. 
+    \item \label{goal:algorithm} \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of aggregate computing. 
     The network operates in a fully distributed manner, without any central server managing message exchange. 
     Each node acts autonomously, coordinating with its neighbors through local interactions and collectively achieving self-organization, thereby eliminating single points of failure. 
     Communication is proximity-based: devices can only interact with nearby nodes, and messages are propagated progressively across the network, layer by layer. 
@@ -232,8 +237,7 @@ This thesis can be devided into two main goals:
     Message sources can define both an expiration time and a maximum propagation distance, enabling controlled diffusion and limiting unnecessary communication overhead. 
     The system is implemented using the \textit{Collektive} framework \cite{amslaurea31080}, leveraging \ac{KMP} to ensure cross-platform compatibility across different targets including 
     JVM, Javascript (browser), Android, iOS, and native versions (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
-
-    \item \textbf{Mobile application}: The second goal is to develop a multiplatform mobile application using \ac{KMP}. 
+    \item \label{goal:application} \textbf{Mobile application}: The second goal is to develop a multiplatform mobile application using \ac{KMP}. 
     This application leverages the messaging algorithm as a core library to send and receive messages from devices in the network. 
     The app must support both Android and iOS platforms providing a simple, user-friendly interface.
     The \ac{UI} allows users to compose messages, configure parameters (expiration time and propagation distance), and view received messages in real-time.
@@ -250,7 +254,7 @@ The software that has spread the most and gained significant attention includes:
 \subsubsection{Briar}
 \textbf{Briar} \cite{briar} is an open-source \ac{P2P} messaging platform designed for secure,
  resilient communication without centralized servers.
-It supports multiple transport methods including Bluetooth, Wi-Fi, Tor, and removable storage (USB sticks), with all communication end-to-end encrypted.
+It supports multiple transport methods including Bluetooth, Wi-Fi and Tor, with all communication end-to-end encrypted.
 Briar provide a mailbox system \textit{Briar Mailbox} that lets the users receive encrypted messages from their contacts while Briar is offline. Next time Briar comes online it will automatically fetch the messages from the Mailbox.
 The primary target audience includes activists, journalists, and civil society members who require secure communication in restricted or infrastructure-limited environments.
 
@@ -349,8 +353,6 @@ It has no compatibility with classic Bluetooth, meaning that devices supporting 
 
 Another similar protocol is \textbf{Wi-Fi Direct}, a wireless standard that enables devices to connect directly (using Wi-Fi) to each other without the need for a traditional access point or router.
 It allows peer-to-peer communication using standard Wi-Fi technology, offering higher data transfer rates and longer range compared to Bluetooth-based solutions.
-
-The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{BLE} and Wi-Fi Direct.
 \begin{table}[h!]
 \centering
 \caption{Comparison between \ac{BLE} and Wi-Fi Direct.}
@@ -386,6 +388,23 @@ The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{
 \end{tabular}
 \end{table}
 
+The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{BLE} and Wi-Fi Direct.
+
+On the other hand, \textbf{\ac{MQTT}} relies on a central broker to manage message distribution.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/mqtt.png}}
+    \caption{MQTT architecture, illustrating the publish-subscribe model with clients and a central broker.}
+    \label{fig:mqtt-architecture}
+\end{figure}
+It follows a publish-subscribe model (\Cref{fig:mqtt-architecture}) where the centralized server known as Broker is connected to various devices which are Clients \cite{usmani2021mqtt}.
+The latter publish messages to specific topics, while subscribers receive only the data relevant to them.
+
+\ac{MQTT} is widely used in \ac{IoT} systems due to its lightweight nature and efficient use of bandwidth.
+
+In the current implementation of the proposed application \ref{goal:application}, \ac{MQTT} is employed as the communication layer to handle messages across devices. 
+Although it relies on a central broker and is therefore not fully decentralized, its advantages make it suitable for prototyping and testing the distributed algorithm \ref{goal:algorithm}. 
+Future developments may involve replacing \ac{MQTT} with peer-to-peer technologies such as Bluetooth, to achieve complete decentralization.
 
 
 \chapter{Contribution}
