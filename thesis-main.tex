@@ -209,7 +209,7 @@ A practical example includes a network of environmental sensors deployed in a fo
 \subsection{Goal}
 This thesis can be devided into two main goals:
 \begin{enumerate}
-    \item \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of Aggregate Computing. 
+    \item \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of aggregate computing. 
     The network operates in a fully distributed manner, without any central server managing message exchange. 
     Each node acts autonomously, coordinating with its neighbors through local interactions and collectively achieving self-organization, thereby eliminating single points of failure. 
     Communication is proximity-based: devices can only interact with nearby nodes, and messages are propagated progressively across the network, layer by layer. 
@@ -228,19 +228,25 @@ This thesis can be devided into two main goals:
 
 \section{State of Art}
 In this section, it will be presented the state of the art in the field of decentralized communication systems.
- The focus will be on the main existing systems, aggregate computing frameworks, and lightweight \ac{P2P} protocols that enable infrastructure-less connectivity.
+ The focus will be on the main existing systems, aggregate computing frameworks, and lightweight communication protocols.
 \subsection{Existing systems}
 Several communication technologies and systems have been developed over the years to facilitate decentralized data exchange among devices.
-The software that has spread the most and gained significant attention includes: Briar, Bridgefy, FireChat.
+The software that has spread the most and gained significant attention includes: \textit{Briar}, \textit{Bridgefy}, \textit{FireChat}.
 \subsubsection{Briar}
 \textbf{Briar} \cite{briar} is an open-source \ac{P2P} messaging platform designed for secure,
  resilient communication without centralized servers.
 It supports multiple transport methods including Bluetooth, Wi-Fi, Tor, and removable storage (USB sticks), with all communication end-to-end encrypted.
-
+Briar provide a mailbox system \textit{Briar Mailbox} that lets the users receive encrypted messages from their contacts while Briar is offline. Next time Briar comes online it will automatically fetch the messages from the Mailbox.
 The primary target audience includes activists, journalists, and civil society members who require secure communication in restricted or infrastructure-limited environments.
 
 A notable feature is the ability to install Briar on an Android device directly from another device that already has it installed, facilitating deployment in disconnected scenarios.
 Nowadays the application is available only for Android devices, with no official iOS version.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/briar.png}}
+    \caption{Diagram illustrating how Briar supports private messaging, public forums, and blogs through multiple transport methods such as Bluetooth, Wi-Fi, and the Internet. \protect\cite{briar}.}
+    \label{fig:briar-architecture}
+\end{figure}
 
 \subsubsection{Bridgefy}
 \textbf{Bridgefy} \cite{bridgefy} is a mobile messaging application that enables offline communication through Bluetooth mesh networking technology.
@@ -249,14 +255,47 @@ The platform allows smartphones to connect directly with nearby devices, creatin
 Originally designed for emergency situations and large gatherings where cellular networks become congested, Bridgefy has been deployed in various crisis scenarios including natural disasters and political protests.
 
 Messages are automatically routed through intermediate devices, extending the effective communication range beyond direct Bluetooth connectivity (typically 100 meters).
-Bridgefy implements encryption protocols to secure message transmission, though the specific implementation has evolved across different versions of the platform.
+Bridgefy uses encryption protocols to secure message transmission; this capability was not available in the app's initial versions.
 
 The service operates on both Android and iOS devices, with a user-friendly interface designed for rapid adoption during emergency situations.
 One limitation is the reliance on device density: the mesh network requires sufficient nearby users to establish reliable multi-hop communication paths.
 
-\subsection{Aggregate computing frameworks}
 
-\subsection{Lightweight P2P protocols}
+\subsubsection{FireChat}
+\textbf{Firechat} was the first popular example of a messaging application that used mesh network topology to communicate between users.
+
+\cite{7937749} FireChat relays messages from one device to another through each user's WiFi or Bluetooth radios, thereby creating a “mesh” of phones receiving and relaying messages even when each message is not viewable on every device (\Cref{fig:firechat-architecture}).
+ This method of communication eliminates the need for centralized communication channels such as cellphone towers that every transmission must pass through.
+While this system is beneficial in overcrowded networks, it eliminates the possibility of controlling or monitoring the network at one point.
+
+Although not originally intended for this purpose, FireChat was widely adopted during civil protests.
+ The application gained popularity in Iraq in 2014, when government restrictions limited Internet access, and later during the 2014 Hong Kong protests (known as the Umbrella Revolution)
+
+Nowadays Firechat is discontinued and no longer available on app stores, the official website is also offline.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/bluetooth-mesh.png}}
+    \caption{FireChat's mesh networking architecture, where messages are relayed through nearby devices using WiFi and Bluetooth, enabling communication without centralized infrastructure.}
+    \label{fig:firechat-architecture}
+\end{figure}
+
+\subsubsection{Final considerations} Those three illustrated applications have more or less the same purpose of providing a decentralized approach to messaging.
+\textit{Briar} stands out for its strong emphasis on security and privacy, making it suitable for users in sensitive situations. 
+\textit{Bridgefy} is the most user-friendly and practical, focused on connecting users in emergency scenarios; encryption was included in later versions.
+\textit{FireChat} was the pioneering first popular example, but now outdated and discontinued. It inspired newer applications.
+
+These applications demonstrate the feasibility of decentralized communication, they rely on predefined routing or broadcasting protocols.
+ None of them incorporate \textit{spatial awareness} or \textit{self-organizing behavior}, features that are naturally modeled through \textit{aggregate computing}.
+
+\subsection{Aggregate computing frameworks}
+There are several frameworks and libraries that facilitate the development of aggregate computing applications, 
+implementing the principles of field calculus and providing abstractions for defining collective behaviors.
+Some of the most notable ones include:
+\begin{itemize}
+    \item \textbf{ScaFi} (Scala Field) is a framwork written in Scala for aggregate computing. 
+\end{itemize}
+
+\subsection{Lightweight communication protocols}
 
 
 \chapter{Contribution}
