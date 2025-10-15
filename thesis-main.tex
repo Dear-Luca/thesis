@@ -5,6 +5,7 @@
 \usepackage{notes}
 \usepackage{shortcuts}
 \usepackage{acro}
+\usepackage{booktabs}
 
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
@@ -47,6 +48,15 @@
     long  = Peer-to-Peer
 }
 
+\DeclareAcronym{BLE}{
+    short = BLE,
+    long  = Bluetooth Low Energy
+}
+
+\DeclareAcronym{PAN}{
+    short = PAN,
+    long  = Personal Area Network
+}
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
@@ -304,17 +314,78 @@ implementing the principles of field calculus and providing abstractions for def
 Some of the most notable ones include:
 \begin{itemize}
     \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for aggregate computing \cite{CASADEI2022101248}. 
-    It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs.
+    It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs, the high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
     \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist simulator \cite{10.1007/978-3-030-78198-9_10}.
-    The high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
+    
     The main applications are in the development of swarm systems, crowd management, wireless sensor network and
     smart city applications.
+
     \textit{ScaFi} only supports JVM and web-based applications.
-    \item \textbf{Protelis} 
+    \item \textbf{Protelis} \cite{10.1145/2695664.2695913} is a programming language designed to simplify the development of resilient and well-structured networked systems, and can be integrated into various simulation frameworks. 
+    It provides a Java-hosted implementation of the field calculus through the \texttt{protelis-lang} library, offering a domain-general foundational API for aggregate programming \cite{8064092}.
+    \begin{figure}
+        \centering
+        \fbox{\includegraphics[width=.8\linewidth]{figures/protelis.png}}
+        \caption{Protelis architecture.}
+        \label{fig:protelis-architecture}
+    \end{figure}
+    The Protelis architecture (\Cref{fig:protelis-architecture}) relies on an interpreter that periodically executes pre-parsed aggregate programs, enabling communication among devices and interaction with the environment.
+    However, since it is built on the Xtext framework for domain-specific languages and requires a JVM to run, its deployment is limited to Java-compatible devices, reducing platform heterogeneity.
 
 \end{itemize}
 
 \subsection{Lightweight communication protocols}
+In the context of decentralized and distributed messaging systems, \textbf{lightweight communication protocols} are essential for efficient data exchange among devices with limited resources.
+A lightweight protocol minimizes overhead transmitted on top of the functional data, useful in scenarios where bandwidth, power, or processing capacity is limited.
+With the proliferation of \ac{IoT} and mobile devices, these protocols have become crucial in modern networking.
+
+Keeping in mind the distributed nature of the system, we can consider the following technologies.
+
+\textbf{\ac{BLE}} formerly marked as \textit{Bluetooth Smart}, is a wireless \ac{PAN} technology designed for short-range communication with low power consumption.
+\ac{BLE} uses the same 2.4 GHz radio frequency as classic Bluetooth but employs a different protocol stack optimized for energy usage.
+It has no compatibility with classic Bluetooth, meaning that devices supporting only one of the two standards cannot communicate directly.
+
+\ac{BLE} supports device discovery and connection through low-duty advertising and scanning cycles, enabling the creation of ad-hoc networks for proximity-based communication.
+
+Another similar protocol is \textbf{Wi-Fi Direct}, a wireless standard that enables devices to connect directly (using Wi-Fi) to each other without the need for a traditional access point or router.
+It allows peer-to-peer communication using standard Wi-Fi technology, offering higher data transfer rates and longer range compared to Bluetooth-based solutions.
+
+The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{BLE} and Wi-Fi Direct.
+\begin{table}[h!]
+\centering
+\caption{Comparison between \ac{BLE} and Wi-Fi Direct.}
+\label{tab:ble-wifidirect}
+\begin{tabular}{p{4cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Feature} & \textbf{\ac{BLE}} & \textbf{Wi-Fi Direct} \\ 
+\midrule
+
+\textbf{Communication range} & Typically up to 50 meters (depending on environment) & Up to 200 meters (depending on device and power) \\[4pt]
+\midrule
+
+\textbf{Data rate} & Up to 2 Mbps (BLE 5.0) & Up to 250 Mbps \\[4pt]
+\midrule
+
+\textbf{Consumption} & Very low, optimized for battery-powered devices & Higher, comparable to standard Wi-Fi \\[4pt]
+\midrule
+
+\textbf{Network topology} & Simple connections or small mesh networks & Group-based topology with a dynamically assigned group owner \\[4pt]
+\midrule
+
+\textbf{Connection setup} & Fast, lightweight pairing through advertising and scanning & Slower setup, requires negotiation between devices \\[4pt]
+\midrule
+
+\textbf{Use cases} & Sensor networks, wearables, proximity-based messaging & File sharing, multimedia streaming, ad-hoc data exchange \\[4pt]
+\midrule
+
+\textbf{Advantages} & Energy efficient, widely supported, ideal for IoT & High throughput, longer range, infrastructure-free \\[4pt]
+\midrule
+
+\textbf{Limitations} & Limited bandwidth and range & Higher energy consumption, more complex setup \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 
 
 \chapter{Contribution}
