@@ -37,6 +37,11 @@
     long  = User Interface
 }
 
+\DeclareAcronym{GUI}{
+    short = GUI,
+    long  = Graphical User Interface
+}
+
 \DeclareAcronym{P2P}{
     short = P2P,
     long  = Peer-to-Peer
@@ -290,9 +295,23 @@ These applications demonstrate the feasibility of decentralized communication, t
 \subsection{Aggregate computing frameworks}
 There are several frameworks and libraries that facilitate the development of aggregate computing applications, 
 implementing the principles of field calculus and providing abstractions for defining collective behaviors.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/scafi.png}}
+    \caption{High-level architecture of the ScaFi framework, illustrating its components ~\protect\cite{CASADEI2022101248}.}
+    \label{fig:scafi-architecture}
+\end{figure}
 Some of the most notable ones include:
 \begin{itemize}
-    \item \textbf{ScaFi} (Scala Field) is a framwork written in Scala for aggregate computing. 
+    \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for aggregate computing \cite{CASADEI2022101248}. 
+    It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs.
+    \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist simulator \cite{10.1007/978-3-030-78198-9_10}.
+    The high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
+    The main applications are in the development of swarm systems, crowd management, wireless sensor network and
+    smart city applications.
+    \textit{ScaFi} only supports JVM and web-based applications.
+    \item \textbf{Protelis} 
+
 \end{itemize}
 
 \subsection{Lightweight communication protocols}
