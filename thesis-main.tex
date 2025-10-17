@@ -9,7 +9,7 @@
 
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
-\title{Multi-platform distributed systems with aggregate computing in Kotlin: the case of proximity messaging}
+\title{Multi-platform distributed systems with Aggregate Computing in Kotlin: the case of proximity messaging}
 \author{Luca Marchi}
 \date{\today}
 \subject{Programmazione ad Oggetti}
@@ -109,10 +109,10 @@ In a world where \ac{IoT} devices are becoming increasingly prevalent,
 
     Traditional network architectures, rely heavily on centralized
     infrastructures, making them unsuitable for scenarios such as disaster recovery or interactions with neighboring devices.
-    The computational model of \textit{aggregate computing} provides a promising
+    The computational model of \textit{Aggregate Computing} provides a promising
     approach to address these challenges by enabling decentralized and self-organizing systems \cite{viroli2019aggregate}.
-    
-    Building on this concept, this thesis explores how aggregate programming
+
+    Building on this concept, this thesis explores how Aggregate Programming
     can support a proximity and decentralized messaging system in a network.
 
 
@@ -128,7 +128,7 @@ As discussed in distributed field programming \cite{viroli2019aggregate}, there 
     \item The composition of modules and subsystems should be simple and predictable, allowing developers to clearly understand the consequences of combining components.
     \item Large-scale distributed systems often consist of multiple heterogeneous subsystems, each of which may require different coordination strategies depending on the region or context in time.
 \end{itemize}
-Aggregate programming aims to overcome these challenges through three fundamental principles:
+Aggregate Programming aims to overcome these challenges through three fundamental principles:
 \begin{enumerate}
     \item The computational target is conceived as a region of the environment, with the underlying device-level details abstracted away, potentially even modeled as a continuous spatial domain.
     \item The program logic is expressed as the manipulation of data structures that extend spatially and temporally across that region.
@@ -145,12 +145,12 @@ According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a fu
 \]
 that maps each device $\delta$ in the domain $D$ to a local value $\ell$ in the range $L$.
 This value can change in time with a \textit{field evolution} that maps each point in time to a field value.
-\Cref{fig:layers-AP} shows how aggregate programming abstracts the complexity of the underlying distributed network and its
+\Cref{fig:layers-AP} shows how Aggregate Programming abstracts the complexity of the underlying distributed network and its
  coordination challenges through a sequence of hierarchical abstraction layers.
 \begin{figure}
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layers-AP.png}}
-    \caption{Layered structure of aggregate programming, illustrating the abstraction at each level~\protect\cite{beal2015aggregate}.}
+    \caption{Layered structure of Aggregate Programming, illustrating the abstraction at each level~\protect\cite{beal2015aggregate}.}
     \label{fig:layers-AP}
 \end{figure}
 
@@ -229,7 +229,7 @@ A practical example includes a network of environmental sensors deployed in a fo
 \subsection{Goal}
 This thesis can be divided into two main goals:
 \begin{enumerate}
-    \item \label{goal:algorithm} \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of aggregate computing. 
+    \item \label{goal:algorithm} \textbf{Messaging algorithm}: The first goal is to design and implement a decentralized, proximity-based messaging algorithm grounded in the principles of Aggregate Computing. 
     The network operates in a fully distributed manner, without any central server managing message exchange. 
     Each node acts autonomously, coordinating with its neighbors through local interactions and collectively achieving self-organization, thereby eliminating single points of failure. 
     Communication is proximity-based: devices can only interact with nearby nodes, and messages are propagated progressively across the network, layer by layer. 
@@ -247,7 +247,7 @@ This thesis can be divided into two main goals:
 
 \section{State of Art}
 In this section, it will be presented the state of the art in the field of decentralized communication systems.
- The focus will be on the main existing systems, aggregate computing frameworks, and lightweight communication protocols.
+ The focus will be on the main existing systems, Aggregate Computing frameworks, and lightweight communication protocols.
 \subsection{Existing systems}
 Several communication technologies and systems have been developed over the years to facilitate decentralized data exchange among devices.
 The software that has spread the most and gained significant attention includes: \textit{Briar}, \textit{Bridgefy}, \textit{FireChat}.
@@ -304,10 +304,10 @@ Nowadays Firechat is discontinued and no longer available on app stores, the off
 \textit{FireChat} was the pioneering first popular example, but now outdated and discontinued. It inspired newer applications.
 
 These applications demonstrate the feasibility of decentralized communication, they rely on predefined routing or broadcasting protocols.
- None of them incorporate \textit{spatial awareness} or \textit{self-organizing behavior}, features that are naturally modeled through \textit{aggregate computing}.
+ None of them incorporate \textit{spatial awareness} or \textit{self-organizing behavior}, features that are naturally modeled through \textit{Aggregate Computing}.
 
-\subsection{Aggregate computing frameworks}
-There are several frameworks and libraries that facilitate the development of aggregate computing applications, 
+\subsection{Aggregate Computing frameworks}
+There are several frameworks and libraries that facilitate the development of Aggregate Computing applications, 
 implementing the principles of field calculus and providing abstractions for defining collective behaviors.
 \begin{figure}
     \centering
@@ -317,7 +317,7 @@ implementing the principles of field calculus and providing abstractions for def
 \end{figure}
 Some of the most notable ones include:
 \begin{itemize}
-    \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for aggregate computing \cite{CASADEI2022101248}. 
+    \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for Aggregate Computing \cite{CASADEI2022101248}. 
     It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs, the high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
     \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist simulator \cite{10.1007/978-3-030-78198-9_10}.
     
@@ -326,7 +326,7 @@ Some of the most notable ones include:
 
     \textit{ScaFi} only supports JVM and web-based applications.
     \item \textbf{Protelis} \cite{10.1145/2695664.2695913} is a programming language designed to simplify the development of resilient and well-structured networked systems, and can be integrated into various simulation frameworks. 
-    It provides a Java-hosted implementation of the field calculus through the \texttt{protelis-lang} library, offering a domain-general foundational API for aggregate programming \cite{8064092}.
+    It provides a Java-hosted implementation of the field calculus through the \texttt{protelis-lang} library, offering a domain-general foundational API for Aggregate Programming \cite{8064092}.
     \begin{figure}
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/protelis.png}}
@@ -407,13 +407,31 @@ Although it relies on a central broker and is therefore not fully decentralized,
 Future developments may involve replacing \ac{MQTT} with peer-to-peer technologies such as Bluetooth, to achieve complete decentralization.
 
 
-\chapter{Contribution}
+\chapter{Architecture and Implementation}
+
+\section{Requirements}
+This section outlines both the functional and non-functional requirements of the messaging system developed in this thesis.
+It describes what the system is expected to accomplish, its qualities, constraints, and performances.
+
+The requirements refer to both the messaging algorithm itself (see \ref{goal:algorithm}) and the mobile application (see \ref{goal:application}).
+\subsection{Functional requirements}
+The functional requirements define the features, behaviors, and operations that the messaging system must support.
+\subsubsection{Aggregate Computing algorithm}
+The messaging algorithm represents the Aggregate Computing layer, the core logic of the system.
+
+
+\subsection{Non-functional requirements}
+
+
+\subsection{Analysis}
+
+
+
 
 You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
 
 \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
-\section{Fancy formulas here}
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
