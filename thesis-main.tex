@@ -418,9 +418,45 @@ The requirements refer to both the messaging algorithm itself (see \ref{goal:alg
 The functional requirements define the features, behaviors, and operations that the messaging system must support.
 \subsubsection{Aggregate Computing algorithm}
 The messaging algorithm represents the Aggregate Computing layer, the core logic of the system.
+\begin{enumerate}
+    \item \textbf{Message propagation}: The algorithm must enable nodes to create and send messages to other nodes within the network. 
+    \item \textbf{Decentralized and proximity-based communication}: Each node should be able to communicate only with its immediate neighbors, the message is propagated in the network through local interactions.
+    There is no central authority managing the communication, the system must be fully distributed and autonomous.
+    \item \textbf{Parameter configurability}: The algorithm should allow message sources to define the expiration time of the message and the maximum propagation distance. 
+    With these parameters it is possible to control how long a message remains valid and how far it can spread in the network, limiting unnecessary communication overhead.
+    \item \textbf{Dynamic topology handling}: The network topology can change dynamically, with nodes joining or leaving the network at any time. 
+    The algorithm must be robust and adaptable to these changes, ensuring continuous message propagation without disruptions.
+    \item \textbf{Simulation support}: The algorithm must be executable within a simulated environment to facilitate testing and validation.
+     This approach enables controlled experimentation under various network conditions and scenarios, ensuring the correctness and stability of the algorithm before its deployment on real devices.
+\end{enumerate}
 
+\subsubsection{Mobile Application}
+The mobile application serves as the \ac{UI} for the messaging system, providing users both an interface and a runtime environment for the algorithm.
+\begin{enumerate}
+    \item \textbf{Cross-platform compatibility}: The application must be supported on both Android and iOS platforms.
+    \item \textbf{User interface}: The application should provide a simple and intuitive \ac{UI} that allows users to compose messages, set parameters (expiration time and propagation distance), and view received messages in real-time.
+    \item \textbf{GPS integration}: The application uses the device's GPS to determine its location, which is essential to compute distances between nodes for message propagation. 
+    \item \textbf{Communication layer}: A lightweight communication protocol must be used to send messages between the various nodes in the network.
+
+\end{enumerate}
 
 \subsection{Non-functional requirements}
+The non-functional requirements specify the quality attributes, constraints, and performance criteria that the messaging system must meet,
+defining how well the functions should be performed.
+
+One of the main non-functional requirements of the system is the \textbf{code alignment} between the simulator
+and the mobile application.
+This ensures that the same algorithmic logic is shared across both environments, minimizing discrepancies between
+simulation and real-world execution.
+In practice, the aggregate algorithm is implemented as a common API, which can be invoked identically within the
+simulation framework and the mobile runtime.
+This alignment is fundamental, as the distributed nature of the system requires extensive validation under multiple-node scenarios.
+
+Another key non-functional requirement is \textbf{scalability}.
+The system must sustain acceptable performance levels as the number of participating nodes increases, ensuring that the aggregate computation cycle executes periodically without noticeable degradation on mobile devices. 
+
+In addition, the codebase must exhibit high \textbf{maintainability} and \textbf{extensibility}, enabling future developers to easily understand, modify, and enhance the system. These qualities are achieved through modular architectural design, comprehensive documentation, and adherence to established coding standards. Furthermore, the system architecture should be flexible enough to support the integration of new communication protocols or additional functionalities without requiring significant refactoring.
+
 
 
 \subsection{Analysis}
@@ -430,12 +466,13 @@ The messaging algorithm represents the Aggregate Computing layer, the core logic
 
 You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
 
-\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
+
+\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 \backmatter
 
