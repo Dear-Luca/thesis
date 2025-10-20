@@ -458,9 +458,30 @@ The system must sustain acceptable performance levels as the number of participa
 In addition, the codebase must exhibit high \textbf{maintainability} and \textbf{extensibility}, enabling future developers to easily understand, modify, and enhance the system. These qualities are achieved through modular architectural design, comprehensive documentation, and adherence to established coding standards. Furthermore, the system architecture should be flexible enough to support the integration of new communication protocols or additional functionalities without requiring significant refactoring.
 
 
-
 \subsection{Analysis}
+To address these requirements and challenges, the system adopts a \textbf{decentralized architecture} through the principles of \textbf{Aggregate Computing}. 
+Each device is treated as an independent computational entity (or node) capable of locally executing aggregate functions and exchanging information only with its neighbors. 
+This model allows global behaviors, such as message diffusion or decay, to emerge from simple local interactions. 
+Message propagation is achieved through \textbf{gradient algorithm} based on \textbf{gossip}, which naturally reflect spatial proximity and temporal dynamics within the network.
 
+From an implementation perspective, the \textit{Collektive} framework is employed to define and simulate the aggregate behavior of the system, ensuring correctness and reproducibility under controlled conditions. 
+
+The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable publish/subscribe mechanism suitable for distributed messaging and initial prototyping. 
+
+Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS, JVM) facilitating consistency between the simulated and real execution environments.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/layered-design.png}}
+    \caption{High-level overview of the architecture, illustrating the interaction between the different layers of the messaging system.}
+    \label{fig:architecture-overview}
+\end{figure}
+
+\section{Network Architecture}
+In the following sections, the overall \textbf{architecture} of the messaging system will be described, focusing on both the design and communication model.
+\subsection{Design}
+The system adopts a decentralized network architecture designed to enable communication among nearby devices without relying on centralized servers.
+
+\subsection{Communication Model}
 
 
 
