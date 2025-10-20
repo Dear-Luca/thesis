@@ -479,21 +479,41 @@ Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets mu
 \section{Network Architecture}
 In the following sections, the overall \textbf{architecture} of the messaging system will be described, focusing on both the design and communication model.
 \subsection{Design}
-The system adopts a decentralized network architecture designed to enable communication among nearby devices without relying on centralized servers.
+The network is modeled as an undirected graph $G = (V, E)$, where $V$ is the set of nodes representing individual devices, and $E$ is the set of edges representing communication links between neighboring nodes (\Cref{fig:network-graph}).
+\begin{figure}[h!]
+    \centering
+    \fbox{\includegraphics[width=.6\linewidth]{figures/network-graph.png}}
+    \caption{Network architecture image taken from \textit{Alchemist Simulator} illustrating nodes and their communication links. Each node represents a device in the messaging system, and edges denote proximity-based connections enabling message exchange.}
+    \label{fig:network-graph}
+\end{figure}
 
+A \textbf{node} in the network represents a single device (e.g., a smartphone) running the messaging software.
+Each node exhibits the following characteristics:
+\begin{enumerate}
+\item \textbf{Lifecycle}: The lifecycle of a node begins when it joins the network and discovers its neighboring devices. 
+While active, the node periodically executes the aggregate algorithm through computation cycles. 
+When the node leaves the network (for example, when the application is closed), it terminates all communication and computation activities.
+\item \textbf{State}: Each node maintains a local state that includes its unique identifier, 
+a list of neighboring nodes with associated distances, its current message value, and positional information. This state is continuously updated based on local interactions.
+\item \textbf{Internal Aggregate Computing Logic}: Each node autonomously executes the aggregate algorithm defined in Section~\ref{goal:algorithm}, which governs how messages are generated, propagated, and expired according to proximity-based interactions with neighboring nodes.
+\end{enumerate}
+The network is \textbf{distributed} and \textbf{decentralized}, meaning there is no central authority or server managing the communication.
+All the nodes behave like whole systems, they are considered together as a single entity like a computational field, not as a collection of individual devices.
+This is achieved through local interactions, each node independently maintains its state and exchanges information with nearby peers, supporting self-organization and resilience.
+
+This type of network is particulary suitable for \textbf{dynamic} and \textbf{scalable} environments by design, since computation and communication depend only on local interactions and nodes can 
+join or leave the network seamlessly, without any disruption. 
 \subsection{Communication Model}
 
 
 
-You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
-
-
+% \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
+
 
 \backmatter
 
