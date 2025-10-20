@@ -63,6 +63,11 @@
     long  = Message Queuing Telemetry Transport
 }
 
+\DeclareAcronym{JC}{
+    short = JC,
+    long  = Jetpack Compose
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -157,7 +162,9 @@ This value can change in time with a \textit{field evolution} that maps each poi
 The messaging system developed in this thesis was implemented using \textit{Collektive} \cite{amslaurea31080}, 
 an open-source framework designed to simplify the development of distributed systems through the principles of Aggregate Programming. 
 Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
+
 \subsection{Collektive}
+\label{section:Collektive}
 Collektive is a framework with the purpose of simplifying the definition of Aggregate Computing systems.
 To achieve this, Collektive adopts the Field Calculus model, providing an intuitive way to define aggregate
 behavior without low-level coding. Built with \ac{KMP}, it can be executed seamlessly on different targets.
@@ -352,7 +359,7 @@ It has no compatibility with classic Bluetooth, meaning that devices supporting 
 \ac{BLE} supports device discovery and connection through low-duty advertising and scanning cycles, enabling the creation of ad-hoc networks for proximity-based communication.
 
 Another similar protocol is \textbf{Wi-Fi Direct}, a wireless standard that enables devices to connect directly (using Wi-Fi) to each other without the need for a traditional access point or router.
-It allows peer-to-peer communication using standard Wi-Fi technology, offering higher data transfer rates and longer range compared to Bluetooth-based solutions.
+It allows \ac{P2P} communication using standard Wi-Fi technology, offering higher data transfer rates and longer range compared to Bluetooth-based solutions.
 \begin{table}[h!]
 \centering
 \caption{Comparison between \ac{BLE} and Wi-Fi Direct.}
@@ -390,6 +397,8 @@ It allows peer-to-peer communication using standard Wi-Fi technology, offering h
 
 The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{BLE} and Wi-Fi Direct.
 
+\subsubsection{\ac{MQTT}}
+\label{subsubsection:Mqtt}
 On the other hand, \textbf{\ac{MQTT}} relies on a central broker to manage message distribution.
 \begin{figure}
     \centering
@@ -404,7 +413,7 @@ The latter publish messages to specific topics, while subscribers receive only t
 
 In the current implementation of the proposed application \ref{goal:application}, \ac{MQTT} is employed as the communication layer to handle messages across devices. 
 Although it relies on a central broker and is therefore not fully decentralized, its advantages make it suitable for prototyping and testing the distributed algorithm \ref{goal:algorithm}. 
-Future developments may involve replacing \ac{MQTT} with peer-to-peer technologies such as Bluetooth, to achieve complete decentralization.
+Future developments may involve replacing \ac{MQTT} with \ac{P2P} technologies such as Bluetooth, to achieve complete decentralization.
 
 
 \chapter{Architecture and Implementation}
@@ -503,10 +512,62 @@ This is achieved through local interactions, each node independently maintains i
 
 This type of network is particulary suitable for \textbf{dynamic} and \textbf{scalable} environments by design, since computation and communication depend only on local interactions and nodes can 
 join or leave the network seamlessly, without any disruption. 
+
+
 \subsection{Communication Model}
+\textbf{TODO: Describe the communication model in detail.}
+Messages originate from \textbf{source nodes} and spread through the network using the aggregate gossip-gradient algorithm.
+
+% Expiration time (TTL - Time To Live), Maximum propagation distance (spatial limit), Describe how nodes discover their neighbors
+
+The system currently employs the \textbf{\ac{MQTT}} protocol as the transport layer to facilitate message exchange among nodes.
 
 
+\section{Technologies}
+\subsubsection{Kotlin Multiplatform}
+\textbf{\ac{KMP}} is the programming framework adopted for both the implementation of the messaging algorithm and the development of the mobile application. 
 
+Kotlin is a modern, statically typed, cross-platform programming language that supports type inference and emphasizes conciseness, safety, and interoperability. 
+It is fully compatible with Java, as the JVM version of its standard library relies on the Java Class Library, enabling seamless integration with existing Java ecosystems.
+
+The primary goal of Kotlin Multiplatform is to streamline the development of cross-platform applications 
+by allowing developers to share common code across multiple targets (such as Android, iOS, JVM, and Web) while maintaining platform-specific implementations only where necessary. 
+This approach greatly reduces code duplication, accelerates development cycles, and ensures consistency across different environments.
+
+In this project, KMP enables the reuse of the same aggregate computing logic and communication components across both the simulation and mobile application. 
+Compilation targets are defined within the Gradle build configuration, which automates the generation of platform-specific binaries from the shared codebase.
+
+
+\subsubsection{Collektive}
+\textbf{Collektive} is used as Aggregate Computing framework to implement the messaging algorithm (see \Cref{section:Collektive}).
+
+\subsubsection{Compose Multiplatform}
+\textbf{Compose Multiplatform} is the UI framework used to implement the graphical interface of the application on both Android and iOS. 
+It is based on \textit{\ac{JC}}, Google’s declarative toolkit for building native Android interfaces, and extends its capabilities to multiple platforms through the \ac{KMP} ecosystem.
+
+Compose Multiplatform enables developers to define a single, shared user interface in Kotlin, which is then rendered natively on each target platform. 
+This approach allows the same declarative UI components and logic to be reused across environments, 
+ensuring a consistent design and behavior while maintaining native performance and responsiveness.
+
+In this project, Compose Multiplatform has been adopted to design the messaging application’s graphical interface, allowing users to create, send, and visualize
+messages within a unified layout. 
+By sharing the same UI code between Android and iOS, the development process is simplified, reducing maintenance overhead and ensuring visual consistency across platforms.
+
+
+\subsubsection{Gradle}
+\textbf{Gradle} is a powerful build automation and dependency management system widely used in modern software development, particularly for projects based on Java, Kotlin, and Groovy. 
+It is designed for flexibility, scalability, and efficiency, making it one of the most popular tools for managing complex, multi-module applications. 
+Gradle employs a declarative \ac{DSL}, written in either Groovy or Kotlin, to define build scripts that specify project configurations, dependencies, tasks, and plugins in a concise and human-readable format.
+
+The build process in Gradle is organized around \textit{tasks}, which represent individual units of work—such as compiling source code, running tests, packaging applications, or generating documentation. 
+Developers can define custom tasks and establish dependencies among them, allowing precise control over the execution order and workflow of the build process. 
+Gradle also supports parallel task execution and incremental builds, improving efficiency and reducing build times.
+
+In the context of this project, Gradle is used to configure the Kotlin Multiplatform environment, manage platform-specific dependencies, and generate binaries for multiple targets, including Android, JVM, and iOS. 
+Its integration with the Kotlin DSL ensures a consistent and automated build process across all platforms, simplifying development and maintaining reproducibility across simulation and deployment environments.
+
+\subsubsection{\ac{MQTT}}
+\textbf{\ac{MQTT}} protocol is used as the communication layer to send messages between the various nodes in the distributed network (see \Cref{subsubsection:Mqtt}).
 % \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 %----------------------------------------------------------------------------------------
