@@ -68,6 +68,11 @@
     long  = Jetpack Compose
 }
 
+\DeclareAcronym{TTL}{
+    short = TTL,
+    long  = Time To Live    
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -146,9 +151,11 @@ in a tiny universal language suitable for mathematical analysis.
 The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space–time domain to a scalar value.
 
 According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a function
-\[
+
+\begin{equation}
 \phi : D \rightarrow L
-\]
+\end{equation}
+
 that maps each device $\delta$ in the domain $D$ to a local value $\ell$ in the range $L$.
 This value can change in time with a \textit{field evolution} that maps each point in time to a field value.
 \Cref{fig:layers-AP} shows how Aggregate Programming abstracts the complexity of the underlying distributed network and its
@@ -593,15 +600,16 @@ As defined in \cite{1238221}, the \textbf{diffusion speed} of gossip protocols r
 at which information originating from any node spreads and becomes uniformly mixed throughout a distributed network.
 It quantifies how quickly local data diffuses across nodes through randomized peer-to-peer exchanges.
 
-Formally, the diffusion speed $T(\delta, n, \epsilon)$
-is defined as the smallest number of rounds required for all nodes’ estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
+Formally, the diffusion speed $\boldsymbol{T(\delta, n, \epsilon)}$
+is defined as the smallest number of rounds required for all (n) nodes’ estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
 This metric provides a unified way to reason about the convergence rate of gossip-based communication mechanisms, regardless of the specific network topology.
 
 In the case of \textbf{Uniform Gossip}, where each node randomly selects a neighbor to exchange information with in each round, 
-diffusion occurs exponentially fast, with a time complexity of 
-\[
-O(\log n + \log(1/\epsilon) + \log(1/\delta)),
-\]
+diffusion occurs exponentially fast, with a time complexity of:
+\begin{equation}
+T(\delta, n, \epsilon) = O(\log(n) + \log(1/\epsilon) + \log(1/\delta))
+\end{equation}
+
 demonstrating that even simple randomized communication mechanisms can achieve rapid and robust global convergence.
 
 
@@ -629,27 +637,63 @@ otherwise it initializes its distance to infinity indicating that it has not yet
 
 \lstinputlisting[language=Kotlin,label={lst:initialization-code}, caption={Initialization code}]{listings/initialization.kt}
 
-Using data class \texttt{GossipGradient} \Cref{lst:gossip-gradient-dataclass-code} to keep track of the current path the message has taken from the origin to the current node with the estimated distance.
+Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-code}) to keep track of the current path the message has taken from the origin to the current node with the estimated distance.
+
+\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+
 
 Each node starts with \texttt{path = listOf(localId)} because the path stored in a node’s gossip ends with that node’s ID and 
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
-\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
 \subsubsection{Sharing logic and distance computation}
-To spread the message across the network is used the Collektive's function \texttt{share}, 
-which implements efficient stateful data sharing among neighbors.
-Every round of the algorithm, the node reads the gossip messages that its neighbors are sharing with him (\texttt{neighborsGossip}),
-based on these information it updates its local state.
-For each neighbor $v \in \texttt{neighbors(u)} $ where $u$ is the current node, is applied the relaxation:
-$$ \boldsymbol{d_{u}^{k+1} \leftarrow  \min(d_{u}^{k+1}, d_{v}^{k} + w(v, u))} $$
+Message dissemination across the network is achieved using Collektive’s \texttt{share} function, which enables efficient, stateful data sharing among neighboring nodes.
 
+At each computational round $k$, every node $u$ reads the gossip messages shared by its neighbors (\texttt{neighborsGossip}) and updates its local state accordingly. Based on this information, the node applies a relaxation step to compute the minimum distance to the message source. For each neighbor $v \in \texttt{neighbors}(u)$, the relaxation is defined as:
+\begin{equation}
+\boldsymbol{d_{u}^{k+1} = \min(d_{u}^{k},\ d_{v}^{k} + w(v, u))}
+\end{equation}
+where $w(v, u)$ represents the communication cost or weight of the edge between nodes $v$ and $u$. This iterative process propagates distance information throughout the network, allowing each node to estimate its proximity to the source node (\Cref{lst:relaxation-code}).
 
+\lstinputlisting[language=Kotlin,label={lst:relaxation-code}, caption={Relaxation code to compute the minimum distance from each node to the source.}]{listings/relaxation.kt}
 
+This approach is also safe for non-source nodes, which initially have an empty \texttt{content} 
+field and an infinite \texttt{distance}. 
 
+As a result, their state is not propagated to other nodes, since the condition \texttt{neighborGossip.content.isNotEmpty()} and the relaxation step prevent the adoption of invalid or uninitialized data. 
+These nodes remain inactive until they receive and relay a valid message proposal, at which point their state becomes part of the propagation process.
 
+\subsubsection{Loop avoidance}
+The \texttt{path} field contained in the \texttt{GossipGradient} data class is also used to prevent cycles during message propagation (\Cref{lst:loop-avoidance-code}).
 
+To achieve this, a copy of each neighbor’s path is created, excluding the neighbor’s own identifier. This produces a sequence representing all the hops that precede that neighbor in the propagation chain.
 
-\section{Multiplatform Mobile Application}
+Two checks are then performed to detect and reject cyclic paths. The first condition, \texttt{it == localId}, prevents self-cycles by discarding any proposal that has already passed through the current node. The second, \texttt{it in neighbors}, filters out proposals that traverse any of the current node’s neighbors other than the one under consideration, thereby avoiding “ping-pong” exchanges between adjacent nodes.
+
+Together, these checks ensure that message propagation remains acyclic, improving the efficiency and correctness of the gossip process.
+
+\lstinputlisting[language=Kotlin,label={lst:loop-avoidance-code}, caption={Loop avoidance code preventing cycles during message propagation.}]{listings/loopAvoidance.kt}
+
+\subsubsection{Message expiration and spatial limits}
+To regulate both the lifespan and spatial reach of messages within the network, 
+the algorithm takes as input two key parameters: the \ac{TTL} (\texttt{lifeTime}) and the maximum propagation distance (\texttt{maxDistance}).
+Before forwarding a message, each node applies a filtering step to ensure that only valid messages, those that have not expired and remain within the defined spatial range, are relayed to neighboring nodes (\Cref{lst:expiration-code}).
+
+\lstinputlisting[language=Kotlin,label={lst:expiration-code}, caption={Filtering logic enforcing message expiration and spatial propagation limits.}]{listings/filter.kt}
+\subsubsection{Multiple sources}
+In a large-scale, real-world deployment, it is common for multiple nodes to generate and transmit messages simultaneously. The algorithm is designed to handle this scenario effectively, allowing multiple sources to coexist and propagate their messages independently without interference.
+
+This behavior is achieved by treating each message source as an independent entity, with every node maintaining separate state information for each active message in the network. Initially, a gossip-based self-stabilization step is applied to the set of active sources (\Cref{lst:sources-sharing-code}).
+
+\lstinputlisting[language=Kotlin,label={lst:sources-sharing-code}, caption={Gossip-based self-stabilization of the message sources.}]{listings/sources-sharing.kt}
+
+After stabilization, the gossip-gradient algorithm described previously is executed independently for each source (\Cref{lst:multisources-code}).
+
+\lstinputlisting[float, language=Kotlin,label={lst:multisources-code}, caption={Execution of the gossip-gradient algorithm for multiple concurrent sources.}]{listings/multipleSources.kt}
+
+Since the implementation relies on the \texttt{share} construct, iterating over all sources requires the use of the \texttt{alignedOn} operator. This operator ensures that only nodes executing the same \texttt{alignedOn(sourceId)} instance exchange values with one another, thereby preventing interference between computations associated with different sources.
+
+\subsubsection{Time complexity}
+
 \subsection{User Interface with Compose Multiplatform}
 
 \subsection{Communication layer}
