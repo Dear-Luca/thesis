@@ -518,11 +518,8 @@ join or leave the network seamlessly, without any disruption.
 
 \subsection{Communication Model}
 \textbf{TODO: Describe the communication model in detail.}
-Messages originate from \textbf{source nodes} and spread through the network using the aggregate gossip-gradient algorithm.
-
 % Expiration time (TTL - Time To Live), Maximum propagation distance (spatial limit), Describe how nodes discover their neighbors
-
-The system currently employs the \textbf{\ac{MQTT}} protocol as the transport layer to facilitate message exchange among nodes.
+% The system currently employs the \textbf{\ac{MQTT}} protocol as the transport layer to facilitate message exchange among nodes.
 
 
 \section{Technologies}
@@ -632,10 +629,30 @@ otherwise it initializes its distance to infinity indicating that it has not yet
 
 \lstinputlisting[language=Kotlin,label={lst:initialization-code}, caption={Initialization code}]{listings/initialization.kt}
 
+Using data class \texttt{GossipGradient} \Cref{lst:gossip-gradient-dataclass-code} to keep track of the current path the message has taken from the origin to the current node with the estimated distance.
+
+Each node starts with \texttt{path = listOf(localId)} because the path stored in a node’s gossip ends with that node’s ID and 
+for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
+
+\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+\subsubsection{Sharing logic and distance computation}
+To spread the message across the network is used the Collektive's function \texttt{share}, 
+which implements efficient stateful data sharing among neighbors.
+Every round of the algorithm, the node reads the gossip messages that its neighbors are sharing with him (\texttt{neighborsGossip}),
+based on these information it updates its local state.
+For each neighbor $v \in \texttt{neighbors(u)} $ where $u$ is the current node, is applied the relaxation:
+$$ \boldsymbol{d_{u}^{k+1} \leftarrow  \min(d_{u}^{k+1}, d_{v}^{k} + w(v, u))} $$
 
 
 
 
+
+
+
+\section{Multiplatform Mobile Application}
+\subsection{User Interface with Compose Multiplatform}
+
+\subsection{Communication layer}
 
 
 %----------------------------------------------------------------------------------------
