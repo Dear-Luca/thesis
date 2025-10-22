@@ -86,6 +86,7 @@ To my family.
 \tableofcontents   
 \listoffigures     % (optional) comment if empty
 \lstlistoflistings % (optional) comment if empty
+\listoftables      % (optional) comment if empty
 %----------------------------------------------------------------------------------------
 
 \mainmatter
@@ -426,6 +427,7 @@ The requirements refer to both the messaging algorithm itself (see \ref{goal:alg
 \subsection{Functional requirements}
 The functional requirements define the features, behaviors, and operations that the messaging system must support.
 \subsubsection{Aggregate Computing algorithm}
+\label{subsection:requirements-algorithm}
 The messaging algorithm represents the Aggregate Computing layer, the core logic of the system.
 \begin{enumerate}
     \item \textbf{Message propagation}: The algorithm must enable nodes to create and send messages to other nodes within the network. 
@@ -542,14 +544,14 @@ Compilation targets are defined within the Gradle build configuration, which aut
 \textbf{Collektive} is used as Aggregate Computing framework to implement the messaging algorithm (see \Cref{section:Collektive}).
 
 \subsubsection{Compose Multiplatform}
-\textbf{Compose Multiplatform} is the UI framework used to implement the graphical interface of the application on both Android and iOS. 
+\textbf{Compose Multiplatform} is the UI framework used to implement the \ac{GUI} of the application on both Android and iOS. 
 It is based on \textit{\ac{JC}}, Google’s declarative toolkit for building native Android interfaces, and extends its capabilities to multiple platforms through the \ac{KMP} ecosystem.
 
 Compose Multiplatform enables developers to define a single, shared user interface in Kotlin, which is then rendered natively on each target platform. 
 This approach allows the same declarative UI components and logic to be reused across environments, 
 ensuring a consistent design and behavior while maintaining native performance and responsiveness.
 
-In this project, Compose Multiplatform has been adopted to design the messaging application’s graphical interface, allowing users to create, send, and visualize
+In this project, Compose Multiplatform has been adopted to design the messaging application’s \ac{GUI}, allowing users to create, send, and visualize
 messages within a unified layout. 
 By sharing the same UI code between Android and iOS, the development process is simplified, reducing maintenance overhead and ensuring visual consistency across platforms.
 
@@ -559,7 +561,7 @@ By sharing the same UI code between Android and iOS, the development process is 
 It is designed for flexibility, scalability, and efficiency, making it one of the most popular tools for managing complex, multi-module applications. 
 Gradle employs a declarative \ac{DSL}, written in either Groovy or Kotlin, to define build scripts that specify project configurations, dependencies, tasks, and plugins in a concise and human-readable format.
 
-The build process in Gradle is organized around \textit{tasks}, which represent individual units of work—such as compiling source code, running tests, packaging applications, or generating documentation. 
+The build process in Gradle is organized around \textit{tasks}, which represent individual units of work, such as compiling source code, running tests, packaging applications, or generating documentation. 
 Developers can define custom tasks and establish dependencies among them, allowing precise control over the execution order and workflow of the build process. 
 Gradle also supports parallel task execution and incremental builds, improving efficiency and reducing build times.
 
@@ -568,7 +570,73 @@ Its integration with the Kotlin DSL ensures a consistent and automated build pro
 
 \subsubsection{\ac{MQTT}}
 \textbf{\ac{MQTT}} protocol is used as the communication layer to send messages between the various nodes in the distributed network (see \Cref{subsubsection:Mqtt}).
-% \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
+
+\section{Messaging with Aggregate Computing}
+The core logic of the messaging system is implemented using the \textit{Collektive} framework, which provides the necessary abstractions and tools to define aggregate behaviors.
+
+% The algorithm that underpins it is designed to respect the requirements outlined in \Cref{subsection:requirements-algorithm}.
+In this section it will be described the algorithm that underpins the system and how it meets the requirements outlined in \Cref{subsection:requirements-algorithm}.
+
+\subsection{Gossip behaviour}
+\textbf{Gossip protocols}, also known as \textbf{epidemic protocols}, are a class of communication algorithms inspired by the way information spreads in social or biological systems. 
+They have emerged as a key communication paradigm for large-scale distributed systems due to their simplicity, scalability, and resilience.
+
+In these protocols, each node periodically contacts one or a few other nodes and exchanges information with them.
+The dynamics of information propagation closely resemble the spread of an epidemic, leading to high fault tolerance and self-stabilization.
+The guarantees obtained from gossip-based communication are inherently probabilistic: such systems achieve high stability under stress and disruption, while scaling gracefully to a very large number of nodes \cite{1238221}.
+
+In the context of \textit{Aggregate Computing}, computation focuses on collective behaviours that emerge from local interactions.
+Each node executes the same local program and exchanges data with its neighbors to collectively produce a global pattern (e.g., diffusion, consensus, or gradient formation).
+In this sense, \textit{gossip} acts as a mechanism of information diffusion, where nodes iteratively mix their local states with those of their neighbors to approximate global aggregates.
+
+The algorithm developed in this thesis follows a similar \textbf{gossip behaviour}, where information spreads through local \ac{P2P} interactions to collectively achieve a consistent global state in a decentralized and self-stabilizing manner.
+
+\subsubsection{Diffusion speed}
+As defined in \cite{1238221}, the \textbf{diffusion speed} of gossip protocols represents the rate
+at which information originating from any node spreads and becomes uniformly mixed throughout a distributed network.
+It quantifies how quickly local data diffuses across nodes through randomized peer-to-peer exchanges.
+
+Formally, the diffusion speed $T(\delta, n, \epsilon)$
+is defined as the smallest number of rounds required for all nodes’ estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
+This metric provides a unified way to reason about the convergence rate of gossip-based communication mechanisms, regardless of the specific network topology.
+
+In the case of \textbf{Uniform Gossip}, where each node randomly selects a neighbor to exchange information with in each round, 
+diffusion occurs exponentially fast, with a time complexity of 
+\[
+O(\log n + \log(1/\epsilon) + \log(1/\delta)),
+\]
+demonstrating that even simple randomized communication mechanisms can achieve rapid and robust global convergence.
+
+
+\subsection{Gradient algorithm}
+The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
+The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
+Full algorithm code is reported in \Cref{lst:algorithm-code}.
+\lstinputlisting[float,language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+
+
+This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
+\begin{itemize}
+    \item \textbf{Graph} $\rightarrow$ undirected weighed graph $G = (V, E)$ where $V$ is the set of nodes and $E$ is the set of edges.
+    \item \textbf{Nodes} $\rightarrow$ each node $u \in V$ represents a device in the network.
+    \item \textbf{Weights} $\rightarrow$ each edge $(u, v) \in E$ has an associated weight $w(u, v)$ representing the distance between nodes $u$ and $v$.
+    \item \textbf{Relaxation} $\rightarrow$ the algorithm iteratively updates the estimated distances to each node by considering all edges and their weights, gradually converging to the shortest path.
+\end{itemize}
+
+
+\subsubsection{Initialization}
+The algorithm starts by initializing the nodes. 
+Each node first of all checks if it is the source node (the one that created the message).
+If it is, it sets its distance to zero and prepares the message content, 
+otherwise it initializes its distance to infinity indicating that it has not yet received the message (\Cref{lst:initialization-code}).
+
+\lstinputlisting[language=Kotlin,label={lst:initialization-code}, caption={Initialization code}]{listings/initialization.kt}
+
+
+
+
+
+
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
