@@ -693,6 +693,24 @@ After stabilization, the gossip-gradient algorithm described previously is execu
 Since the implementation relies on the \texttt{share} construct, iterating over all sources requires the use of the \texttt{alignedOn} operator. This operator ensures that only nodes executing the same \texttt{alignedOn(sourceId)} instance exchange values with one another, thereby preventing interference between computations associated with different sources.
 
 \subsubsection{Time complexity}
+Let $n = |V|$ be the number of nodes, $m = |E|$ the number of links, and $s$ the number of sources. 
+The gradient phase is Bellman–Ford–like: with non-negative weights, the pure distance relaxation costs 
+$O(nm)$ per source in the worst case (thus $O(n^3)$ on dense graphs with $m \approx n^2$). 
+
+In the implementation presented here, the loop-avoidance check scans the neighbor’s path prefix, adding an 
+$O(n)$ factor per neighbor. 
+This yields $O(mn)$ work per round and up to $O(n)$ rounds, i.e., $O(mn^2)$ per source 
+(dense: $O(n^4)$). 
+
+Across $s$ sources, multiply the bounds: $O(snm)$ (dense: $O(sn^3)$) for the pure gradient, 
+or $O(smn^2)$ (dense: $O(sn^4)$) with full path checking. 
+In sparse geometric graphs ($m = O(n)$) and diameter $D \ll n$, 
+typical convergence is closer to $O(snD)$ (pure) or $O(sn^2D)$ (with path check). 
+Bounding the path inspection to a constant $k$ (or removing it) 
+recovers the $O(snm)$ worst-case bound.
+
+
+\section{Mobile Application}
 
 \subsection{User Interface with Compose Multiplatform}
 
