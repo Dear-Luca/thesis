@@ -622,7 +622,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[float,language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+\lstinputlisting[language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -755,6 +755,25 @@ It provides primitives for defining fields, sharing data among neighbors, and pe
 \end{figure}
 
 \lstinputlisting[language=Kotlin,label={lst:collektive-code}, caption={Collektive engine setup}]{listings/Collektive.kt}
+
+GPS data is consumed locally, provided by the \textbf{Location Services} layer, which interfaces with the device's native location APIs to obtain accurate positional information (it's platform specific).
+GPS data is shared via transport for neighbor awareness but it's independent from it.
+This layer captures the device's latitude and longitude, which are essential for computing distances between nodes in the messaging algorithm, and updating location in real time.
+
+These informations are spread to other nodes through \textbf{Transport Layer}, using \ac{MQTT} protocol as communication mechanism.
+The host used for this purpose is the public broker \textit{test.mosquitto.org} over WebSocket with the port 8080 instead of the default 1883 (over TCP).
+This is firewall friendly, many private or public networks block non standard ports like 1883, while 8080 is commonly allowed for web traffic.
+It also ensures compatibility with browsers and WebApps, allowing future extensions of the application to web platforms.
+
+Transport layer is responsible for:
+\begin{itemize}
+    \item \textbf{Neighbor discovery}
+    \item \textbf{Location sharing}
+    \item \textbf{Message delivery}
+\end{itemize}
+
+
+
 
 
 
