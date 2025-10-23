@@ -73,6 +73,11 @@
     long  = Time To Live    
 }
 
+\DeclareAcronym{MVVM}{
+    short = MVVM,
+    long  = Model-View-ViewModel    
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -641,7 +646,7 @@ Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-co
 
 
 
-\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+\lstinputlisting[language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
 Each node starts with \texttt{path = listOf(localId)} because the path stored in a node’s gossip ends with that node’s ID and 
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
@@ -709,8 +714,49 @@ recovers the $O(snm)$ worst-case bound.
 
 
 \section{Mobile Application}
+The mobile application serves as the \ac{GUI} for the messaging system, providing users both an interface and a runtime environment for the algorithm.
 
-\subsection{User Interface with Compose Multiplatform}
+\textbf{Echo} is the name chosen for the application, it recalls the idea of messages reverberating through a network within a certain range and time frame (like voice echoing).
+It's also the Linux command for printing messages to the terminal, symbolizing communication.
+
+The mobile application is implemented using \ac{KMP} and Compose Multiplatform, ensuring \textbf{cross-platform} compatibility between Android and iOS devices.
+In this section the architecture and the implementation details of the app will be described.
+
+
+\subsection{Architecture}
+
+The architecture of the Echo application is designed to be modular and scalable, allowing for easy maintenance and future enhancements.
+It follows a \textbf{\ac{MVVM}} software architectural pattern, separating the user interface, business logic, and data management into distinct layers (\Cref{fig:app-MVVM}).
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/mvvm.png}}
+    \caption{Illustration of the MVVM architecture pattern.}
+    \label{fig:app-MVVM}
+\end{figure}
+
+\ac{MVVM} is structured into three main components:
+\begin{itemize}
+    \item \textbf{Model}: Represents the data and business logic of the application. It is responsible for managing the data, including retrieving it from a database or an API, and performing any necessary transformations or calculations (in this case Aggregate Computing logic).
+    \item \textbf{View}: Represents the \ac{UI} of the application, what the user sees and interacts with. It displays the data provided by the ViewModel and sends user interactions (such as button clicks) back to the ViewModel.
+    \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves data from the Model, applies any necessary transformations, and exposes the data to the View in a \ac{UI} friendly way. 
+    The ViewModel holds the \ac{UI} state and uses observable data structures to notify the View when updates occur.
+\end{itemize}
+
+The layered design of the application can be seen in \Cref{fig:app-layered-design}.
+Now it will be described each layer in a bottom-up approach.
+
+\textbf{Collektive Engine} layer is the Aggregate Computing runtime environment for managing and executing aggregate programs like the messaging algorithm.
+It provides primitives for defining fields, sharing data among neighbors, and performing computations over the network like \texttt{share}, \texttt{alignedOn}, \texttt{neighboring} (\Cref{lst:collektive-code}).
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/app-layered-design.png}}
+    \caption{Layered design of the mobile application, illustrating the interaction between the different components.}
+    \label{fig:app-layered-design}
+\end{figure}
+
+\lstinputlisting[language=Kotlin,label={lst:collektive-code}, caption={Collektive engine setup}]{listings/Collektive.kt}
+
+
 
 \subsection{Communication layer}
 
