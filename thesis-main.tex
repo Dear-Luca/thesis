@@ -78,6 +78,11 @@
     long  = Model-View-ViewModel    
 }
 
+\DeclareAcronym{QoS}{
+    short = QoS,
+    long = Quality of Service
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -412,21 +417,31 @@ The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{
 
 \subsubsection{\ac{MQTT}}
 \label{subsubsection:Mqtt}
-On the other hand, \textbf{\ac{MQTT}} relies on a central broker to manage message distribution.
+\textbf{\ac{MQTT}} (Message Queuing Telemetry Transport) is a lightweight communication protocol based on a centralized \textit{publish–subscribe} architecture. 
+It relies on a central server, known as the \textit{broker}, which manages message distribution among connected clients (\Cref{fig:mqtt-architecture}). 
+
 \begin{figure}
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/mqtt.png}}
-    \caption{MQTT architecture, illustrating the publish-subscribe model with clients and a central broker.}
+    \caption{MQTT architecture illustrating the publish–subscribe model with clients and a central broker.}
     \label{fig:mqtt-architecture}
 \end{figure}
-It follows a publish-subscribe model (\Cref{fig:mqtt-architecture}) where the centralized server known as Broker is connected to various devices which are Clients \cite{usmani2021mqtt}.
-The latter publish messages to specific topics, while subscribers receive only the data relevant to them.
 
-\ac{MQTT} is widely used in \ac{IoT} systems due to its lightweight nature and efficient use of bandwidth.
+In this model, clients can either \textit{publish} messages to specific \textit{topics} or \textit{subscribe} to topics of interest, receiving only data relevant to them \cite{usmani2021mqtt}. 
+The broker acts as an intermediary that decouples message producers and consumers, ensuring reliable and asynchronous communication. 
 
-In the current implementation of the proposed application \ref{goal:application}, \ac{MQTT} is employed as the communication layer to handle messages across devices. 
-Although it relies on a central broker and is therefore not fully decentralized, its advantages make it suitable for prototyping and testing the distributed algorithm \ref{goal:algorithm}. 
-Future developments may involve replacing \ac{MQTT} with \ac{P2P} technologies such as Bluetooth, to achieve complete decentralization.
+\ac{MQTT} is widely adopted in \ac{IoT} systems due to its minimal packet overhead, low bandwidth consumption, and persistent session management, making it particularly suitable for constrained devices and unstable network conditions.
+
+The protocol defines three levels of \ac{QoS}, which determine the reliability of message delivery:
+\begin{itemize}
+    \item \textbf{\ac{QoS} 0 – At most once:} messages are delivered according to the best effort of the underlying network, with no confirmation or retry mechanism. There is no acknowledgment from the receiver.
+    \item \textbf{\ac{QoS} 1 – At least once:} ensures that messages are delivered to the receiver at least one time, though duplicates may occur. It requires a PUBACK acknowledgment.
+    \item \textbf{\ac{QoS} 2 – Exactly once:} guarantees that each message is received only once by the intended recipient, at the cost of additional network overhead using using a four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP).
+\end{itemize}
+
+In the current implementation of the proposed application (Section~\ref{goal:application}), \ac{MQTT} is employed as the communication layer to exchange messages across devices. Although it depends on a centralized broker and is therefore not fully decentralized, its simplicity and efficiency make it an ideal solution for prototyping and testing the distributed messaging algorithm (Section~\ref{goal:algorithm}). 
+
+Future developments may involve replacing \ac{MQTT} with peer-to-peer (\ac{P2P}) communication technologies, such as Bluetooth, to achieve full decentralization while maintaining the same messaging semantics.
 
 
 \chapter{Architecture and Implementation}
@@ -622,7 +637,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -646,7 +661,7 @@ Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-co
 
 
 
-\lstinputlisting[language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
 Each node starts with \texttt{path = listOf(localId)} because the path stored in a node’s gossip ends with that node’s ID and 
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
@@ -742,6 +757,7 @@ It follows a \textbf{\ac{MVVM}} software architectural pattern, separating the u
     The ViewModel holds the \ac{UI} state and uses observable data structures to notify the View when updates occur.
 \end{itemize}
 
+\subsection{Layered design}
 The layered design of the application can be seen in \Cref{fig:app-layered-design}.
 Now it will be described each layer in a bottom-up approach.
 
@@ -756,9 +772,16 @@ It provides primitives for defining fields, sharing data among neighbors, and pe
 
 \lstinputlisting[language=Kotlin,label={lst:collektive-code}, caption={Collektive engine setup}]{listings/Collektive.kt}
 
-GPS data is consumed locally, provided by the \textbf{Location Services} layer, which interfaces with the device's native location APIs to obtain accurate positional information (it's platform specific).
-GPS data is shared via transport for neighbor awareness but it's independent from it.
-This layer captures the device's latitude and longitude, which are essential for computing distances between nodes in the messaging algorithm, and updating location in real time.
+GPS data (\Cref{lst:gps-data-code}) is consumed locally, provided by the \textbf{Location Services} layer, which interfaces with the device's native location APIs to obtain accurate positional information (it's platform specific).
+\lstinputlisting[float, language=Kotlin,label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
+
+GPS data is shared via transport layer for neighbor awareness but it's independent from it.
+
+Location Services layer captures the device's latitude and longitude, essential for computing distances between nodes in the messaging algorithm, and updates location in real time.
+To calculate the distance between two devices, given their GPS coordinates, the Haversine formula is used:
+\begin{equation}
+d = 2r \cdot \operatorname{arcsin}(\sqrt{\sin^2(\frac{\Delta\phi}{2}) + \cos(\phi_1)\cos(\phi_2)\sin^2(\frac{\Delta\lambda}{2})})
+\end{equation}
 
 These informations are spread to other nodes through \textbf{Transport Layer}, using \ac{MQTT} protocol as communication mechanism.
 The host used for this purpose is the public broker \textit{test.mosquitto.org} over WebSocket with the port 8080 instead of the default 1883 (over TCP).
@@ -767,17 +790,18 @@ It also ensures compatibility with browsers and WebApps, allowing future extensi
 
 Transport layer is responsible for:
 \begin{itemize}
-    \item \textbf{Neighbor discovery}
+    \item \textbf{Neighbor discovery}: Every device periodically broadcast its presence via heartbeat (it means that the device is connected to the network) to a wildcard topic
+     (will match all heartbeat messages published by any device) \texttt{echo/heartbeat/+} (\Cref{lst:heartbeat-code}).
+     \lstinputlisting[float, language=Kotlin,label={lst:heartbeat-code}, caption={Heartbeat pulse recursive sending function.}]{listings/heartBeat.kt}
+     The \ac{QoS} used is level 0 (fire and forget), since heartbeats are ephemeral and frequent, this ensures minimal overhead.
+    It's also implemented a timeout mechanism to remove neighbors (\Cref{lst:cleanHeartBeat-code}): If a device stops sending heartbeats (crashed, lost connection, moved away) after 5 seconds (\texttt{retentionTime}), it's removed from the neighbor list.
+    \lstinputlisting[language=Kotlin,label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
+
+    \item \textbf{Message delivery}: 
+    
     \item \textbf{Location sharing}
-    \item \textbf{Message delivery}
 \end{itemize}
 
-
-
-
-
-
-\subsection{Communication layer}
 
 
 %----------------------------------------------------------------------------------------
