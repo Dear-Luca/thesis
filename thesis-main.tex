@@ -109,6 +109,12 @@ To my family.
 %----------------------------------------------------------------------------------------
 \chapter{Introduction}
 \label{chap:introduction}
+This chapter introduces the overall purpose and scope of the thesis. 
+It begins by presenting the scientific and technological context in which this work is situated, highlighting the state of the art and
+the motivations that led to the development of a decentralized proximity-based messaging system. 
+Subsequently, it outlines the research objectives, methodological approach, and main contributions of the study.
+
+
 %----------------------------------------------------------------------------------------
 \section{Context}
 In a world where \ac{IoT} devices are becoming increasingly prevalent,
@@ -445,6 +451,8 @@ Future developments may involve replacing \ac{MQTT} with peer-to-peer (\ac{P2P})
 
 
 \chapter{Architecture and Implementation}
+This chapter presents the main contributions of the thesis, with particular emphasis on the design and implementation of the decentralized messaging system. 
+It details the architectural choices, software components, and underlying mechanisms that enable message propagation through gossip-based aggregate behaviors, highlighting how these elements collectively realize the system’s objectives and support its cross-platform deployment.
 
 \section{Requirements}
 This section outlines both the functional and non-functional requirements of the messaging system developed in this thesis.
@@ -515,7 +523,7 @@ Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets mu
 \end{figure}
 
 \section{Network Architecture}
-In the following sections, the overall \textbf{architecture} of the messaging system will be described, focusing on both the design and communication model.
+In the following sections, the overall \textbf{architecture} of the messaging system will be described (\Cref{fig:architecture-overview}), focusing on both the design and communication model.
 \subsection{Design}
 The network is modeled as an undirected graph $G = (V, E)$, where $V$ is the set of nodes representing individual devices, and $E$ is the set of edges representing communication links between neighboring nodes (\Cref{fig:network-graph}).
 \begin{figure}[h!]
