@@ -729,40 +729,51 @@ recovers the $O(snm)$ worst-case bound.
 
 
 \section{Mobile Application}
-The mobile application serves as the \ac{GUI} for the messaging system, providing users both an interface and a runtime environment for the algorithm.
+The mobile application serves as the \ac{GUI} of the messaging system, providing users with both an intuitive interface and a runtime environment for executing the algorithm.
 
-\textbf{Echo} is the name chosen for the application, it recalls the idea of messages reverberating through a network within a certain range and time frame (like voice echoing).
-It's also the Linux command for printing messages to the terminal, symbolizing communication.
+\textbf{Echo} is the name chosen for the application, as it evokes the idea of messages reverberating through the network within a limited range and time frame, analogous to how sound echoes in space.
+The name also recalls the Linux command \texttt{echo}, used to print messages to the terminal, symbolizing communication and simplicity.
 
-The mobile application is implemented using \ac{KMP} and Compose Multiplatform, ensuring \textbf{cross-platform} compatibility between Android and iOS devices.
-In this section the architecture and the implementation details of the app will be described.
+The application is implemented using \ac{KMP} and Compose Multiplatform, ensuring \textbf{cross-platform} compatibility between Android and iOS devices.
+This section describes the architecture and implementation details of the app.
+
 
 
 \subsection{Architecture}
 
-The architecture of the Echo application is designed to be modular and scalable, allowing for easy maintenance and future enhancements.
-It follows a \textbf{\ac{MVVM}} software architectural pattern, separating the user interface, business logic, and data management into distinct layers (\Cref{fig:app-MVVM}).
+The architecture of the \textbf{Echo} application is designed to be modular and scalable, enabling easy maintenance and future extensions.
+It follows the \textbf{\ac{MVVM}} architectural pattern, which separates the user interface, business logic, and data management into distinct layers (\Cref{fig:app-MVVM}).
+
 \begin{figure}
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/mvvm.png}}
-    \caption{Illustration of the MVVM architecture pattern.}
+    \caption{Illustration of the MVVM architectural pattern.}
     \label{fig:app-MVVM}
 \end{figure}
 
-\ac{MVVM} is structured into three main components:
+The \ac{MVVM} pattern consists of three main components:
 \begin{itemize}
-    \item \textbf{Model}: Represents the data and business logic of the application. It is responsible for managing the data, including retrieving it from a database or an API, and performing any necessary transformations or calculations (in this case Aggregate Computing logic).
-    \item \textbf{View}: Represents the \ac{UI} of the application, what the user sees and interacts with. It displays the data provided by the ViewModel and sends user interactions (such as button clicks) back to the ViewModel.
-    \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves data from the Model, applies any necessary transformations, and exposes the data to the View in a \ac{UI} friendly way. 
-    The ViewModel holds the \ac{UI} state and uses observable data structures to notify the View when updates occur.
+    \item \textbf{Model}: Represents the data and business logic of the application. It is responsible for managing data sources, such as local databases or APIs, and performing necessary transformations or computations.
+    \item \textbf{View}: Defines the \ac{UI} layer—the part of the application that the user interacts with. It displays data exposed by the ViewModel and forwards user interactions (e.g., button clicks or text input) back to it.
+    \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves and processes data from the Model, exposing it in a \ac{UI}-friendly form. The ViewModel maintains the application state and employs observable data structures to notify the View of any updates.
 \end{itemize}
 
-\subsection{Layered design}
-The layered design of the application can be seen in \Cref{fig:app-layered-design}.
-Now it will be described each layer in a bottom-up approach.
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth, height=0.8\linewidth, keepaspectratio]{figures/mvvm-echo.png}}
+    \caption{MVVM architecture of the \textbf{Echo} mobile application.}
+    \label{fig:mvvm-echo}
+\end{figure}
 
-\textbf{Collektive Engine} layer is the Aggregate Computing runtime environment for managing and executing aggregate programs like the messaging algorithm.
-It provides primitives for defining fields, sharing data among neighbors, and performing computations over the network like \texttt{share}, \texttt{alignedOn}, \texttt{neighboring} (\Cref{lst:collektive-code}).
+
+\subsection{Layered design}
+
+The layered design of the application is illustrated in \Cref{fig:app-layered-design}.
+Each layer is described below following a bottom-up approach.
+
+\textbf{Collektive Engine.} This layer acts as the Aggregate Computing runtime environment responsible for managing and executing aggregate programs, including the messaging algorithm.
+It provides primitives for defining computational fields, sharing data among neighbors, and performing distributed computations across the network, such as \texttt{share}, \texttt{alignedOn}, and \texttt{neighboring} (\Cref{lst:collektive-code}).
+
 \begin{figure}
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/app-layered-design.png}}
@@ -770,38 +781,54 @@ It provides primitives for defining fields, sharing data among neighbors, and pe
     \label{fig:app-layered-design}
 \end{figure}
 
-\lstinputlisting[language=Kotlin,label={lst:collektive-code}, caption={Collektive engine setup}]{listings/Collektive.kt}
+\lstinputlisting[language=Kotlin, label={lst:collektive-code}, caption={Collektive engine setup.}]{listings/Collektive.kt}
 
-GPS data (\Cref{lst:gps-data-code}) is consumed locally, provided by the \textbf{Location Services} layer, which interfaces with the device's native location APIs to obtain accurate positional information (it's platform specific).
-\lstinputlisting[float, language=Kotlin,label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
+The \textbf{Location Services} layer provides access to the device’s native location APIs to obtain accurate positional information (\Cref{lst:gps-data-code}).
+It captures latitude and longitude values, essential for computing distances between nodes in the messaging algorithm, and updates the device’s location in real time.
 
-GPS data is shared via transport layer for neighbor awareness but it's independent from it.
+\lstinputlisting[float, language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
 
-Location Services layer captures the device's latitude and longitude, essential for computing distances between nodes in the messaging algorithm, and updates location in real time.
-To calculate the distance between two devices, given their GPS coordinates, the Haversine formula is used:
+To compute distances between two devices with known coordinates, the Haversine formula is used:
 \begin{equation}
-d = 2r \cdot \operatorname{arcsin}(\sqrt{\sin^2(\frac{\Delta\phi}{2}) + \cos(\phi_1)\cos(\phi_2)\sin^2(\frac{\Delta\lambda}{2})})
+d = 2r \cdot \operatorname{arcsin}\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)}\right)
 \end{equation}
 
-These informations are spread to other nodes through \textbf{Transport Layer}, using \ac{MQTT} protocol as communication mechanism.
-The host used for this purpose is the public broker \textit{test.mosquitto.org} over WebSocket with the port 8080 instead of the default 1883 (over TCP).
-This is firewall friendly, many private or public networks block non standard ports like 1883, while 8080 is commonly allowed for web traffic.
-It also ensures compatibility with browsers and WebApps, allowing future extensions of the application to web platforms.
+The location data obtained locally is shared through the \textbf{Transport Layer}, enabling neighbor awareness without direct coupling to the Collektive Engine.
+This layer uses the \ac{MQTT} protocol as its communication mechanism, relying on the public broker \textit{test.mosquitto.org} over WebSocket on port 8080 instead of the default TCP port 1883.
+Using port 8080 improves firewall compatibility, since many private or public networks block non-standard ports like 1883, while 8080 is commonly allowed for web traffic.
+This setup also ensures compatibility with browsers and WebApps, facilitating future extensions of the application to web platforms.
 
-Transport layer is responsible for:
+The Transport Layer is responsible for the following functionalities:
+
 \begin{itemize}
-    \item \textbf{Neighbor discovery}: Every device periodically broadcast its presence via heartbeat (it means that the device is connected to the network) to a wildcard topic
-     (will match all heartbeat messages published by any device) \texttt{echo/heartbeat/+} (\Cref{lst:heartbeat-code}).
-     \lstinputlisting[float, language=Kotlin,label={lst:heartbeat-code}, caption={Heartbeat pulse recursive sending function.}]{listings/heartBeat.kt}
-     The \ac{QoS} used is level 0 (fire and forget), since heartbeats are ephemeral and frequent, this ensures minimal overhead.
-    It's also implemented a timeout mechanism to remove neighbors (\Cref{lst:cleanHeartBeat-code}): If a device stops sending heartbeats (crashed, lost connection, moved away) after 5 seconds (\texttt{retentionTime}), it's removed from the neighbor list.
-    \lstinputlisting[language=Kotlin,label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
+    \item \textbf{Neighbor discovery}: Each device periodically broadcasts its presence via a heartbeat message, indicating active network connectivity, to the wildcard topic \texttt{echo/heartbeat/+} (\Cref{lst:heartbeat-code}).
+    \lstinputlisting[float, language=Kotlin, label={lst:heartbeat-code}, caption={Heartbeat pulse recursive sending function.}]{listings/heartBeat.kt}
 
-    \item \textbf{Message delivery}: 
-    
-    \item \textbf{Location sharing}
+    The \ac{QoS} level 0 (\textit{fire and forget}) is used, since heartbeats are ephemeral and frequent, minimizing overhead.
+    A timeout mechanism is implemented to remove inactive neighbors (\Cref{lst:cleanHeartBeat-code}): if a device stops sending heartbeats (due to crash, disconnection, or moving away) for more than 5 seconds (\texttt{retentionTime}), it is removed from the neighbor list.
+
+    \lstinputlisting[language=Kotlin, label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
+
+    \item \textbf{Message delivery}: Each device subscribes to its dedicated topic \texttt{echo/messages/<deviceId>} to receive messages.
+    For this purpose, \ac{QoS} level 1 (\textit{at least once}) is used to ensure reliable delivery:
+    \begin{enumerate}
+        \item The sender publishes a message to the broker.
+        \item The broker acknowledges receipt (\texttt{PUBACK}).
+        \item The broker forwards the message to subscribers.
+        \item The subscriber acknowledges receipt (\texttt{PUBACK}).
+        \item If acknowledgment fails, the message is retransmitted.
+    \end{enumerate}
+
+    \item \textbf{Location sharing}: GPS coordinates are embedded within the heartbeat payloads (\Cref{lst:GPS-heartbeat-code}), allowing nodes to discover neighbors and compute distances without requiring a separate location-sharing mechanism.
+    \lstinputlisting[float, language=Kotlin, label={lst:GPS-heartbeat-code}, caption={GPS coordinates embedded inside the heartbeat payload.}]{listings/DeviceLocationHeartbeat.kt}
+    This design ensures that GPS data is continuously updated through the heartbeat frequency.
 \end{itemize}
 
+Finally, the \textbf{Application Layer} encapsulates the core logic of the messaging system.
+It implements the decentralized gossip algorithm responsible for message propagation and handles all user-facing features, including message creation, parameter configuration (expiration time and propagation distance), and real-time visualization of messages.
+
+\chapter{Validation}
+\section{Continuous Integration}
 
 
 %----------------------------------------------------------------------------------------
