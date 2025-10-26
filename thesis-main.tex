@@ -6,6 +6,9 @@
 \usepackage{shortcuts}
 \usepackage{acro}
 \usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
 
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
@@ -20,6 +23,19 @@
 \academicyear{2024-2025}
 
 \acsetup{first-style=long-short}
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{blue}\bfseries,
+  basicstyle=\ttfamily\small,
+  comment=[l]{\#},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{orange}\ttfamily,
+  moredelim=[l][\color{red}]{:},
+  morestring=[b]',
+  morestring=[b]"
+}
+
 \DeclareAcronym{IoT}{
   short = IoT,
   long  = Internet of Things
@@ -83,6 +99,11 @@
     long = Quality of Service
 }
 
+\DeclareAcronym{CI}{
+    short = CI,
+    long  = Continuous Integration
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -118,14 +139,14 @@ Subsequently, it outlines the research objectives, methodological approach, and 
 %----------------------------------------------------------------------------------------
 \section{Context}
 In a world where \ac{IoT} devices are becoming increasingly prevalent,
-    the need for efficient and reliable communication systems is paramount
+    the need for efficient and reliable communication systems is paramount (\Cref{fig:iot-devices}).
     \begin{figure}[h!]
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/iot-devices.png}}
         \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment and with many opportunities for local and even location-independent interactions on fixed network infrastructures~\protect\cite{beal2015aggregate}.}
         \label{fig:iot-devices}
     \end{figure}
-    (\Cref{fig:iot-devices}).
+    
 
     The interactions between neighboring devices play a crucial role in enabling seamless data exchange and coordination,
     so there is the need to design networks with infrastructures that support scalability, adaptability and reusability \cite{beal2015aggregate}.
@@ -836,7 +857,22 @@ Finally, the \textbf{Application Layer} encapsulates the core logic of the messa
 It implements the decentralized gossip algorithm responsible for message propagation and handles all user-facing features, including message creation, parameter configuration (expiration time and propagation distance), and real-time visualization of messages.
 
 \chapter{Validation}
+This chapter describes the validation process undertaken to ensure the correctness of the algorithm.
+It's divided into \ac{CI} setup and Simulation experiments.
+
 \section{Continuous Integration}
+\ac{CI} is a software development practice that involves automatically building, testing, and validating code changes as they are integrated into a shared repository.
+The integrations are made frequently, ensuring that the system remains in a consistently deployable state throughout the development lifecycle.
+This approach helps maintain code quality, reduces integration problems, and promotes collaboration among team members.
+
+In this project, \textbf{GitHub Actions} is used as the \ac{CI} platform to automate the build processes for both the shared codebase and the mobile application.
+The \ac{CI} pipeline is configured to trigger on every push or pull request to the main branch, ensuring that all changes are automatically validated before being merged.
+
+The algorithm was added to \footnote{\url{https://github.com/Collektive/collektive-examples}}, repository which hosts various examples of applications built using the Collektive framework.
+The \ac{CI} workflow includes the following jobs:
+
+
+\lstinputlisting[float, language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
 
 
 %----------------------------------------------------------------------------------------
