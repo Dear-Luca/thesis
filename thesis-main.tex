@@ -113,7 +113,7 @@ To my family.
 \section{Context}
 In a world where \ac{IoT} devices are becoming increasingly prevalent,
     the need for efficient and reliable communication systems is paramount
-    \begin{figure}
+    \begin{figure}[h!]
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/iot-devices.png}}
         \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment and with many opportunities for local and even location-independent interactions on fixed network infrastructures~\protect\cite{beal2015aggregate}.}
@@ -170,7 +170,7 @@ that maps each device $\delta$ in the domain $D$ to a local value $\ell$ in the 
 This value can change in time with a \textit{field evolution} that maps each point in time to a field value.
 \Cref{fig:layers-AP} shows how Aggregate Programming abstracts the complexity of the underlying distributed network and its
  coordination challenges through a sequence of hierarchical abstraction layers.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layers-AP.png}}
     \caption{Layered structure of Aggregate Programming, illustrating the abstraction at each level~\protect\cite{beal2015aggregate}.}
@@ -285,7 +285,7 @@ The primary target audience includes activists, journalists, and civil society m
 
 A notable feature is the ability to install Briar on an Android device directly from another device that already has it installed, facilitating deployment in disconnected scenarios.
 Nowadays the application is available only for Android devices, with no official iOS version.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/briar.png}}
     \caption{Diagram illustrating how Briar supports private messaging, public forums, and blogs through multiple transport methods such as Bluetooth, Wi-Fi, and the Internet. \protect\cite{briar}.}
@@ -316,7 +316,7 @@ Although not originally intended for this purpose, FireChat was widely adopted d
  The application gained popularity in Iraq in 2014, when government restrictions limited Internet access, and later during the 2014 Hong Kong protests (known as the Umbrella Revolution)
 
 Nowadays Firechat is discontinued and no longer available on app stores, the official website is also offline.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/bluetooth-mesh.png}}
     \caption{FireChat's mesh networking architecture, where messages are relayed through nearby devices using WiFi and Bluetooth, enabling communication without centralized infrastructure.}
@@ -334,7 +334,7 @@ These applications demonstrate the feasibility of decentralized communication, t
 \subsection{Aggregate Computing frameworks}
 There are several frameworks and libraries that facilitate the development of Aggregate Computing applications, 
 implementing the principles of field calculus and providing abstractions for defining collective behaviors.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/scafi.png}}
     \caption{High-level architecture of the ScaFi framework, illustrating its components ~\protect\cite{CASADEI2022101248}.}
@@ -352,7 +352,7 @@ Some of the most notable ones include:
     \textit{ScaFi} only supports JVM and web-based applications.
     \item \textbf{Protelis} \cite{10.1145/2695664.2695913} is a programming language designed to simplify the development of resilient and well-structured networked systems, and can be integrated into various simulation frameworks. 
     It provides a Java-hosted implementation of the field calculus through the \texttt{protelis-lang} library, offering a domain-general foundational API for Aggregate Programming \cite{8064092}.
-    \begin{figure}
+    \begin{figure}[h!]
         \centering
         \fbox{\includegraphics[width=.8\linewidth]{figures/protelis.png}}
         \caption{Protelis architecture.}
@@ -420,7 +420,7 @@ The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{
 \textbf{\ac{MQTT}} (Message Queuing Telemetry Transport) is a lightweight communication protocol based on a centralized \textit{publish–subscribe} architecture. 
 It relies on a central server, known as the \textit{broker}, which manages message distribution among connected clients (\Cref{fig:mqtt-architecture}). 
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/mqtt.png}}
     \caption{MQTT architecture illustrating the publish–subscribe model with clients and a central broker.}
@@ -507,7 +507,7 @@ From an implementation perspective, the \textit{Collektive} framework is employe
 The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable publish/subscribe mechanism suitable for distributed messaging and initial prototyping. 
 
 Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS, JVM) facilitating consistency between the simulated and real execution environments.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layered-design.png}}
     \caption{High-level overview of the architecture, illustrating the interaction between the different layers of the messaging system.}
@@ -637,7 +637,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+\lstinputlisting[language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -661,8 +661,8 @@ Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-co
 
 
 
-\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
-Each node starts with \texttt{path = listOf(localId)} because the path stored in a node’s gossip ends with that node’s ID and 
+\lstinputlisting[language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+Each node starts with \texttt{path = listOf(localId)} because the path stored in a node's gossip ends with that node's ID and 
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
 \subsubsection{Sharing logic and distance computation}
@@ -744,7 +744,7 @@ This section describes the architecture and implementation details of the app.
 The architecture of the \textbf{Echo} application is designed to be modular and scalable, enabling easy maintenance and future extensions.
 It follows the \textbf{\ac{MVVM}} architectural pattern, which separates the user interface, business logic, and data management into distinct layers (\Cref{fig:app-MVVM}).
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/mvvm.png}}
     \caption{Illustration of the MVVM architectural pattern.}
@@ -758,7 +758,7 @@ The \ac{MVVM} pattern consists of three main components:
     \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves and processes data from the Model, exposing it in a \ac{UI}-friendly form. The ViewModel maintains the application state and employs observable data structures to notify the View of any updates.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth, height=0.8\linewidth, keepaspectratio]{figures/mvvm-echo.png}}
     \caption{MVVM architecture of the \textbf{Echo} mobile application.}
@@ -774,7 +774,7 @@ Each layer is described below following a bottom-up approach.
 \textbf{Collektive Engine.} This layer acts as the Aggregate Computing runtime environment responsible for managing and executing aggregate programs, including the messaging algorithm.
 It provides primitives for defining computational fields, sharing data among neighbors, and performing distributed computations across the network, such as \texttt{share}, \texttt{alignedOn}, and \texttt{neighboring} (\Cref{lst:collektive-code}).
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/app-layered-design.png}}
     \caption{Layered design of the mobile application, illustrating the interaction between the different components.}
@@ -784,9 +784,9 @@ It provides primitives for defining computational fields, sharing data among nei
 \lstinputlisting[language=Kotlin, label={lst:collektive-code}, caption={Collektive engine setup.}]{listings/Collektive.kt}
 
 The \textbf{Location Services} layer provides access to the device’s native location APIs to obtain accurate positional information (\Cref{lst:gps-data-code}).
-It captures latitude and longitude values, essential for computing distances between nodes in the messaging algorithm, and updates the device’s location in real time.
+It captures latitude and longitude values, essential for computing distances between nodes in the messaging algorithm, and updates the device's location in real time.
 
-\lstinputlisting[float, language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
+\lstinputlisting[language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
 
 To compute distances between two devices with known coordinates, the Haversine formula is used:
 \begin{equation}
@@ -802,7 +802,7 @@ The Transport Layer is responsible for the following functionalities:
 
 \begin{itemize}
     \item \textbf{Neighbor discovery}: Each device periodically broadcasts its presence via a heartbeat message, indicating active network connectivity, to the wildcard topic \texttt{echo/heartbeat/+} (\Cref{lst:heartbeat-code}).
-    \lstinputlisting[float, language=Kotlin, label={lst:heartbeat-code}, caption={Heartbeat pulse recursive sending function.}]{listings/heartBeat.kt}
+    \lstinputlisting[language=Kotlin, label={lst:heartbeat-code}, caption={Heartbeat pulse recursive sending function.}]{listings/heartBeat.kt}
 
     The \ac{QoS} level 0 (\textit{fire and forget}) is used, since heartbeats are ephemeral and frequent, minimizing overhead.
     A timeout mechanism is implemented to remove inactive neighbors (\Cref{lst:cleanHeartBeat-code}): if a device stops sending heartbeats (due to crash, disconnection, or moving away) for more than 5 seconds (\texttt{retentionTime}), it is removed from the neighbor list.
@@ -820,7 +820,7 @@ The Transport Layer is responsible for the following functionalities:
     \end{enumerate}
 
     \item \textbf{Location sharing}: GPS coordinates are embedded within the heartbeat payloads (\Cref{lst:GPS-heartbeat-code}), allowing nodes to discover neighbors and compute distances without requiring a separate location-sharing mechanism.
-    \lstinputlisting[float, language=Kotlin, label={lst:GPS-heartbeat-code}, caption={GPS coordinates embedded inside the heartbeat payload.}]{listings/DeviceLocationHeartbeat.kt}
+    \lstinputlisting[language=Kotlin, label={lst:GPS-heartbeat-code}, caption={GPS coordinates embedded inside the heartbeat payload.}]{listings/DeviceLocationHeartbeat.kt}
     This design ensures that GPS data is continuously updated through the heartbeat frequency.
 \end{itemize}
 
