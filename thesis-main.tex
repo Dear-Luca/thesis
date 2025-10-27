@@ -31,7 +31,7 @@
 \lstdefinelanguage{yaml}{
   keywords={true,false,null,y,n},
   keywordstyle=\color{purple}\bfseries,
-  basicstyle=\ttfamily\small,                                 % assuming a key comes first
+  basicstyle=\ttfamily\scriptsize,                                 % assuming a key comes first
   sensitive=false,
   comment=[l]{\#},
   morecomment=[s]{/*}{*/},
@@ -186,7 +186,7 @@ This model is particularly well-suited for scenarios where devices need to coord
 
 As discussed in distributed field programming \cite{viroli2019aggregate}, there are principles to follow when designing large-scale systems:
 \begin{itemize}
-    \item The mechanisms ensuring robust coordination should operate transparently in the background, so that programmers don’t need to manage them directly.
+    \item The mechanisms ensuring robust coordination should operate transparently in the background, so that programmers don't need to manage them directly.
     \item The composition of modules and subsystems should be simple and predictable, allowing developers to clearly understand the consequences of combining components.
     \item Large-scale distributed systems often consist of multiple heterogeneous subsystems, each of which may require different coordination strategies depending on the region or context in time.
 \end{itemize}
@@ -199,7 +199,7 @@ Aggregate Programming aims to overcome these challenges through three fundamenta
 The foundation of this paradigm lies in \textit{field calculus} \cite{beal2015aggregate},
 a core set of constructs modeling device behavior and interaction. These essential features are captured
 in a tiny universal language suitable for mathematical analysis.
-The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space–time domain to a scalar value.
+The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space-time domain to a scalar value.
 
 According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a function
 
@@ -247,7 +247,7 @@ In recent years, the proliferation of \ac{IoT} and mobile devices has increased 
 As devices are becoming pervasive and ubiquitous, new models are required to enable coordination and information exchange without relying on fixed infrastructures.
 This need motivates the exploration of decentralized and distributed approaches, which can operate robustly in dynamic and connectivity-limited environments.
 
-% Describe what problem exists and why it’s challenging.
+% Describe what problem exists and why it's challenging.
 % Focus on the technical or conceptual gap your thesis addresses.
 
 \subsection{Problem statement}
@@ -385,7 +385,7 @@ Some of the most notable ones include:
 \begin{itemize}
     \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for Aggregate Computing \cite{CASADEI2022101248}. 
     It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs, the high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
-    \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist simulator \cite{10.1007/978-3-030-78198-9_10}.
+    \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist Simulator \cite{Pianini_2013}, an open-source software for simulating and experimenting with distributed systems.
     
     The main applications are in the development of swarm systems, crowd management, wireless sensor network and
     smart city applications.
@@ -458,13 +458,13 @@ The table \Cref{tab:ble-wifidirect} summarizes the main differences between \ac{
 
 \subsubsection{\ac{MQTT}}
 \label{subsubsection:Mqtt}
-\textbf{\ac{MQTT}} (Message Queuing Telemetry Transport) is a lightweight communication protocol based on a centralized \textit{publish–subscribe} architecture. 
+\textbf{\ac{MQTT}} (Message Queuing Telemetry Transport) is a lightweight communication protocol based on a centralized \textit{publish-subscribe} architecture. 
 It relies on a central server, known as the \textit{broker}, which manages message distribution among connected clients (\Cref{fig:mqtt-architecture}). 
 
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/mqtt.png}}
-    \caption{MQTT architecture illustrating the publish–subscribe model with clients and a central broker.}
+    \caption{MQTT architecture illustrating the publish-subscribe model with clients and a central broker.}
     \label{fig:mqtt-architecture}
 \end{figure}
 
@@ -475,9 +475,9 @@ The broker acts as an intermediary that decouples message producers and consumer
 
 The protocol defines three levels of \ac{QoS}, which determine the reliability of message delivery:
 \begin{itemize}
-    \item \textbf{\ac{QoS} 0 – At most once:} messages are delivered according to the best effort of the underlying network, with no confirmation or retry mechanism. There is no acknowledgment from the receiver.
-    \item \textbf{\ac{QoS} 1 – At least once:} ensures that messages are delivered to the receiver at least one time, though duplicates may occur. It requires a PUBACK acknowledgment.
-    \item \textbf{\ac{QoS} 2 – Exactly once:} guarantees that each message is received only once by the intended recipient, at the cost of additional network overhead using using a four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP).
+    \item \textbf{\ac{QoS} 0 - At most once:} messages are delivered according to the best effort of the underlying network, with no confirmation or retry mechanism. There is no acknowledgment from the receiver.
+    \item \textbf{\ac{QoS} 1 - At least once:} ensures that messages are delivered to the receiver at least one time, though duplicates may occur. It requires a PUBACK acknowledgment.
+    \item \textbf{\ac{QoS} 2 - Exactly once:} guarantees that each message is received only once by the intended recipient, at the cost of additional network overhead using using a four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP).
 \end{itemize}
 
 In the current implementation of the proposed application (Section~\ref{goal:application}), \ac{MQTT} is employed as the communication layer to exchange messages across devices. Although it depends on a centralized broker and is therefore not fully decentralized, its simplicity and efficiency make it an ideal solution for prototyping and testing the distributed messaging algorithm (Section~\ref{goal:algorithm}). 
@@ -487,7 +487,7 @@ Future developments may involve replacing \ac{MQTT} with peer-to-peer (\ac{P2P})
 
 \chapter{Architecture and Implementation}
 This chapter presents the main contributions of the thesis, with particular emphasis on the design and implementation of the decentralized messaging system. 
-It details the architectural choices, software components, and underlying mechanisms that enable message propagation through gossip-based aggregate behaviors, highlighting how these elements collectively realize the system’s objectives and support its cross-platform deployment.
+It details the architectural choices, software components, and underlying mechanisms that enable message propagation through gossip-based aggregate behaviors, highlighting how these elements collectively realize the system's objectives and support its cross-platform deployment.
 
 \section{Requirements}
 This section outlines both the functional and non-functional requirements of the messaging system developed in this thesis.
@@ -518,7 +518,6 @@ The mobile application serves as the \ac{UI} for the messaging system, providing
     \item \textbf{User interface}: The application should provide a simple and intuitive \ac{UI} that allows users to compose messages, set parameters (expiration time and propagation distance), and view received messages in real-time.
     \item \textbf{GPS integration}: The application uses the device's GPS to determine its location, which is essential to compute distances between nodes for message propagation. 
     \item \textbf{Communication layer}: A lightweight communication protocol must be used to send messages between the various nodes in the network.
-
 \end{enumerate}
 
 \subsection{Non-functional requirements}
@@ -538,7 +537,6 @@ The system must sustain acceptable performance levels as the number of participa
 
 In addition, the codebase must exhibit high \textbf{maintainability} and \textbf{extensibility}, enabling future developers to easily understand, modify, and enhance the system. These qualities are achieved through modular architectural design, comprehensive documentation, and adherence to established coding standards. Furthermore, the system architecture should be flexible enough to support the integration of new communication protocols or additional functionalities without requiring significant refactoring.
 
-
 \subsection{Analysis}
 To address these requirements and challenges, the system adopts a \textbf{decentralized architecture} through the principles of \textbf{Aggregate Computing}. 
 Each device is treated as an independent computational entity (or node) capable of locally executing aggregate functions and exchanging information only with its neighbors. 
@@ -550,24 +548,23 @@ From an implementation perspective, the \textit{Collektive} framework is employe
 The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable publish/subscribe mechanism suitable for distributed messaging and initial prototyping. 
 
 Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS, JVM) facilitating consistency between the simulated and real execution environments.
-\begin{figure}[h!]
+\section{Network Architecture}
+In the following sections, the overall \textbf{architecture} of the messaging system will be described (\Cref{fig:architecture-overview}), focusing on both the design and communication model.
+\begin{figure}
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layered-design.png}}
     \caption{High-level overview of the architecture, illustrating the interaction between the different layers of the messaging system.}
     \label{fig:architecture-overview}
 \end{figure}
-
-\section{Network Architecture}
-In the following sections, the overall \textbf{architecture} of the messaging system will be described (\Cref{fig:architecture-overview}), focusing on both the design and communication model.
 \subsection{Design}
-The network is modeled as an undirected graph $G = (V, E)$, where $V$ is the set of nodes representing individual devices, and $E$ is the set of edges representing communication links between neighboring nodes (\Cref{fig:network-graph}).
+The network is modeled as an undirected graph $G = (V, E)$, where $V$ is the set of nodes representing individual devices,
+ and $E$ is the set of edges representing communication links between neighboring nodes (\Cref{fig:network-graph}).
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.6\linewidth]{figures/network-graph.png}}
     \caption{Network architecture image taken from \textit{Alchemist Simulator} illustrating nodes and their communication links. Each node represents a device in the messaging system, and edges denote proximity-based connections enabling message exchange.}
     \label{fig:network-graph}
 \end{figure}
-
 A \textbf{node} in the network represents a single device (e.g., a smartphone) running the messaging software.
 Each node exhibits the following characteristics:
 \begin{enumerate}
@@ -576,7 +573,8 @@ While active, the node periodically executes the aggregate algorithm through com
 When the node leaves the network (for example, when the application is closed), it terminates all communication and computation activities.
 \item \textbf{State}: Each node maintains a local state that includes its unique identifier, 
 a list of neighboring nodes with associated distances, its current message value, and positional information. This state is continuously updated based on local interactions.
-\item \textbf{Internal Aggregate Computing Logic}: Each node autonomously executes the aggregate algorithm defined in Section~\ref{goal:algorithm}, which governs how messages are generated, propagated, and expired according to proximity-based interactions with neighboring nodes.
+\item \textbf{Internal Aggregate Computing Logic}: Each node autonomously executes the aggregate algorithm defined in Section~\ref{goal:algorithm}, which governs how messages are generated, propagated, 
+and expired according to proximity-based interactions with neighboring nodes.
 \end{enumerate}
 The network is \textbf{distributed} and \textbf{decentralized}, meaning there is no central authority or server managing the communication.
 All the nodes behave like whole systems, they are considered together as a single entity like a computational field, not as a collection of individual devices.
@@ -612,13 +610,13 @@ Compilation targets are defined within the Gradle build configuration, which aut
 
 \subsubsection{Compose Multiplatform}
 \textbf{Compose Multiplatform} is the UI framework used to implement the \ac{GUI} of the application on both Android and iOS. 
-It is based on \textit{\ac{JC}}, Google’s declarative toolkit for building native Android interfaces, and extends its capabilities to multiple platforms through the \ac{KMP} ecosystem.
+It is based on \textit{\ac{JC}}, Google's declarative toolkit for building native Android interfaces, and extends its capabilities to multiple platforms through the \ac{KMP} ecosystem.
 
 Compose Multiplatform enables developers to define a single, shared user interface in Kotlin, which is then rendered natively on each target platform. 
 This approach allows the same declarative UI components and logic to be reused across environments, 
 ensuring a consistent design and behavior while maintaining native performance and responsiveness.
 
-In this project, Compose Multiplatform has been adopted to design the messaging application’s \ac{GUI}, allowing users to create, send, and visualize
+In this project, Compose Multiplatform has been adopted to design the messaging application's \ac{GUI}, allowing users to create, send, and visualize
 messages within a unified layout. 
 By sharing the same UI code between Android and iOS, the development process is simplified, reducing maintenance overhead and ensuring visual consistency across platforms.
 
@@ -664,7 +662,7 @@ at which information originating from any node spreads and becomes uniformly mix
 It quantifies how quickly local data diffuses across nodes through randomized peer-to-peer exchanges.
 
 Formally, the diffusion speed $\boldsymbol{T(\delta, n, \epsilon)}$
-is defined as the smallest number of rounds required for all (n) nodes’ estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
+is defined as the smallest number of rounds required for all (n) nodes' estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
 This metric provides a unified way to reason about the convergence rate of gossip-based communication mechanisms, regardless of the specific network topology.
 
 In the case of \textbf{Uniform Gossip}, where each node randomly selects a neighbor to exchange information with in each round, 
@@ -709,7 +707,7 @@ Each node starts with \texttt{path = listOf(localId)} because the path stored in
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
 \subsubsection{Sharing logic and distance computation}
-Message dissemination across the network is achieved using Collektive’s \texttt{share} function, which enables efficient, stateful data sharing among neighboring nodes.
+Message dissemination across the network is achieved using Collektive's \texttt{share} function, which enables efficient, stateful data sharing among neighboring nodes.
 
 At each computational round $k$, every node $u$ reads the gossip messages shared by its neighbors (\texttt{neighborsGossip}) and updates its local state accordingly. Based on this information, the node applies a relaxation step to compute the minimum distance to the message source. For each neighbor $v \in \texttt{neighbors}(u)$, the relaxation is defined as:
 \begin{equation}
@@ -728,9 +726,9 @@ These nodes remain inactive until they receive and relay a valid message proposa
 \subsubsection{Loop avoidance}
 The \texttt{path} field contained in the \texttt{GossipGradient} data class is also used to prevent cycles during message propagation (\Cref{lst:loop-avoidance-code}).
 
-To achieve this, a copy of each neighbor’s path is created, excluding the neighbor’s own identifier. This produces a sequence representing all the hops that precede that neighbor in the propagation chain.
+To achieve this, a copy of each neighbor's path is created, excluding the neighbor's own identifier. This produces a sequence representing all the hops that precede that neighbor in the propagation chain.
 
-Two checks are then performed to detect and reject cyclic paths. The first condition, \texttt{it == localId}, prevents self-cycles by discarding any proposal that has already passed through the current node. The second, \texttt{it in neighbors}, filters out proposals that traverse any of the current node’s neighbors other than the one under consideration, thereby avoiding “ping-pong” exchanges between adjacent nodes.
+Two checks are then performed to detect and reject cyclic paths. The first condition, \texttt{it == localId}, prevents self-cycles by discarding any proposal that has already passed through the current node. The second, \texttt{it in neighbors}, filters out proposals that traverse any of the current node's neighbors other than the one under consideration, thereby avoiding “ping-pong” exchanges between adjacent nodes.
 
 Together, these checks ensure that message propagation remains acyclic, improving the efficiency and correctness of the gossip process.
 
@@ -757,10 +755,10 @@ Since the implementation relies on the \texttt{share} construct, iterating over 
 
 \subsubsection{Time complexity}
 Let $n = |V|$ be the number of nodes, $m = |E|$ the number of links, and $s$ the number of sources. 
-The gradient phase is Bellman–Ford–like with non-negative weights, the pure distance relaxation costs 
+The gradient phase is Bellman-Ford-like with non-negative weights, the pure distance relaxation costs 
 $O(nm)$ per source in the worst case (thus $O(n^3)$ on dense graphs with $m \approx n^2$). 
 
-In the implementation presented here, the \textit{loop-avoidance} check scans the neighbor’s path prefix, adding an 
+In the implementation presented here, the \textit{loop-avoidance} check scans the neighbor's path prefix, adding an 
 $O(n)$ factor per neighbor. 
 This yields $O(mn)$ work per round and up to $O(n)$ rounds, i.e., $O(mn^2)$ per source 
 (dense: $O(n^4)$). 
@@ -826,7 +824,7 @@ It provides primitives for defining computational fields, sharing data among nei
 
 \lstinputlisting[language=Kotlin, label={lst:collektive-code}, caption={Collektive engine setup.}]{listings/Collektive.kt}
 
-The \textbf{Location Services} layer provides access to the device’s native location APIs to obtain accurate positional information (\Cref{lst:gps-data-code}).
+The \textbf{Location Services} layer provides access to the device's native location APIs to obtain accurate positional information (\Cref{lst:gps-data-code}).
 It captures latitude and longitude values, essential for computing distances between nodes in the messaging algorithm, and updates the device's location in real time.
 
 \lstinputlisting[language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
@@ -879,15 +877,41 @@ It's divided into \ac{CI} setup and Simulation experiments.
 The integrations are made frequently, ensuring that the system remains in a consistently deployable state throughout the development lifecycle.
 This approach helps maintain code quality, reduces integration problems, and promotes collaboration among team members.
 
-In this project, \textbf{GitHub Actions} is used as the \ac{CI} platform to automate the build processes for both the shared codebase and the mobile application.
+In this project, \textbf{GitHub Actions} is used as the \ac{CI} platform to automate the build processes for both the shared codebase \footnote{\label{collektive-example-repo}\url{https://github.com/Collektive/collektive-examples}} and the mobile application.
 The \ac{CI} pipeline is configured to trigger on every push or pull request to the main branch, ensuring that all changes are automatically validated before being merged.
 
-The algorithm was added to \footnote{\url{https://github.com/Collektive/collektive-examples}}, repository which hosts various examples of applications built using the Collektive framework.
-The \ac{CI} workflow includes the following jobs \Cref{lst:CI-collektive-examples}:
+The algorithm was added to \Cref{collektive-example-repo}, repository which hosts various examples of applications built using the Collektive framework.
+The \ac{CI} workflow includes the following jobs (\Cref{lst:CI-collektive-examples}):
 
 \lstinputlisting[float, language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
 
+\begin{enumerate}
+    \item \texttt{build}: it's the main job of the workflow, responsible for the compilation, testing and deployment over three operating systems—Windows, Ubuntu, and macOS.
+    Each run begins by checking out the project's source code from the repository, after which the workflow executes the Gradle build and testing phases through the \texttt{build-check-deploy-gradle-action}. 
+    This action automates the project verification process by running commands such as \texttt{./gradlew check runAllGraphic}, ensuring that the simulations and validation steps complete successfully.
+    \item \texttt{success}: executed after the \texttt{build} job completes, serves as a verification step,
+    it checks whether all builds have finished successfully or if any have failed or been cancelled.
+\end{enumerate}
+\section{Alchemist simulations}
+Deploing and testing the messaging system in a real-world environment with many mobile devices can be logistically challenging and require significant resources.
+To overcome these challenges, the \textit{Alchemist Simulator} is used to create a controlled environment with multiple nodes where various scenarios can be simulated and analyzed.
 
+The simulations executed through the \texttt{Alchemist Simulator}  are configured using \textbf{YAML} files, which specify the parameters governing the simulation environment, the number and type of nodes, and the associated behavioral models.
+The example shown in \Cref{lst:alchemist-simulation-yaml} presents a representative configuration defining a simulation scenario with $50$ regular nodes and $2$ source nodes.
+\lstinputlisting[float, language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
+
+Each node executes the program \texttt{gossipChatMultipleSourcesEntrypoint} (\Cref{lst:simulation-entry-point}), which serves as the entry point of the simulation.
+This component initializes the \emph{gossip-based chat algorithm}, invoking it with predefined parameters such as the message lifetime and the maximum propagation distance, thereby reproducing the intended proximity-based communication dynamics.
+\lstinputlisting[float, language=Kotlin, label={lst:simulation-entry-point}, caption={Entry point for the multi-source chat simulation.}]{listings/simulationEntryPoint.kt}
+
+Using the \ac{GUI} provided by the Simulator, it is possible to visualize the network topology and change it, monitor the state of each node in real time and analyze how messages propagate through the network over time.
+
+\subsection{Simulation with GPS traces}
+
+\chapter{Conclusions}
+\section{Final considerations}
+
+\section{Future work}
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
