@@ -550,7 +550,7 @@ The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, w
 Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS, JVM) facilitating consistency between the simulated and real execution environments.
 \section{Network Architecture}
 In the following sections, the overall \textbf{architecture} of the messaging system will be described (\Cref{fig:architecture-overview}), focusing on both the design and communication model.
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layered-design.png}}
     \caption{High-level overview of the architecture, illustrating the interaction between the different layers of the messaging system.}
@@ -907,6 +907,15 @@ This component initializes the \emph{gossip-based chat algorithm}, invoking it w
 Using the \ac{GUI} provided by the Simulator, it is possible to visualize the network topology and change it, monitor the state of each node in real time and analyze how messages propagate through the network over time.
 
 \subsection{Simulation with GPS traces}
+\texttt{Alchemist} is equipped with the ability to load and simulate on real-world maps. This feature allows for more realistic simulations by incorporating actual geographic data and node placements.
+
+The data of Vienna's 2021 marathon event was used to create a realistic challenging environment to test the messaging system \Cref{fig:marathon-simulation}.
+\begin{figure}[h!]
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/vienna-marathon.png}}
+    \caption{Simulation of the messaging system using real-world GPS traces from Vienna's 2021 marathon event.}
+    \label{fig:marathon-simulation}
+\end{figure}
 
 \chapter{Conclusions}
 \section{Final considerations}
