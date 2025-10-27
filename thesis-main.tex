@@ -10,6 +10,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
 \school{\unibo}
 \programme{Corso di Laurea Triennale in Ingegneria e Scienze Informatiche}
 \title{Multi-platform distributed systems with Aggregate Computing in Kotlin: the case of proximity messaging}
@@ -24,17 +27,28 @@
 
 \acsetup{first-style=long-short}
 
+
 \lstdefinelanguage{yaml}{
   keywords={true,false,null,y,n},
-  keywordstyle=\color{blue}\bfseries,
-  basicstyle=\ttfamily\small,
+  keywordstyle=\color{purple}\bfseries,
+  basicstyle=\ttfamily\small,                                 % assuming a key comes first
+  sensitive=false,
   comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
   commentstyle=\color{gray}\ttfamily,
-  stringstyle=\color{orange}\ttfamily,
-  moredelim=[l][\color{red}]{:},
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+%   moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
   morestring=[b]',
-  morestring=[b]"
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
 }
+
+
 
 \DeclareAcronym{IoT}{
   short = IoT,
@@ -869,8 +883,7 @@ In this project, \textbf{GitHub Actions} is used as the \ac{CI} platform to auto
 The \ac{CI} pipeline is configured to trigger on every push or pull request to the main branch, ensuring that all changes are automatically validated before being merged.
 
 The algorithm was added to \footnote{\url{https://github.com/Collektive/collektive-examples}}, repository which hosts various examples of applications built using the Collektive framework.
-The \ac{CI} workflow includes the following jobs:
-
+The \ac{CI} workflow includes the following jobs \Cref{lst:CI-collektive-examples}:
 
 \lstinputlisting[float, language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
 
