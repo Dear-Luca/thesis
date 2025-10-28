@@ -877,7 +877,7 @@ It's divided into \ac{CI} setup and Simulation experiments.
 The integrations are made frequently, ensuring that the system remains in a consistently deployable state throughout the development lifecycle.
 This approach helps maintain code quality, reduces integration problems, and promotes collaboration among team members.
 
-In this project, \textbf{GitHub Actions} is used as the \ac{CI} platform to automate the build processes for both the shared codebase \footnote{\label{collektive-example-repo}\url{https://github.com/Collektive/collektive-examples}} and the mobile application.
+In this project, \textbf{GitHub Actions} is used as \ac{CI} platform to automate the build processes for both the shared codebase \footnote{\label{collektive-example-repo}\url{https://github.com/Collektive/collektive-examples}} and the mobile application.
 The \ac{CI} pipeline is configured to trigger on every push or pull request to the main branch, ensuring that all changes are automatically validated before being merged.
 
 The algorithm was added to \Cref{collektive-example-repo}, repository which hosts various examples of applications built using the Collektive framework.
@@ -907,9 +907,9 @@ This component initializes the \emph{gossip-based chat algorithm}, invoking it w
 Using the \ac{GUI} provided by the Simulator, it is possible to visualize the network topology and change it, monitor the state of each node in real time and analyze how messages propagate through the network over time.
 
 \subsection{Simulation with GPS traces}
-\texttt{Alchemist} is equipped with the ability to load and simulate on real-world maps. This feature allows for more realistic simulations by incorporating actual geographic data and node placements.
+\texttt{Alchemist} provides the capability to load and simulate scenarios on real-world geographic maps. This feature enables more realistic experiments by incorporating actual spatial data and mobility traces, allowing nodes to move within real urban environments.
 
-The data of Vienna's 2021 marathon event was used to create a realistic challenging environment to test the messaging system \Cref{fig:marathon-simulation}.
+To evaluate the behavior of the proposed messaging system under realistic conditions, data from the \textit{Vienna Marathon 2021} event were used to construct a challenging simulation environment (\Cref{fig:marathon-simulation}).
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/vienna-marathon.png}}
@@ -917,7 +917,17 @@ The data of Vienna's 2021 marathon event was used to create a realistic challeng
     \label{fig:marathon-simulation}
 \end{figure}
 
+The simulation involves approximately $1500$ nodes, representing people devices, moving along the city.
+
+\Cref{fig:marathon-simulation} presents a snapshot of the simulation.
+The left panel depicts the entire network topology, including all nodes and
+ their communication links, whereas the right panel displays the state of a selected node, detailing the messages it has received during execution.
+
+ This large-scale, dynamic environment was selected to test the system’s scalability, robustness, and message propagation capabilities in dense and highly mobile network conditions.
+
 \chapter{Conclusions}
+In this chapter the final conclusions and considerations of the thesis are drawn with a recap of the main contributions and results achieved.
+
 \section{Final considerations}
 
 \section{Future work}
