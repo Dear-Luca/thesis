@@ -806,6 +806,24 @@ The \ac{MVVM} pattern consists of three main components:
     \item \textbf{View}: Defines the \ac{UI} layer—the part of the application that the user interacts with. It displays data exposed by the ViewModel and forwards user interactions (e.g., button clicks or text input) back to it.
     \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves and processes data from the Model, exposing it in a \ac{UI}-friendly form. The ViewModel maintains the application state and employs observable data structures to notify the View of any updates.
 \end{itemize}
+The image in \Cref{fig:mvvm-echo} illustrates how the \textbf{Echo} application implements the \ac{MVVM} architecture.
+
+The \textbf{View Layer}, built with Compose Multiplatform, in files such as \texttt{App.kt}, \texttt{Screen.kt}, and \texttt{TopBar.kt}, is responsible for rendering the \ac{GUI} and 
+for observing the application state through Kotlin's \texttt{StateFlow} mechanism, ensuring reactive updates whenever the underlying data changes.
+
+The \textbf{ViewModel layer}, embodied by the \texttt{NearbyDevicesViewModel} class, acts as the central coordinator that manages application state and orchestrates business logic.
+It exposes observable state variables including message lists, connection status, discovered devices, 
+current GPS location, and sending indicators, while providing action methods such as \texttt{sendMessage()}, \texttt{startCollektiveProgram()} , and \texttt{startLocationTracking()} that the View layer invokes in response to user interactions.
+
+The \textbf{Model layer} comprises immutable data classes including:
+\begin{itemize}
+    \item \texttt{ChatMessage}: Application-level data structure for displaying messages in the UI
+    \item \texttt{DeviceLocationHeartbeat}: Data class for sharing device location and heartbeat information via \ac{MQTT}.
+    \item \texttt{Message}: Internal data structure representing a message used by the gossip algorithm during propagation.
+    \item \texttt{GossipConfig}: Configuration for default gossip parameters such as \ac{TTL} and maximum distance.
+\end{itemize}
+
+The \textbf{Service layer} contains the infrastructure components: the Collektive aggregate computing framework, the MQTT mailbox for network communication, platform-specific location services, and the gossip algorithm implementations which the ViewModel coordinates to perform operations.
 
 \begin{figure}[h!]
     \centering
