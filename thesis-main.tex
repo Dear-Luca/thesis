@@ -129,7 +129,7 @@
 \end{abstract}
 
 \begin{dedication} % this is optional
-To my family.
+    Dedication...
 \end{dedication}
 
 %----------------------------------------------------------------------------------------
@@ -592,8 +592,8 @@ This type of network is particulary suitable for \textbf{dynamic} and \textbf{sc
 join or leave the network seamlessly, without any disruption. 
 
 
-\subsection{Communication Model}
-\textbf{TODO: Describe the communication model in detail.}
+% \subsection{Communication Model}
+% \textbf{TODO: Describe the communication model in detail.}
 % Expiration time (TTL - Time To Live), Maximum propagation distance (spatial limit), Describe how nodes discover their neighbors
 % The system currently employs the \textbf{\ac{MQTT}} protocol as the transport layer to facilitate message exchange among nodes.
 
@@ -686,7 +686,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -710,7 +710,7 @@ Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-co
 
 
 
-\lstinputlisting[language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
+\lstinputlisting[float, language=Kotlin,label={lst:gossip-gradient-dataclass-code}, caption={Data structure representing a state in a gossip-based gradient algorithm.}]{listings/GossipGradient.kt}
 Each node starts with \texttt{path = listOf(localId)} because the path stored in a node's gossip ends with that node's ID and 
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
@@ -759,8 +759,7 @@ After stabilization, the gossip-gradient algorithm described previously is execu
 
 
 Since the implementation relies on the \texttt{share} construct, iterating over all sources requires the use of the \texttt{alignedOn} operator. This operator ensures that only nodes executing the same \texttt{alignedOn(sourceId)} instance exchange values with one another, thereby preventing interference between computations associated with different sources.
-\lstinputlisting[language=Kotlin,label={lst:multisources-code}, caption={Execution of the gossip-gradient algorithm for multiple concurrent sources.}]{listings/multipleSources.kt}
-
+\lstinputlisting[float, language=Kotlin,label={lst:multisources-code}, caption={Execution of the gossip-gradient algorithm for multiple concurrent sources.}]{listings/multipleSources.kt}
 \subsubsection{Time complexity}
 Let $n = |V|$ be the number of nodes, $m = |E|$ the number of links, and $s$ the number of sources. 
 The gradient phase is Bellman-Ford-like with non-negative weights, the pure distance relaxation costs 
@@ -778,14 +777,21 @@ recovers the $O(snm)$ worst-case bound.
 
 
 \section{Mobile Application}
+
+\begin{figure}[hb!]
+    \centering
+    \fbox{\includegraphics[width=.8\linewidth]{figures/screenshot-echo.png}}
+    \caption{Illustration of the Echo application interface. On the left is an iOS device, and on the right is an Android device.
+    These two smartphones are exchanging messages with each other.}
+    \label{fig:screenshot-echo}
+\end{figure}
 The mobile application serves as the \ac{GUI} of the messaging system, providing users with both an intuitive interface and a runtime environment for executing the algorithm.
 
 \textbf{Echo} is the name chosen for the application, as it evokes the idea of messages reverberating through the network within a limited range and time frame, analogous to how sound echoes in space.
 The name also recalls the Linux command \texttt{echo}, used to print messages to the terminal, symbolizing communication and simplicity.
 
-The application is implemented using \ac{KMP} and Compose Multiplatform, ensuring \textbf{cross-platform} compatibility between Android and iOS devices.
+The application is implemented using \ac{KMP} and Compose Multiplatform, ensuring \textbf{cross-platform} compatibility between Android and iOS devices (\Cref{fig:screenshot-echo}).
 This section describes the architecture and implementation details of the app.
-
 
 
 \subsection{Architecture}
@@ -808,7 +814,7 @@ The \ac{MVVM} pattern consists of three main components:
 \end{itemize}
 The image in \Cref{fig:mvvm-echo} illustrates how the \textbf{Echo} application implements the \ac{MVVM} architecture.
 
-The \textbf{View Layer}, built with Compose Multiplatform, in files such as \texttt{App.kt}, \texttt{Screen.kt}, and \texttt{TopBar.kt}, is responsible for rendering the \ac{GUI} and 
+The \textbf{View layer}, built with Compose Multiplatform, in files such as \texttt{App.kt}, \texttt{Screen.kt}, and \texttt{TopBar.kt}, is responsible for rendering the \ac{GUI} and 
 for observing the application state through Kotlin's \texttt{StateFlow} mechanism, ensuring reactive updates whenever the underlying data changes.
 
 The \textbf{ViewModel layer}, embodied by the \texttt{NearbyDevicesViewModel} class, acts as the central coordinator that manages application state and orchestrates business logic.
@@ -848,12 +854,12 @@ It provides primitives for defining computational fields, sharing data among nei
     \label{fig:app-layered-design}
 \end{figure}
 
-\lstinputlisting[language=Kotlin, label={lst:collektive-code}, caption={Collektive engine setup.}]{listings/Collektive.kt}
+\lstinputlisting[float, language=Kotlin, label={lst:collektive-code}, caption={Collektive engine setup.}]{listings/Collektive.kt}
 
 The \textbf{Location Services} layer provides access to the device's native location APIs to obtain accurate positional information (\Cref{lst:gps-data-code}).
 It captures latitude and longitude values, essential for computing distances between nodes in the messaging algorithm, and updates the device's location in real time.
 
-\lstinputlisting[language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
+\lstinputlisting[float, language=Kotlin, label={lst:gps-data-code}, caption={Data class for GPS location.}]{listings/DeviceLocation.kt}
 
 To compute distances between two devices with known coordinates, the Haversine formula is used:
 \begin{equation}
@@ -874,7 +880,7 @@ The Transport Layer is responsible for the following functionalities:
     The \ac{QoS} level 0 (\textit{fire and forget}) is used, since heartbeats are ephemeral and frequent, minimizing overhead.
     A timeout mechanism is implemented to remove inactive neighbors (\Cref{lst:cleanHeartBeat-code}): if a device stops sending heartbeats (due to crash, disconnection, or moving away) for more than 5 seconds (\texttt{retentionTime}), it is removed from the neighbor list.
 
-    \lstinputlisting[language=Kotlin, label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
+    \lstinputlisting[float, language=Kotlin, label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
 
     \item \textbf{Message delivery}: Each device subscribes to its dedicated topic \texttt{echo/messages/<deviceId>} to receive messages.
     For this purpose, \ac{QoS} level 1 (\textit{at least once}) is used to ensure reliable delivery:
@@ -924,11 +930,11 @@ To overcome these challenges, the \textit{Alchemist Simulator} is used to create
 
 The simulations executed through the \texttt{Alchemist Simulator}  are configured using \textbf{YAML} files, which specify the parameters governing the simulation environment, the number and type of nodes, and the associated behavioral models.
 The example shown in \Cref{lst:alchemist-simulation-yaml} presents a representative configuration defining a simulation scenario with $50$ regular nodes and $2$ source nodes.
-\lstinputlisting[language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
+\lstinputlisting[float, language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
 
 Each node executes the program \texttt{gossipChatMultipleSourcesEntrypoint} (\Cref{lst:simulation-entry-point}), which serves as the entry point of the simulation.
 This component initializes the \emph{gossip-based chat algorithm}, invoking it with predefined parameters such as the message lifetime and the maximum propagation distance, thereby reproducing the intended proximity-based communication dynamics.
-\lstinputlisting[language=Kotlin, label={lst:simulation-entry-point}, caption={Entry point for the multi-source chat simulation.}]{listings/simulationEntryPoint.kt}
+\lstinputlisting[float, language=Kotlin, label={lst:simulation-entry-point}, caption={Entry point for the multi-source chat simulation.}]{listings/simulationEntryPoint.kt}
 
 Using the \ac{GUI} provided by the Simulator, it is possible to visualize the network topology and change it, monitor the state of each node in real time and analyze how messages propagate through the network over time.
 
