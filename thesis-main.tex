@@ -883,7 +883,7 @@ The \ac{CI} pipeline is configured to trigger on every push or pull request to t
 The algorithm was added to \Cref{collektive-example-repo}, repository which hosts various examples of applications built using the Collektive framework.
 The \ac{CI} workflow includes the following jobs (\Cref{lst:CI-collektive-examples}):
 
-\lstinputlisting[float, language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
+\lstinputlisting[language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
 
 \begin{enumerate}
     \item \texttt{build}: it's the main job of the workflow, responsible for the compilation, testing and deployment over three operating systems—Windows, Ubuntu, and macOS.
@@ -898,15 +898,15 @@ To overcome these challenges, the \textit{Alchemist Simulator} is used to create
 
 The simulations executed through the \texttt{Alchemist Simulator}  are configured using \textbf{YAML} files, which specify the parameters governing the simulation environment, the number and type of nodes, and the associated behavioral models.
 The example shown in \Cref{lst:alchemist-simulation-yaml} presents a representative configuration defining a simulation scenario with $50$ regular nodes and $2$ source nodes.
-\lstinputlisting[float, language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
+\lstinputlisting[language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
 
 Each node executes the program \texttt{gossipChatMultipleSourcesEntrypoint} (\Cref{lst:simulation-entry-point}), which serves as the entry point of the simulation.
 This component initializes the \emph{gossip-based chat algorithm}, invoking it with predefined parameters such as the message lifetime and the maximum propagation distance, thereby reproducing the intended proximity-based communication dynamics.
-\lstinputlisting[float, language=Kotlin, label={lst:simulation-entry-point}, caption={Entry point for the multi-source chat simulation.}]{listings/simulationEntryPoint.kt}
+\lstinputlisting[language=Kotlin, label={lst:simulation-entry-point}, caption={Entry point for the multi-source chat simulation.}]{listings/simulationEntryPoint.kt}
 
 Using the \ac{GUI} provided by the Simulator, it is possible to visualize the network topology and change it, monitor the state of each node in real time and analyze how messages propagate through the network over time.
 
-\subsection{Simulation with GPS traces}
+\section{Simulation with GPS traces}
 \texttt{Alchemist} provides the capability to load and simulate scenarios on real-world geographic maps. This feature enables more realistic experiments by incorporating actual spatial data and mobility traces, allowing nodes to move within real urban environments.
 
 To evaluate the behavior of the proposed messaging system under realistic conditions, data from the \textit{Vienna Marathon 2021} event were used to construct a challenging simulation environment (\Cref{fig:marathon-simulation}).
@@ -926,14 +926,28 @@ The left panel depicts the entire network topology, including all nodes and
  This large-scale, dynamic environment was selected to test the system’s scalability, robustness, and message propagation capabilities in dense and highly mobile network conditions.
 
 \chapter{Conclusions}
-This chapter presents the final conclusions and reflections of the thesis, providing a comprehensive overview of the main contributions and the results achieved throughout the work.
-It summarizes how the proposed system met the research objectives and highlights its relevance within the broader context of aggregate and distributed computing.
-Finally, the chapter outlines possible directions for future developments, identifying potential extensions, improvements, and open challenges that could be explored in subsequent research.
-\section{Final considerations}
+This chapter presents the concluding remarks of the thesis, offering a comprehensive synthesis of the main contributions and results achieved throughout the work. It revisits the research objectives, evaluating how they have been addressed through the design and implementation of the proposed decentralized messaging system.
 
+Finally, the chapter outlines prospective directions for further development, identifying possible enhancements, extensions, and open research challenges that may guide future investigations in this domain.
+\section{Final considerations}
+The primary objective of this thesis was to design and implement a decentralized, proximity-based messaging system founded on the principles of \textbf{Aggregate Computing}. 
+To achieve this goal, it was essential to adopt a framework capable of providing suitable abstractions and tools for the development of aggregate programs.
+
+The \textbf{Collektive} framework was selected as the foundation of the system due to its expressive \ac{DSL}, multiplatform capabilities, and seamless integration with the \textbf{Alchemist Simulator}. 
+The latter was employed to validate the correctness and performance of the proposed algorithm through a series of controlled simulations.
+
+After the algorithm was designed and validated, it was incorporated as the core message propagation mechanism within \textbf{Echo}, a cross-platform mobile application developed using \textbf{\ac{KMP}}. 
+The user interface was implemented with \textbf{Compose Multiplatform}, while \textbf{\ac{MQTT}} was employed as the communication protocol to handle message exchange among devices.
+
+The resulting application supports both Android and iOS platforms, enabling cross-platform interaction and demonstrating the feasibility of integrating Aggregate Computing paradigms within mobile environments.
 
 \section{Future work}
-%----------------------------------------------------------------------------------------
+The development of \textbf{Echo} is intended to continue beyond the scope of this thesis. Several enhancements and extensions could be explored to further improve the system's functionality and overcome its current limitations.
+
+A primary objective for future work is the integration of alternative communication protocols, such as Bluetooth or Wi-Fi Direct, as substitutes for the current \ac{MQTT}-based transport layer. This would enable device-to-device message exchange without Internet connectivity, thereby achieving a fully decentralized \ac{P2P} network architecture.
+
+Another planned development involves the publication of the application on official distribution platforms, such as the Google Play Store and Apple App Store, under the department's supervision. 
+This step would facilitate real-world testing and user feedback, providing valuable insights for further refinement of the system and validation of its decentralized communication model.
 % BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
