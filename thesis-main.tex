@@ -224,22 +224,30 @@ Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to d
 
 \subsection{Collektive}
 \label{section:Collektive}
-Collektive is a framework with the purpose of simplifying the definition of Aggregate Computing systems.
-To achieve this, Collektive adopts the Field Calculus model, providing an intuitive way to define aggregate
-behavior without low-level coding. Built with \ac{KMP}, it can be executed seamlessly on different targets.
-Moreover, a compiler plugin was introduced to support function alignment, automatically annotating aligned functions to ensure consistent coordination among nodes
-\cite{amslaurea31080}.
+\textbf{Collektive} is a framework designed to simplify the development of systems based on the principles of \textbf{Aggregate Computing}. 
+It adopts the \textit{Field Calculus} model to provide an intuitive and expressive means for defining aggregate behaviors without requiring low-level implementation details. 
+Developed using \ac{KMP}, it supports execution across multiple platforms and devices \cite{amslaurea31080}.
 
-The main features of this framework can be summarized as follows \cite{collektive_docs}:
+The main features of the framework can be summarized as follows \cite{collektive_docs}:
 \begin{itemize}
-\item \textbf{High-Level Abstraction}: Collektive streamlines the development of distributed behaviors by enabling developers to define coordination logic succinctly, without explicitly handling individual device states.
-\item \textbf{Declarative Programming}: The framework adopts a declarative paradigm, allowing developers to specify the desired system outcomes, while the underlying runtime manages the execution details.
-\item \textbf{Dynamic Adaptation}: Applications developed with Collektive can automatically adapt to network variations and external inputs, maintaining robustness in dynamic and unpredictable environments.
+\item \textbf{High-Level Abstraction:} Collektive streamlines the creation of distributed behaviors by enabling developers to express coordination logic at a global level, without explicitly managing individual device states.
+\item \textbf{Declarative Programming:} The framework promotes a declarative programming model, allowing developers to specify the intended system outcomes, while the runtime transparently handles the coordination and execution mechanisms.
+\item \textbf{Dynamic Adaptation:} Applications built with Collektive can dynamically respond to network changes and external stimuli, ensuring robustness and resilience in highly variable environments.
 \end{itemize}
 
-It provides a minimal \ac{DSL} where the developer can specify the
-collective behaviour of a network of devices and the devices can directly communicate with each other and execute the same program.
+Collektive is structured into three main components:
 
+The first and most significant is the \textbf{\ac{DSL}}, which constitutes the core of the framework. 
+It leverages \textit{XC}, an experimental programming language designed for the development of homogeneous distributed systems. 
+The DSL encapsulates the main Aggregate Computing operators and provides an extensive set of tests to ensure correctness and consistency.
+
+The second component is the \textbf{compiler plugin}, which is divided into two submodules: a frontend component that performs static analysis to detect potentially unsafe or inappropriate
+ code written using the Collektive DSL, and a backend component that augments the runtime stack by tracking function calls. 
+ Each time a function is invoked, its name is recorded within a dedicated data structure to maintain proper execution alignment.
+
+The third component, \textbf{Alchemist-incarnation}, enables the integration of Collektive with the \textit{Alchemist Simulator}  \cite{Pianini_2013},
+ an open-source environment for modeling and experimenting with distributed and pervasive systems. 
+ This component allows Collektive programs to be executed within simulated environments, facilitating the validation of aggregate behaviors before deployment on real devices \cite{amslaurea31080}.
 \section{Motivations}
 In this section motivations for implementing a decentralized proximity-based messaging system will be illustrated.
 
@@ -385,7 +393,7 @@ Some of the most notable ones include:
 \begin{itemize}
     \item \textbf{ScaFi} (Scala Field) is a framework written in Scala for Aggregate Computing \cite{CASADEI2022101248}. 
     It provides a \ac{DSL} and API modules for writing, testing, and running aggregate programs, the high-level architecture of ScaFi is depicted in \Cref{fig:scafi-architecture}.
-    \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist Simulator \cite{Pianini_2013}, an open-source software for simulating and experimenting with distributed systems.
+    \textit{ScaFi} also includes a simulation environment with a \ac{GUI}, integrated with the Alchemist Simulator.
     
     The main applications are in the development of swarm systems, crowd management, wireless sensor network and
     smart city applications.
