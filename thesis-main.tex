@@ -124,8 +124,21 @@
 
 \frontmatter\frontispiece
 
-\begin{abstract}	
+\begin{abstract}
+In pervasive and ubiquitous computing scenarios, where Internet of Things and mobile devices must communicate under intermittent or absent network infrastructure,
+ centralized messaging architectures become fragile, difficult to scale, and unsuitable for proximity-based interactions such as disaster recovery or dense crowd communication.
 
+This thesis explores the use of Aggregate Computing as a foundation for designing decentralized and self-organizing proximity messaging systems.
+The proposed solution leverages Kotlin Multiplatform to ensure compatibility across heterogeneous devices and employs Collektive as the underlying Aggregate Computing framework.
+
+At the core of the system lies a gossip-based algorithm that disseminates messages through local, neighbor-to-neighbor exchanges. The algorithm follows a Bellman-Ford-like approach, computing distance gradients from each node to a source to identify the shortest propagation paths. 
+It supports multiple concurrent message sources and includes configurable parameters such as message expiration time and maximum propagation distance to control dissemination scope.
+
+The messaging logic is integrated into Echo, a cross-platform mobile application (Android/iOS) developed with Kotlin Multiplatform and Jetpack Compose Multiplatform for the user interface. The application currently employs the MQTT protocol as the transport layer for inter-device communication.
+
+This work contributes to the field of decentralized communication by demonstrating how Aggregate Computing principles can be effectively applied to design robust, scalable, and proximity-aware messaging systems for dynamic, infrastructure-less environments.
+
+Future developments will focus on integrating peer-to-peer communication protocols, such as Bluetooth or Wi-Fi Direct, to achieve a fully decentralized architecture.
 \end{abstract}
 
 \begin{dedication} % this is optional
