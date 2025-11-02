@@ -699,7 +699,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code}]{listings/algorithm.kt}
+\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code.}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -717,7 +717,7 @@ Each node first of all checks if it is the source node (the one that created the
 If it is, it sets its distance to zero and prepares the message content, 
 otherwise it initializes its distance to infinity indicating that it has not yet received the message (\Cref{lst:initialization-code}).
 
-\lstinputlisting[language=Kotlin,label={lst:initialization-code}, caption={Initialization code}]{listings/initialization.kt}
+\lstinputlisting[language=Kotlin,label={lst:initialization-code}, caption={Initialization code.}]{listings/initialization.kt}
 
 Using data class \texttt{GossipGradient} (\Cref{lst:gossip-gradient-dataclass-code}) to keep track of the current path the message has taken from the origin to the current node with the estimated distance.
 
