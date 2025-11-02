@@ -132,13 +132,13 @@ This thesis explores the use of Aggregate Computing as a foundation for designin
 The proposed solution leverages Kotlin Multiplatform to ensure compatibility across heterogeneous devices and employs Collektive as the underlying Aggregate Computing framework.
 
 At the core of the system lies a gossip-based algorithm that disseminates messages through local, neighbor-to-neighbor exchanges. The algorithm follows a Bellman-Ford-like approach, computing distance gradients from each node to a source to identify the shortest propagation paths. 
-It supports multiple concurrent message sources and includes configurable parameters such as message expiration time and maximum propagation distance to control dissemination scope.
+It supports multiple message sources and includes configurable parameters such as message expiration time and maximum propagation distance to control propagation scope.
 
 The messaging logic is integrated into Echo, a cross-platform mobile application (Android/iOS) developed with Kotlin Multiplatform and Jetpack Compose Multiplatform for the user interface. The application currently employs the MQTT protocol as the transport layer for inter-device communication.
 
 This work contributes to the field of decentralized communication by demonstrating how Aggregate Computing principles can be effectively applied to design robust, scalable, and proximity-aware messaging systems for dynamic, infrastructure-less environments.
 
-Future developments will focus on integrating peer-to-peer communication protocols, such as Bluetooth or Wi-Fi Direct, to achieve a fully decentralized architecture.
+Future developments will focus on integrating peer-to-peer protocols, such as Bluetooth or Wi-Fi Direct, to achieve a fully decentralized architecture and Internet-less communication.
 \end{abstract}
 
 \begin{dedication} % this is optional
@@ -188,12 +188,12 @@ In a world where \ac{IoT} devices are becoming increasingly prevalent,
     approach to address these challenges by enabling decentralized and self-organizing systems \cite{viroli2019aggregate}.
 
     Building on this concept, this thesis explores how Aggregate Programming
-    can support a proximity and decentralized messaging system in a network.
+    can support distributed and proximity-based architecture, operating efficiently without centralized control.
 
 
 
 \subsection{Aggregate Programming}
-\textbf{Aggregate Programming} is a distributed systems paradigm that simplifies programming large networks of devices by focusing on the global, system-level behavior rather than the individual behavior of each device.
+\textbf{Aggregate Programming} is a distributed systems paradigm that simplifies programming large networks of devices by focusing on the global behavior rather than the individual device.
 It shifts the abstraction to view the network as an aggregate, an agglomeration of nodes that collectively exhibit certain behaviors.
 This model is particularly well-suited for scenarios where devices need to coordinate and collaborate based on local interactions, such as in \ac{IoT} applications.
 
@@ -205,7 +205,7 @@ As discussed in distributed field programming \cite{viroli2019aggregate}, there 
 \end{itemize}
 Aggregate Programming aims to overcome these challenges through three fundamental principles:
 \begin{enumerate}
-    \item The computational target is conceived as a region of the environment, with the underlying device-level details abstracted away, potentially even modeled as a continuous spatial domain.
+    \item The computational target is imagined as a region of the environment, with the underlying device-level details abstracted away, potentially even modeled as a continuous spatial domain.
     \item The program logic is expressed as the manipulation of data structures that extend spatially and temporally across that region.
     \item These computations are executed locally by individual devices within the region, which coordinate through resilient mechanisms and proximity-based interactions.
 \end{enumerate}
@@ -223,7 +223,7 @@ According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a fu
 that maps each device $\delta$ in the domain $D$ to a local value $\ell$ in the range $L$.
 This value can change in time with a \textit{field evolution} that maps each point in time to a field value.
 \Cref{fig:layers-AP} shows how Aggregate Programming abstracts the complexity of the underlying distributed network and its
- coordination challenges through a sequence of hierarchical abstraction layers.
+ coordination challenges through a sequence of hierarchical layers.
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/layers-AP.png}}
@@ -266,7 +266,7 @@ In this section motivations for implementing a decentralized proximity-based mes
 
 In recent years, the proliferation of \ac{IoT} and mobile devices has increased the need for local communication systems capable of operating even without stable network infrastructure. Centralized architectures, although efficient in connected environments, fail to guarantee reliability and resilience in dynamic or disconnected scenarios.
 As devices are becoming pervasive and ubiquitous, new models are required to enable coordination and information exchange without relying on fixed infrastructures.
-This need motivates the exploration of decentralized and distributed approaches, which can operate robustly in dynamic and connectivity-limited environments.
+This need motivates the exploration of decentralized and distributed approaches, which can operate robustly in dynamic and limited environments.
 
 % Describe what problem exists and why it's challenging.
 % Focus on the technical or conceptual gap your thesis addresses.
@@ -276,7 +276,7 @@ Traditional messaging systems and architectures often rely heavily on centralize
 unsuitable and vulnerable for scenarios where connectivity is not guaranteed. 
 These situations include \textbf{disaster recovery}, the process for restoring an organization's network infrastructure and operations after a disruptive event, such as a natural disaster, cyberattack, or system failure.
 
-In such environments there are several vulnerabilities and challenges to consider:
+In such scenarios, there are several vulnerabilities and challenges to consider:
 \begin{itemize}
     \item \textbf{Single point of failure}: Centralized systems are vulnerable to failures of the authority that makes decisions. This can lead to widespread service disruption and outages.
     \item \textbf{Scalability issues}: As the number of devices increases, centralized systems may struggle to manage the growing volume of data and communication, leading to bottlenecks and delayed responses.
@@ -325,7 +325,7 @@ This thesis can be divided into two main goals:
     The system is implemented using the \textit{Collektive} framework \cite{amslaurea31080}, leveraging \ac{KMP} to ensure cross-platform compatibility across different targets including 
     JVM, Javascript (browser), Android, iOS, and native versions (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
     \item \label{goal:application} \textbf{Mobile application}: The second goal is to develop a multiplatform mobile application using \ac{KMP}. 
-    This application leverages the messaging algorithm as a core library to send and receive messages from devices in the network. 
+    This application leverages the messaging algorithm as core logic to send and receive messages from devices in the network. 
     The app must support both Android and iOS platforms providing a simple, user-friendly interface.
     The \ac{UI} allows users to compose messages, configure parameters (expiration time and propagation distance), and view received messages in real-time.
     Another feature is the anonymization of the users, there is not any registration or login system, the users are completely anonymous. Anybody can use the app without providing any personal information.
@@ -370,7 +370,7 @@ One limitation is the reliance on device density: the mesh network requires suff
 \subsubsection{FireChat}
 \textbf{Firechat} was the first popular example of a messaging application that used mesh network topology to communicate between users.
 
-\cite{7937749} FireChat relays messages from one device to another through each user's WiFi or Bluetooth radios, thereby creating a “mesh” of phones receiving and relaying messages even when each message is not viewable on every device (\Cref{fig:firechat-architecture}).
+\cite{7937749} FireChat sends messages from one device to another through each user's WiFi or Bluetooth radios, thereby creating a “mesh” of phones receiving and relaying messages even when each message is not viewable on every device (\Cref{fig:firechat-architecture}).
  This method of communication eliminates the need for centralized communication channels such as cellphone towers that every transmission must pass through.
 While this system is beneficial in overcrowded networks, it eliminates the possibility of controlling or monitoring the network at one point.
 
@@ -503,7 +503,7 @@ The protocol defines three levels of \ac{QoS}, which determine the reliability o
 
 In the current implementation of the proposed application (Section~\ref{goal:application}), \ac{MQTT} is employed as the communication layer to exchange messages across devices. Although it depends on a centralized broker and is therefore not fully decentralized, its simplicity and efficiency make it an ideal solution for prototyping and testing the distributed messaging algorithm (Section~\ref{goal:algorithm}). 
 
-Future developments may involve replacing \ac{MQTT} with peer-to-peer (\ac{P2P}) communication technologies, such as Bluetooth, to achieve full decentralization while maintaining the same messaging semantics.
+Future developments may involve replacing \ac{MQTT} with (\ac{P2P}) communication technologies, such as Bluetooth, to achieve full decentralization while maintaining the same messaging semantics.
 
 
 \chapter{Architecture and Implementation}
