@@ -134,7 +134,7 @@ The proposed solution leverages Kotlin Multiplatform to ensure compatibility acr
 At the core of the system lies a gossip-based algorithm that disseminates messages through local, neighbor-to-neighbor exchanges. The algorithm follows a Bellman-Ford-like approach, computing distance gradients from each node to a source to identify the shortest propagation paths. 
 It supports multiple message sources and includes configurable parameters such as message expiration time and maximum propagation distance to control propagation scope.
 
-The messaging logic is integrated into Echo, a cross-platform mobile application (Android/iOS) developed with Kotlin Multiplatform and Jetpack Compose Multiplatform for the user interface. The application currently employs the MQTT protocol as the transport layer for inter-device communication.
+The messaging logic is integrated into Echo, a cross-platform mobile application (Android/iOS) developed with Kotlin Multiplatform and Jetpack Compose Multiplatform for the user interface. The application currently employs the MQTT protocol as the transport layer for communication.
 
 This work contributes to the field of decentralized communication by demonstrating how Aggregate Computing principles can be effectively applied to design robust, scalable, and proximity-aware messaging systems for dynamic, infrastructure-less environments.
 
@@ -342,11 +342,11 @@ The software that has spread the most and gained significant attention includes:
 \textbf{Briar} \cite{briar} is an open-source \ac{P2P} messaging platform designed for secure,
  resilient communication without centralized servers.
 It supports multiple transport methods including Bluetooth, Wi-Fi and Tor, with all communication end-to-end encrypted.
-Briar provide a mailbox system \textit{Briar Mailbox} that lets the users receive encrypted messages from their contacts while Briar is offline. Next time Briar comes online it will automatically fetch the messages from the Mailbox.
+Briar provides a mailbox system \textit{Briar Mailbox} that lets the users receive encrypted messages from their contacts while Briar is offline. Next time Briar comes online it will automatically fetch the messages from the Mailbox.
 The primary target audience includes activists, journalists, and civil society members who require secure communication in restricted or infrastructure-limited environments.
 
 A notable feature is the ability to install Briar on an Android device directly from another device that already has it installed, facilitating deployment in disconnected scenarios.
-Nowadays the application is available only for Android devices, with no official iOS version.
+Nowadays, the application is available only for Android devices, with no official iOS version.
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/briar.png}}
@@ -370,7 +370,7 @@ One limitation is the reliance on device density: the mesh network requires suff
 \subsubsection{FireChat}
 \textbf{Firechat} was the first popular example of a messaging application that used mesh network topology to communicate between users.
 
-\cite{7937749} FireChat sends messages from one device to another through each user's WiFi or Bluetooth radios, thereby creating a “mesh” of phones receiving and relaying messages even when each message is not viewable on every device (\Cref{fig:firechat-architecture}).
+\cite{7937749} FireChat sends messages from one device to another through each user's Wi-Fi or Bluetooth radios, thereby creating a “mesh” of phones receiving and relaying messages even when each message is not viewable on every device (\Cref{fig:firechat-architecture}).
  This method of communication eliminates the need for centralized communication channels such as cellphone towers that every transmission must pass through.
 While this system is beneficial in overcrowded networks, it eliminates the possibility of controlling or monitoring the network at one point.
 
@@ -381,7 +381,7 @@ Nowadays Firechat is discontinued and no longer available on app stores, the off
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/bluetooth-mesh.png}}
-    \caption{FireChat's mesh networking architecture, where messages are relayed through nearby devices using WiFi and Bluetooth, enabling communication without centralized infrastructure.}
+    \caption{FireChat's mesh networking architecture, where messages are relayed through nearby devices using Wi-Fi and Bluetooth, enabling communication without centralized infrastructure.}
     \label{fig:firechat-architecture}
 \end{figure}
 
@@ -498,7 +498,7 @@ The protocol defines three levels of \ac{QoS}, which determine the reliability o
 \begin{itemize}
     \item \textbf{\ac{QoS} 0 - At most once:} messages are delivered according to the best effort of the underlying network, with no confirmation or retry mechanism. There is no acknowledgment from the receiver.
     \item \textbf{\ac{QoS} 1 - At least once:} ensures that messages are delivered to the receiver at least one time, though duplicates may occur. It requires a PUBACK acknowledgment.
-    \item \textbf{\ac{QoS} 2 - Exactly once:} guarantees that each message is received only once by the intended recipient, at the cost of additional network overhead using using a four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP).
+    \item \textbf{\ac{QoS} 2 - Exactly once:} guarantees that each message is received only once by the intended recipient, at the cost of additional network overhead using a four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP).
 \end{itemize}
 
 In the current implementation of the proposed application (Section~\ref{goal:application}), \ac{MQTT} is employed as the communication layer to exchange messages across devices. Although it depends on a centralized broker and is therefore not fully decentralized, its simplicity and efficiency make it an ideal solution for prototyping and testing the distributed messaging algorithm (Section~\ref{goal:algorithm}). 
@@ -568,7 +568,7 @@ From an implementation perspective, the \textit{Collektive} framework is employe
 
 The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable publish/subscribe mechanism suitable for distributed messaging and initial prototyping. 
 
-Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS, JVM) facilitating consistency between the simulated and real execution environments.
+Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS) facilitating consistency between the simulated and real execution environments.
 \section{Network Architecture}
 In the following sections, the overall \textbf{architecture} of the messaging system will be described (\Cref{fig:architecture-overview}), focusing on both the design and communication model.
 \begin{figure}[h!]
@@ -594,14 +594,14 @@ While active, the node periodically executes the aggregate algorithm through com
 When the node leaves the network (for example, when the application is closed), it terminates all communication and computation activities.
 \item \textbf{State}: Each node maintains a local state that includes its unique identifier, 
 a list of neighboring nodes with associated distances, its current message value, and positional information. This state is continuously updated based on local interactions.
-\item \textbf{Internal Aggregate Computing Logic}: Each node autonomously executes the aggregate algorithm defined in Section~\ref{goal:algorithm}, which governs how messages are generated, propagated, 
+\item \textbf{Internal Aggregate Computing logic}: Each node autonomously executes the aggregate algorithm defined in Section~\ref{goal:algorithm}, which governs how messages are generated, propagated, 
 and expired according to proximity-based interactions with neighboring nodes.
 \end{enumerate}
 The network is \textbf{distributed} and \textbf{decentralized}, meaning there is no central authority or server managing the communication.
 All the nodes behave like whole systems, they are considered together as a single entity like a computational field, not as a collection of individual devices.
 This is achieved through local interactions, each node independently maintains its state and exchanges information with nearby peers, supporting self-organization and resilience.
 
-This type of network is particulary suitable for \textbf{dynamic} and \textbf{scalable} environments by design, since computation and communication depend only on local interactions and nodes can 
+This type of network is particularly suitable for \textbf{dynamic} and \textbf{scalable} environments by design, since computation and communication depend only on local interactions and nodes can 
 join or leave the network seamlessly, without any disruption. 
 
 
@@ -622,7 +622,7 @@ The primary goal of Kotlin Multiplatform is to streamline the development of cro
 by allowing developers to share common code across multiple targets (such as Android, iOS, JVM, and Web) while maintaining platform-specific implementations only where necessary. 
 This approach greatly reduces code duplication, accelerates development cycles, and ensures consistency across different environments.
 
-In this project, KMP enables the reuse of the same aggregate computing logic and communication components across both the simulation and mobile application. 
+In this project, KMP enables the reuse of the same Aggregate Computing logic and communication components across both the simulation and mobile application. 
 Compilation targets are defined within the Gradle build configuration, which automates the generation of platform-specific binaries from the shared codebase.
 
 
@@ -644,7 +644,7 @@ By sharing the same UI code between Android and iOS, the development process is 
 
 \subsubsection{Gradle}
 \textbf{Gradle} is a powerful build automation and dependency management system widely used in modern software development, particularly for projects based on Java, Kotlin, and Groovy. 
-It is designed for flexibility, scalability, and efficiency, making it one of the most popular tools for managing complex, multi-module applications. 
+It is designed for flexibility, scalability, and efficiency, making it one of the most popular tools for managing complex, multimodule applications. 
 Gradle employs a declarative \ac{DSL}, written in either Groovy or Kotlin, to define build scripts that specify project configurations, dependencies, tasks, and plugins in a concise and human-readable format.
 
 The build process in Gradle is organized around \textit{tasks}, which represent individual units of work, such as compiling source code, running tests, packaging applications, or generating documentation. 
@@ -663,7 +663,7 @@ The core logic of the messaging system is implemented using the \textit{Collekti
 % The algorithm that underpins it is designed to respect the requirements outlined in \Cref{subsection:requirements-algorithm}.
 In this section it will be described the algorithm that underpins the system and how it meets the requirements outlined in \Cref{subsection:requirements-algorithm}.
 
-\subsection{Gossip behaviour}
+\subsection{Gossip behavior}
 \textbf{Gossip protocols}, also known as \textbf{epidemic protocols}, are a class of communication algorithms inspired by the way information spreads in social or biological systems. 
 They have emerged as a key communication paradigm for large-scale distributed systems due to their simplicity, scalability, and resilience.
 
@@ -671,16 +671,16 @@ In these protocols, each node periodically contacts one or a few other nodes and
 The dynamics of information propagation closely resemble the spread of an epidemic, leading to high fault tolerance and self-stabilization.
 The guarantees obtained from gossip-based communication are inherently probabilistic: such systems achieve high stability under stress and disruption, while scaling gracefully to a very large number of nodes \cite{1238221}.
 
-In the context of \textit{Aggregate Computing}, computation focuses on collective behaviours that emerge from local interactions.
+In the context of \textit{Aggregate Computing}, computation focuses on collective behaviors that emerge from local interactions.
 Each node executes the same local program and exchanges data with its neighbors to collectively produce a global pattern (e.g., diffusion, consensus, or gradient formation).
 In this sense, \textit{gossip} acts as a mechanism of information diffusion, where nodes iteratively mix their local states with those of their neighbors to approximate global aggregates.
 
-The algorithm developed in this thesis follows a similar \textbf{gossip behaviour}, where information spreads through local \ac{P2P} interactions to collectively achieve a consistent global state in a decentralized and self-stabilizing manner.
+The algorithm developed in this thesis follows a similar \textbf{gossip behavior}, where information spreads through local \ac{P2P} interactions to collectively achieve a consistent global state in a decentralized and self-stabilizing manner.
 
 \subsubsection{Diffusion speed}
 As defined in \cite{1238221}, the \textbf{diffusion speed} of gossip protocols represents the rate
 at which information originating from any node spreads and becomes uniformly mixed throughout a distributed network.
-It quantifies how quickly local data diffuses across nodes through randomized peer-to-peer exchanges.
+It quantifies how quickly local data diffuses across nodes through randomized \ac{P2P} exchanges.
 
 Formally, the diffusion speed $\boldsymbol{T(\delta, n, \epsilon)}$
 is defined as the smallest number of rounds required for all (n) nodes' estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
@@ -699,7 +699,7 @@ demonstrating that even simple randomized communication mechanisms can achieve r
 The purpose of this algorithm is to enable communication between nodes finding the shortest path to a message source.
 The algorithm computes, in a fully distributed manner, the minimum distance (\textbf{gradient}) from each node to a designated target (the source that sends the message).
 Full algorithm code is reported in \Cref{lst:algorithm-code}.
-\lstinputlisting[float, language=Kotlin,label={lst:algorithm-code}, caption={Entire algorithm code.}]{listings/algorithm.kt}
+\lstinputlisting[float, language=Kotlin, label={lst:algorithm-code}, caption={Entire algorithm code.}]{listings/algorithm.kt}
 
 
 This is a \textbf{Bellman-Ford} style algorithm, applied over the network graph:
@@ -734,7 +734,8 @@ At each computational round $k$, every node $u$ reads the gossip messages shared
 \begin{equation}
 \boldsymbol{d_{u}^{k+1} = \min(d_{u}^{k},\ d_{v}^{k} + w(v, u))}
 \end{equation}
-where $w(v, u)$ represents the communication cost or weight of the edge between nodes $v$ and $u$. This iterative process propagates distance information throughout the network, allowing each node to estimate its proximity to the source node (\Cref{lst:relaxation-code}).
+where $w(v, u)$ represents the communication cost or weight of the edge between nodes $v$ and $u$.
+This iterative process propagates distance information throughout the network, allowing each node to estimate its proximity to the source node (\Cref{lst:relaxation-code}).
 
 \lstinputlisting[language=Kotlin,label={lst:relaxation-code}, caption={Relaxation code to compute the minimum distance from each node to the source.}]{listings/relaxation.kt}
 
@@ -749,7 +750,8 @@ The \texttt{path} field contained in the \texttt{GossipGradient} data class is a
 
 To achieve this, a copy of each neighbor's path is created, excluding the neighbor's own identifier. This produces a sequence representing all the hops that precede that neighbor in the propagation chain.
 
-Two checks are then performed to detect and reject cyclic paths. The first condition, \texttt{it == localId}, prevents self-cycles by discarding any proposal that has already passed through the current node. The second, \texttt{it in neighbors}, filters out proposals that traverse any of the current node's neighbors other than the one under consideration, thereby avoiding “ping-pong” exchanges between adjacent nodes.
+Two checks are then performed to detect and reject cyclic paths. The first condition, \texttt{it == localId}, prevents self-cycles by discarding any proposal that has already passed through the current node.
+The second, \texttt{it in neighbors}, filters out proposals that traverse any of the current node's neighbors other than the one under consideration, thereby avoiding “ping-pong” exchanges between adjacent nodes.
 
 Together, these checks ensure that message propagation remains acyclic, improving the efficiency and correctness of the gossip process.
 
@@ -762,9 +764,11 @@ Before forwarding a message, each node applies a filtering step to ensure that o
 
 \lstinputlisting[language=Kotlin,label={lst:expiration-code}, caption={Filtering logic enforcing message expiration and spatial propagation limits.}]{listings/filter.kt}
 \subsubsection{Multiple sources}
-In a large-scale, real-world deployment, it is common for multiple nodes to generate and transmit messages simultaneously. The algorithm is designed to handle this scenario effectively, allowing multiple sources to coexist and propagate their messages independently without interference.
+In a large-scale, real-world deployment, it is common for multiple nodes to generate and transmit messages simultaneously.
+The algorithm is designed to handle this scenario effectively, allowing multiple sources to coexist and propagate their messages independently without interference.
 
-This behavior is achieved by treating each message source as an independent entity, with every node maintaining separate state information for each active message in the network. Initially, a gossip-based self-stabilization step is applied to the set of active sources (\Cref{lst:sources-sharing-code}).
+This behavior is achieved by treating each message source as an independent entity, with every node maintaining separate state information for each active message in the network.
+Initially, a gossip-based self-stabilization step is applied to the set of active sources (\Cref{lst:sources-sharing-code}).
 
 \lstinputlisting[language=Kotlin,label={lst:sources-sharing-code}, caption={Gossip-based self-stabilization of the message sources.}]{listings/sources-sharing.kt}
 
@@ -822,8 +826,9 @@ It follows the \textbf{\ac{MVVM}} architectural pattern, which separates the use
 The \ac{MVVM} pattern consists of three main components:
 \begin{itemize}
     \item \textbf{Model}: Represents the data and business logic of the application. It is responsible for managing data sources, such as local databases or APIs, and performing necessary transformations or computations.
-    \item \textbf{View}: Defines the \ac{UI} layer—the part of the application that the user interacts with. It displays data exposed by the ViewModel and forwards user interactions (e.g., button clicks or text input) back to it.
-    \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves and processes data from the Model, exposing it in a \ac{UI}-friendly form. The ViewModel maintains the application state and employs observable data structures to notify the View of any updates.
+    \item \textbf{View}: Defines the \ac{UI} layer, the part of the application that the user interacts with. It displays data exposed by the ViewModel and forwards user interactions (e.g., button clicks or text input) back to it.
+    \item \textbf{ViewModel}: Acts as an intermediary between the Model and the View. It retrieves and processes data from the Model, exposing it in a \ac{UI}-friendly form. 
+    The ViewModel maintains the application state and employs observable data structures to notify the View of any updates.
 \end{itemize}
 The image in \Cref{fig:mvvm-echo} illustrates how the \textbf{Echo} application implements the \ac{MVVM} architecture.
 
@@ -836,7 +841,7 @@ current GPS location, and sending indicators, while providing action methods suc
 
 The \textbf{Model layer} comprises immutable data classes including:
 \begin{itemize}
-    \item \texttt{ChatMessage}: Application-level data structure for displaying messages in the UI
+    \item \texttt{ChatMessage}: Application-level data structure for displaying messages in the UI.
     \item \texttt{DeviceLocationHeartbeat}: Data class for sharing device location and heartbeat information via \ac{MQTT}.
     \item \texttt{Message}: Internal data structure representing a message used by the gossip algorithm during propagation.
     \item \texttt{GossipConfig}: Configuration for default gossip parameters such as \ac{TTL} and maximum distance.
@@ -857,7 +862,7 @@ The \textbf{Service layer} contains the infrastructure components: the Collektiv
 The layered design of the application is illustrated in \Cref{fig:app-layered-design}.
 Each layer is described below following a bottom-up approach.
 
-\textbf{Collektive Engine.} This layer acts as the Aggregate Computing runtime environment responsible for managing and executing aggregate programs, including the messaging algorithm.
+\textbf{Collektive Engine} layer acts as the Aggregate Computing runtime environment responsible for managing and executing aggregate programs, including the messaging algorithm.
 It provides primitives for defining computational fields, sharing data among neighbors, and performing distributed computations across the network, such as \texttt{share}, \texttt{alignedOn}, and \texttt{neighboring} (\Cref{lst:collektive-code}).
 
 \begin{figure}[h!]
@@ -880,7 +885,7 @@ d = 2r \cdot \operatorname{arcsin}\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\r
 \end{equation}
 
 The location data obtained locally is shared through the \textbf{Transport Layer}, enabling neighbor awareness without direct coupling to the Collektive Engine.
-This layer uses the \ac{MQTT} protocol as its communication mechanism, relying on the public broker \textit{test.mosquitto.org} over WebSocket on port 8080 instead of the default TCP port 1883.
+This layer uses the \ac{MQTT} protocol as its communication mechanism, relying on the public broker \footnote{\label{mosquitto}\url{https://test.mosquitto.org/}} over WebSocket on port 8080 instead of the default TCP port 1883.
 Using port 8080 improves firewall compatibility, since many private or public networks block non-standard ports like 1883, while 8080 is commonly allowed for web traffic.
 This setup also ensures compatibility with browsers and WebApps, facilitating future extensions of the application to web platforms.
 
@@ -938,7 +943,7 @@ The \ac{CI} workflow includes the following jobs (\Cref{lst:CI-collektive-exampl
     it checks whether all builds have finished successfully or if any have failed or been cancelled.
 \end{enumerate}
 \section{Alchemist simulations}
-Deploing and testing the messaging system in a real-world environment with many mobile devices can be logistically challenging and require significant resources.
+Deploying and testing the messaging system in a real-world environment with many mobile devices can be logistically challenging and require significant resources.
 To overcome these challenges, the \textit{Alchemist Simulator} is used to create a controlled environment with multiple nodes where various scenarios can be simulated and analyzed.
 
 The simulations executed through the \texttt{Alchemist Simulator}  are configured using \textbf{YAML} files, which specify the parameters governing the simulation environment, the number and type of nodes, and the associated behavioral models.
