@@ -582,14 +582,19 @@ This alignment is fundamental, as the distributed nature of the system requires 
 
 
 \subsection{Analysis}
-To address these requirements and challenges, the system adopts a \textbf{decentralized architecture} through the principles of \textbf{Aggregate Computing}. 
-Each device is treated as an independent computational entity (or node) capable of locally executing aggregate functions and exchanging information only with its neighbors. 
-This model allows global behaviors, such as message diffusion or decay, to emerge from simple local interactions. 
+To address these requirements and challenges, the system adopts a \textbf{decentralized architecture} based on the principles of \textit{Aggregate Computing}, a computational paradigm that models systems as collections of interacting devices operating in a spatial environment. 
+In this model, each device (or node) executes the same aggregate program, which is evaluated locally through periodic computation and communication rounds with \textbf{neighboring devices}. 
+By relying solely on local information exchange, global behaviors naturally emerge from the coordination of many simple entities. 
+This approach provides several advantages: it promotes \textbf{scalability}, since computation does not depend on centralized coordination; it enhances \textbf{robustness}, as the system can tolerate node failures or dynamic topology changes; and it enables \textbf{self-organization}, allowing complex collective behaviors, such as message diffusion and distance-based message decay, to arise from local rules. 
+These properties make Aggregate Computing particularly suited for dynamic, large-scale, and unreliable environments such as mobile ad hoc networks.
+
 Message propagation is achieved through \textbf{gradient algorithm} based on \textbf{gossip}, which naturally reflect spatial proximity and temporal dynamics within the network.
 
 From an implementation perspective, the \textit{Collektive} framework is employed to define and simulate the aggregate behavior of the system, ensuring correctness and reproducibility under controlled conditions. 
 
-The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable publish/subscribe mechanism suitable for distributed messaging and initial prototyping. 
+The communication layer is currently based on the \textbf{\ac{MQTT}} protocol, which provides a lightweight and reliable \textit{publish/subscribe} mechanism suitable for distributed messaging and initial prototyping. 
+Although this choice introduces a centralized broker, it is important to note that Aggregate Computing model inherently abstracts from the underlying communication protocol.
+This abstraction ensures that the same aggregate logic remains valid across different infrastructures, enabling flexibility and portability in future implementations.
 
 Finally, the use of \textbf{\ac{KMP}} enables a unified codebase that targets multiple platforms (Android, iOS) facilitating consistency between the simulated and real execution environments.
 \section{Network Architecture}
@@ -606,7 +611,7 @@ The network is modeled as an undirected graph $G = (V, E)$, where $V$ is the set
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.6\linewidth]{figures/network-graph.png}}
-    \caption{Network architecture image taken from \textit{Alchemist Simulator} illustrating nodes and their communication links. Each node represents a device in the messaging system, and edges denote proximity-based connections enabling message exchange.}
+    \caption{Layout of a network representation. Image taken from \textit{Alchemist Simulator} illustrating nodes and their communication links. Each node represents a device in the messaging system, and edges denote proximity-based connections enabling message exchange.}
     \label{fig:network-graph}
 \end{figure}
 A \textbf{node} in the network represents a single device (e.g., a smartphone) running the messaging software.
@@ -709,7 +714,7 @@ Formally, the diffusion speed $\boldsymbol{T(\delta, n, \epsilon)}$
 is defined as the smallest number of rounds required for all (n) nodes' estimates to deviate from the global average by at most a relative error $\epsilon$, with probability at least $1 - \delta$.
 This metric provides a unified way to reason about the convergence rate of gossip-based communication mechanisms, regardless of the specific network topology.
 
-In the case of \textbf{Uniform Gossip}, where each node randomly selects a neighbor to exchange information with in each round, 
+In the case of \textbf{Uniform Gossip}, where each node randomly selects a neighbor to exchange information within each round, 
 diffusion occurs exponentially fast, with a time complexity of:
 \begin{equation}
 T(\delta, n, \epsilon) = O(\log(n) + \log(1/\epsilon) + \log(1/\delta))
@@ -751,7 +756,10 @@ Each node starts with \texttt{path = listOf(localId)} because the path stored in
 for every round a neighbor copies your path and then calls \texttt{addHop} to add its own ID to the path, so the invariant stays true.
 
 \subsubsection{Sharing logic and distance computation}
-Message dissemination across the network is achieved using Collektive's \texttt{share} function, which enables efficient, stateful data sharing among neighboring nodes.
+Message dissemination across the network is achieved using Collektive's \texttt{share} function, a fundamental building block of the framework, used to model stateful and continuous interactions among neighboring devices. 
+It enables each node to maintain and update a local value over time while exchanging this value with its neighbors during each computational round. 
+Starting from an initial value, the construct applies a transformation function that combines the device's current state with the most recent values received from neighboring nodes, producing a new local result that is then shared back with them.
+\texttt{share} broadcasts the same result to all the neighbors, capturing the space-time evolution of collective computations and allowing the emergence of global behaviors from local updates.
 
 At each computational round $k$, every node $u$ reads the gossip messages shared by its neighbors (\texttt{neighborsGossip}) and updates its local state accordingly. Based on this information, the node applies a relaxation step to compute the minimum distance to the message source. For each neighbor $v \in \texttt{neighbors}(u)$, the relaxation is defined as:
 \begin{equation}
@@ -997,7 +1005,7 @@ The simulation involves approximately $1500$ nodes, representing people devices,
 The left panel depicts the entire network topology, including all nodes and
  their communication links, whereas the right panel displays the state of a selected node, detailing the messages it has received during execution.
 
- This large-scale, dynamic environment was selected to test the system’s scalability, robustness, and message propagation capabilities in dense and highly mobile network conditions.
+ This large-scale, dynamic environment was selected to test the system's scalability, robustness, and message propagation capabilities in dense and highly mobile network conditions.
 
 \chapter{Conclusions}
 This chapter presents the concluding remarks of the thesis, offering a comprehensive synthesis of the main contributions and results achieved throughout the work. It revisits the research objectives, evaluating how they have been addressed through the design and implementation of the proposed decentralized messaging system.
