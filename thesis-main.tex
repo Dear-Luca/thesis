@@ -803,10 +803,15 @@ Initially, a gossip-based self-stabilization step is applied to the set of activ
 
 \lstinputlisting[language=Kotlin,label={lst:sources-sharing-code}, caption={Gossip-based self-stabilization of the message sources.}]{listings/sources-sharing.kt}
 
-After stabilization, the gossip-gradient algorithm described previously is executed independently for each source (\Cref{lst:multisources-code}).
+After stabilization, the gossip-gradient algorithm described previously is executed independently for each source (\Cref{lst:multisources-code}). 
+When executing the algorithm for \textit{multiple message sources}, 
+it is essential to ensure that each computation remains independent, avoiding interference between gradients originating from different nodes. 
+Without proper separation, values shared among neighbors could overlap across distinct gradient evaluations, leading to incorrect results and inconsistent field propagation. 
+To address this issue, the \texttt{alignedOn} construct is employed. 
+This operator provides a mechanism for \textbf{computational alignment}, ensuring that only devices executing the same \texttt{alignedOn(sourceId)} instance exchange information with one another. 
+In practice, each source's gossip diffusion is treated as a distinct logical computation with its own stable alignment key.
+Without it, multi-source gossip becomes susceptible to state interference and inaccurate distance calculations.
 
-
-Since the implementation relies on the \texttt{share} construct, iterating over all sources requires the use of the \texttt{alignedOn} operator. This operator ensures that only nodes executing the same \texttt{alignedOn(sourceId)} instance exchange values with one another, thereby preventing interference between computations associated with different sources.
 \lstinputlisting[float, language=Kotlin,label={lst:multisources-code}, caption={Execution of the gossip-gradient algorithm for multiple concurrent sources.}]{listings/multipleSources.kt}
 \subsubsection{Time complexity}
 Let $n = |V|$ be the number of nodes, $m = |E|$ the number of links, and $s$ the number of sources. 
