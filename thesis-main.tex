@@ -804,6 +804,7 @@ Initially, a gossip-based self-stabilization step is applied to the set of activ
 \lstinputlisting[language=Kotlin,label={lst:sources-sharing-code}, caption={Gossip-based self-stabilization of the message sources.}]{listings/sources-sharing.kt}
 
 After stabilization, the gossip-gradient algorithm described previously is executed independently for each source (\Cref{lst:multisources-code}). 
+
 When executing the algorithm for \textit{multiple message sources}, 
 it is essential to ensure that each computation remains independent, avoiding interference between gradients originating from different nodes. 
 Without proper separation, values shared among neighbors could overlap across distinct gradient evaluations, leading to incorrect results and inconsistent field propagation. 
@@ -900,6 +901,8 @@ Each layer is described below following a bottom-up approach.
 
 \textbf{Collektive Engine} layer acts as the Aggregate Computing runtime environment responsible for managing and executing aggregate programs, including the messaging algorithm.
 It provides primitives for defining computational fields, sharing data among neighbors, and performing distributed computations across the network, such as \texttt{share}, \texttt{alignedOn}, and \texttt{neighboring} (\Cref{lst:collektive-code}).
+The engine handles message alignment, synchronization, and data propagation, ensuring the consistency of aggregate computations across all nodes.
+By abstracting the low-level communication details, the \textit{Collektive Engine} allows developers to focus on the logical specification of the distributed behavior.
 
 \begin{figure}[h!]
     \centering
@@ -923,6 +926,7 @@ d = 2r \cdot \operatorname{arcsin}\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\r
 The location data obtained locally is shared through the \textbf{Transport Layer}, enabling neighbor awareness without direct coupling to the Collektive Engine.
 This layer uses the \ac{MQTT} protocol as its communication mechanism, relying on the public broker \footnote{\label{mosquitto}\url{https://test.mosquitto.org/}} over WebSocket on port 8080 instead of the default TCP port 1883.
 Using port 8080 improves firewall compatibility, since many private or public networks block non-standard ports like 1883, while 8080 is commonly allowed for web traffic.
+
 This setup also ensures compatibility with browsers and WebApps, facilitating future extensions of the application to web platforms.
 
 The Transport Layer is responsible for the following functionalities:
@@ -953,7 +957,7 @@ The Transport Layer is responsible for the following functionalities:
 \end{itemize}
 
 Finally, the \textbf{Application Layer} encapsulates the core logic of the messaging system.
-It implements the decentralized gossip algorithm responsible for message propagation and handles all user-facing features, including message creation, parameter configuration (expiration time and propagation distance), and real-time visualization of messages.
+It implements the decentralized proximity-based gossip algorithm responsible for message propagation and handles all user-facing features, including message creation, parameter configuration (\ac{TTL} and maximum propagation distance), and real-time visualization of messages.
 
 \chapter{Validation}
 This chapter describes the validation process undertaken to ensure the correctness of the algorithm.
@@ -968,9 +972,10 @@ In this project, \textbf{GitHub Actions} is used as \ac{CI} platform to automate
 The \ac{CI} pipeline is configured to trigger on every push or pull request to the main branch, ensuring that all changes are automatically validated before being merged.
 
 The algorithm was added to \Cref{collektive-example-repo}, repository which hosts various examples of applications built using the Collektive framework.
-The \ac{CI} workflow includes the following jobs (\Cref{lst:CI-collektive-examples}):
 
-\lstinputlisting[language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
+The \ac{CI} workflow includes the following jobs:
+
+% \lstinputlisting[language=yaml, label={lst:CI-collektive-examples}, caption={CI workflow for Collektive examples.}]{listings/CI-collektive-examples.yml}
 
 \begin{enumerate}
     \item \texttt{build}: it's the main job of the workflow, responsible for the compilation, testing and deployment over three operating systems—Windows, Ubuntu, and macOS.
@@ -981,11 +986,11 @@ The \ac{CI} workflow includes the following jobs (\Cref{lst:CI-collektive-exampl
 \end{enumerate}
 \section{Alchemist simulations}
 Deploying and testing the messaging system in a real-world environment with many mobile devices can be logistically challenging and require significant resources.
-To overcome these challenges, the \textit{Alchemist Simulator} is used to create a controlled environment with multiple nodes where various scenarios can be simulated and analyzed.
+To overcome these challenges, the \textit{Alchemist Simulator} is employed to reproduce realistic scenarios in a controlled and reproducible setting. Thanks to the \texttt{Alchemist-incarnation} component integrated within \textit{Collektive}, it is possible to simulate networks composed of many nodes and to analyze the system's behavior under diverse conditions. 
+This approach enables the evaluation of scalability, robustness, and communication dynamics without the practical constraints of large-scale physical testing.
 
 The simulations executed through the \texttt{Alchemist Simulator}  are configured using \textbf{YAML} files, which specify the parameters governing the simulation environment, the number and type of nodes, and the associated behavioral models.
-The example shown in \Cref{lst:alchemist-simulation-yaml} presents a representative configuration defining a simulation scenario with $50$ regular nodes and $2$ source nodes.
-\lstinputlisting[float, language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
+% \lstinputlisting[float, language=yaml, label={lst:alchemist-simulation-yaml}, caption={YAML configuration file for the Alchemist simulation.}]{listings/alchemist-simulation.yml}
 
 Each node executes the program \texttt{gossipChatMultipleSourcesEntrypoint} (\Cref{lst:simulation-entry-point}), which serves as the entry point of the simulation.
 This component initializes the \emph{gossip-based chat algorithm}, invoking it with predefined parameters such as the message lifetime and the maximum propagation distance, thereby reproducing the intended proximity-based communication dynamics.
@@ -995,7 +1000,6 @@ Using the \ac{GUI} provided by the Simulator, it is possible to visualize the ne
 
 \section{Simulation with GPS traces}
 \texttt{Alchemist} provides the capability to load and simulate scenarios on real-world geographic maps. This feature enables more realistic experiments by incorporating actual spatial data and mobility traces, allowing nodes to move within real urban environments.
-
 To evaluate the behavior of the proposed messaging system under realistic conditions, data from the \textit{Vienna Marathon 2021} event were used to construct a challenging simulation environment (\Cref{fig:marathon-simulation}).
 \begin{figure}[h!]
     \centering
@@ -1011,6 +1015,15 @@ The left panel depicts the entire network topology, including all nodes and
  their communication links, whereas the right panel displays the state of a selected node, detailing the messages it has received during execution.
 
  This large-scale, dynamic environment was selected to test the system's scalability, robustness, and message propagation capabilities in dense and highly mobile network conditions.
+
+ \section{Results}
+ The validation phase aimed to confirm the correctness, scalability, and resilience of the proposed messaging system under realistic conditions. 
+ The use of the Alchemist Simulator, integrated with Collektive, allowed extensive experimentation in controlled yet dynamic environments, reproducing both synthetic and real-world mobility traces. 
+ The large-scale simulation involving approximately $1500$ mobile nodes based on the \textit{Vienna Marathon 2021} GPS data demonstrated that the gossip-gradient algorithm successfully propagated messages across a highly mobile network, 
+ maintaining stable diffusion patterns and consistent field formation even under continuous topological changes and challenging conditions. 
+ The system exhibited self-stabilizing behavior, with nodes autonomously recovering from disconnections and adapting to varying densities without centralized coordination. 
+ Moreover, the decentralized nature of the aggregate model ensured scalability, as communication and computation relied solely on local interactions. 
+ These results confirm that the designed solution is robust, adaptive, and scalable, validating the effectiveness of Aggregate Computing as a paradigm for building decentralized, proximity-based messaging systems.
 
 \chapter{Conclusions}
 This chapter presents the concluding remarks of the thesis, offering a comprehensive synthesis of the main contributions and results achieved throughout the work. It revisits the research objectives, evaluating how they have been addressed through the design and implementation of the proposed decentralized messaging system.
