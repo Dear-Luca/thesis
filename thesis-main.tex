@@ -22,7 +22,7 @@
 \supervisor{Prof. Pianini Danilo}
 \cosupervisor{Dott.ssa Cortecchia Angela}
 
-\session{II}
+\session{III}
 \academicyear{2024-2025}
 
 \acsetup{first-style=long-short}
@@ -118,6 +118,11 @@
     long  = Continuous Integration
 }
 
+\DeclareAcronym{JVM}{
+    short = JVM,
+    long  = Java Virtual Machine
+}
+
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
 \begin{document}
@@ -209,10 +214,10 @@ Aggregate Programming aims to overcome these challenges through three fundamenta
     \item The program logic is expressed as the manipulation of data structures that extend spatially and temporally across that region.
     \item These computations are executed locally by individual devices within the region, which coordinate through resilient mechanisms and proximity-based interactions.
 \end{enumerate}
-The foundation of this paradigm lies in \textit{field calculus} \cite{beal2015aggregate},
+The foundation of this paradigm lies in \textit{Field Calculus} \cite{beal2015aggregate},
 a core set of constructs modeling device behavior and interaction. These essential features are captured
 in a tiny universal language suitable for mathematical analysis.
-The concept of \textbf{field} plays a central role in this context and originates from physics, where it is defined as a function mapping every point in a space-time domain to a scalar value.
+The concept of \textbf{field} plays a central role in this context and is inspired by physics, where it is defined as a function mapping every point in a space-time domain to a scalar value.
 
 According to \cite{viroli2019aggregate}, the \textit{field value} $\phi$ is a function
 
@@ -232,8 +237,8 @@ This value can change in time with a \textit{field evolution} that maps each poi
 \end{figure}
 
 The messaging system developed in this thesis was implemented using \textit{Collektive} \cite{amslaurea31080}, 
-an open-source framework designed to simplify the development of distributed systems through the principles of Aggregate Programming. 
-Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
+an \href{https://github.com/Collektive}{open-source} framework designed to simplify the development of distributed systems through the principles of Aggregate Programming. 
+Collektive provides developer-oriented APIs (as in \Cref{fig:layers-AP}) used to define and execute aggregate applications.
 
 \subsection{Collektive}
 \label{section:Collektive}
@@ -241,29 +246,34 @@ Collektive provides developer-facing APIs (as in \Cref{fig:layers-AP}) used to d
 It adopts the \textit{Field Calculus} model to provide an intuitive and expressive means for defining aggregate behaviors without requiring low-level implementation details. 
 Developed using \ac{KMP}, it supports execution across multiple platforms and devices \cite{amslaurea31080}.
 
-The main features of the framework can be summarized as follows \cite{collektive_docs}:
+The main features of the framework can be summarized as follows \cite{DBLP:conf/acsos/Cortecchia24}:
 \begin{itemize}
 \item \textbf{High-Level Abstraction:} Collektive streamlines the creation of distributed behaviors by enabling developers to express coordination logic at a global level, without explicitly managing individual device states.
 \item \textbf{Declarative Programming:} The framework promotes a declarative programming model, allowing developers to specify the intended system outcomes, while the runtime transparently handles the coordination and execution mechanisms.
-\item \textbf{Dynamic Adaptation:} Applications built with Collektive can dynamically respond to network changes and external stimuli, ensuring robustness and resilience in highly variable environments.
+\item \textbf{Dynamic Adaptation:} Applications built with Collektive can dynamically respond to network changes and environmental changes, ensuring robustness and resilience in highly variable environments.
 \end{itemize}
 
 Collektive is structured into three main components:
 
 The first and most significant is the \textbf{\ac{DSL}}, which constitutes the core of the framework. 
-It leverages \textit{XC}, an experimental programming language designed for the development of homogeneous distributed systems. 
+It leverages \textit{XC} \cite{AUDRITO2024111976}, an experimental programming language designed for the development of homogeneous distributed systems. 
 The DSL encapsulates the main Aggregate Computing operators and provides an extensive set of tests to ensure correctness and consistency.
 
 The second component is the \textbf{compiler plugin}, which is divided into two submodules: a frontend component that performs static analysis to detect potentially unsafe or inappropriate
- code written using the Collektive DSL, and a backend component that augments the runtime stack by tracking function calls. 
- Each time a function is invoked, its name is recorded within a dedicated data structure to maintain proper execution alignment.
+code written using the Collektive DSL, and a backend component that augments the runtime stack by tracking function calls. 
+Each time a function is invoked, its name is recorded within a "Stack" data structure to maintain proper execution alignment.
+The \textbf{alignment} mechanism is crucial for the correct execution of aggregate programs,
+ensuring that each message from a neighbor is automatically matched to a specific \texttt{nbr} (\Cref{fig:layers-AP}) construct of \textit{Field Calculus}, used for communication.
+Each construct produces an export, value to be transmitted to neighboring devices.
+This export is labeled with the coordinates of the node within the evaluation tree corresponding to that construct. 
+All exports generated during computation are collected into a single message, which is then broadcast to neighboring nodes.
+This message can be modeled as a value tree: an ordered hierarchy of values produced during the evaluation of each sub-expression of the aggregate program.
+The \textit{alignment mechanism} ensures that the evaluation of each construct on a device corresponds precisely to the same construct on its neighbors, maintaining a consistent traversal path within the evaluation tree.
 
 The third component, \textbf{Alchemist-incarnation}, enables the integration of Collektive with the \textit{Alchemist Simulator}  \cite{Pianini_2013},
- an open-source environment for modeling and experimenting with distributed and pervasive systems. 
+ an open-source simulator for modeling and experimenting with distributed and pervasive systems. 
  This component allows Collektive programs to be executed within simulated environments, facilitating the validation of aggregate behaviors before deployment on real devices \cite{amslaurea31080}.
 \section{Motivations}
-In this section motivations for implementing a decentralized proximity-based messaging system will be illustrated.
-
 In recent years, the proliferation of \ac{IoT} and mobile devices has increased the need for local communication systems capable of operating even without stable network infrastructure. Centralized architectures, although efficient in connected environments, fail to guarantee reliability and resilience in dynamic or disconnected scenarios.
 As devices are becoming pervasive and ubiquitous, new models are required to enable coordination and information exchange without relying on fixed infrastructures.
 This need motivates the exploration of decentralized and distributed approaches, which can operate robustly in dynamic and limited environments.
@@ -282,9 +292,8 @@ In such scenarios, there are several vulnerabilities and challenges to consider:
     \item \textbf{Scalability issues}: As the number of devices increases, centralized systems may struggle to manage the growing volume of data and communication, leading to bottlenecks and delayed responses.
     \item \textbf{Limited resilience}: Centralized architectures often lack the redundancy and fault tolerance needed to maintain functionality in the face of network disruptions or device failures.
 \end{itemize}
-The networks that need to overcome the issues above can benefit from Aggregate Computing principles, which provides
-a distributed architecture where the nodes can directly communicate with the neighbors.
-
+For networks that must overcome the issues described above, the principles of Aggregate Computing are beneficial, 
+as they provide a distributed architecture facilitating direct communication between nodes.
 % Give practical examples where your system or research could apply — 
 % this grounds your thesis in reality and shows relevance.
 \subsection{Real world use cases}
@@ -323,7 +332,7 @@ This thesis can be divided into two main goals:
     The algorithm must also handle dynamic network topologies, where devices can join or leave the network at any time, ensuring robustness and adaptability. 
     Message sources can define both an expiration time and a maximum propagation distance, enabling controlled diffusion and limiting unnecessary communication overhead. 
     The system is implemented using the \textit{Collektive} framework \cite{amslaurea31080}, leveraging \ac{KMP} to ensure cross-platform compatibility across different targets including 
-    JVM, Javascript (browser), Android, iOS, and native versions (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
+    \ac{JVM}, Javascript (browser), Android, iOS, and native versions (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
     \item \label{goal:application} \textbf{Mobile application}: The second goal is to develop a multiplatform mobile application using \ac{KMP}. 
     This application leverages the messaging algorithm as core logic to send and receive messages from devices in the network. 
     The app must support both Android and iOS platforms providing a simple, user-friendly interface.
@@ -377,7 +386,7 @@ While this system is beneficial in overcrowded networks, it eliminates the possi
 Although not originally intended for this purpose, FireChat was widely adopted during civil protests.
  The application gained popularity in Iraq in 2014, when government restrictions limited Internet access, and later during the 2014 Hong Kong protests (known as the Umbrella Revolution)
 
-Nowadays Firechat is discontinued and no longer available on app stores, the official website is also offline.
+Nowadays FireChat is discontinued and no longer available on app stores, the official website is also offline.
 \begin{figure}[h!]
     \centering
     \fbox{\includegraphics[width=.8\linewidth]{figures/bluetooth-mesh.png}}
@@ -385,7 +394,7 @@ Nowadays Firechat is discontinued and no longer available on app stores, the off
     \label{fig:firechat-architecture}
 \end{figure}
 
-\subsubsection{Final considerations} Those three illustrated applications have more or less the same purpose of providing a decentralized approach to messaging.
+\subsubsection{Final considerations} Those three illustrated applications have broadly the same purpose of providing a decentralized approach to messaging.
 \textit{Briar} stands out for its strong emphasis on security and privacy, making it suitable for users in sensitive situations. 
 \textit{Bridgefy} is the most user-friendly and practical, focused on connecting users in emergency scenarios; encryption was included in later versions.
 \textit{FireChat} was the pioneering first popular example, but now outdated and discontinued. It inspired newer applications.
@@ -411,8 +420,10 @@ Some of the most notable ones include:
     The main applications are in the development of swarm systems, crowd management, wireless sensor network and
     smart city applications.
 
-    \textit{ScaFi} only supports JVM and web-based applications.
-    \item \textbf{Protelis} \cite{10.1145/2695664.2695913} is a programming language designed to simplify the development of resilient and well-structured networked systems, and can be integrated into various simulation frameworks. 
+    \textit{ScaFi} only supports \ac{JVM} and web-based applications, so it is not suitable for the purposes of this thesis, which requires mobile cross-platform compatibility.
+    Since \textit{Collektive} is built using \ac{KMP}, it can target Android and iOS devices, allowing the integration of Aggregate Computing principles into a mobile application.
+    \item \textbf{Protelis} \cite{10.1145/2695664.2695913} is a programming language designed to simplify the development of resilient and well-structured networked systems.
+    It offers an implementation for the interoperability with the Alchemist Simulator, where it can be seen its practical use in the development of aggregate programs.
     It provides a Java-hosted implementation of the field calculus through the \texttt{protelis-lang} library, offering a domain-general foundational API for Aggregate Programming \cite{8064092}.
     \begin{figure}[h!]
         \centering
@@ -421,8 +432,20 @@ Some of the most notable ones include:
         \label{fig:protelis-architecture}
     \end{figure}
     The Protelis architecture (\Cref{fig:protelis-architecture}) relies on an interpreter that periodically executes pre-parsed aggregate programs, enabling communication among devices and interaction with the environment.
-    However, since it is built on the Xtext framework for domain-specific languages and requires a JVM to run, its deployment is limited to Java-compatible devices, reducing platform heterogeneity.
-
+    However, since it is built on the Xtext framework for domain-specific languages and requires a \ac{JVM} to run, its deployment is limited to Java-compatible devices, reducing platform heterogeneity.
+    \item \textbf{FCPP} \cite{9196401} (Field Calculus Plus Plus) is a C++ library that implements the Field Calculus paradigm for Aggregate Computing in a highly efficient and extensible manner. 
+    It offers a component-based architecture (\Cref{fig:FCPP-architecture}) that supports modular composition and compile-time optimization, enabling parallelism and low-overhead execution. 
+    \begin{figure}[h!]
+        \centering
+        \fbox{\includegraphics[width=.8\linewidth]{figures/FCPP.png}}
+        \caption{FCPP architecture.}
+        \label{fig:FCPP-architecture}
+    \end{figure}
+    
+    Unlike JVM-based tools, FCPP can target a broader range of platforms, including microcontrollers, thanks to its lightweight design and minimal dependencies. 
+    The framework provides layered abstractions for data structures, components, and aggregate functions, facilitating flexible customization for simulation, IoT deployments, or self-organizing cloud systems. 
+    Experimental comparisons demonstrate substantial improvements in performance and scalability, with simulations running orders of magnitude faster and using significantly less memory. 
+    Overall, FCPP represents a major step toward practical, high-performance implementations of aggregate computing on heterogeneous and resource-constrained devices
 \end{itemize}
 
 \subsection{Lightweight communication protocols}
@@ -544,19 +567,19 @@ The mobile application serves as the \ac{UI} for the messaging system, providing
 \subsection{Non-functional requirements}
 The non-functional requirements specify the quality attributes, constraints, and performance criteria that the messaging system must meet,
 defining how well the functions should be performed.
-
-One of the main non-functional requirements of the system is the \textbf{code alignment} between the simulator
+\begin{itemize}
+    \item \textbf{Code alignment}: One of the main non-functional requirements of the system is the code alignment between the simulator
 and the mobile application.
 This ensures that the same algorithmic logic is shared across both environments, minimizing discrepancies between
 simulation and real-world execution.
 In practice, the aggregate algorithm is implemented as a common API, which can be invoked identically within the
 simulation framework and the mobile runtime.
 This alignment is fundamental, as the distributed nature of the system requires extensive validation under multiple-node scenarios.
+\item \textbf{Scalability}: The system must sustain acceptable performance levels as the number of participating nodes increases, ensuring that the aggregate computation cycle executes periodically without noticeable degradation on mobile devices. 
+\item \textbf{Maintainability and Extensibility}: The codebase must be maintainable and extensible, enabling future developers to easily understand, modify, and enhance the system. These qualities are achieved through modular architectural design, comprehensive documentation, and adherence to established coding standards. Furthermore, the system architecture should be flexible enough to support the integration of new communication protocols or additional functionalities without requiring significant refactoring.
 
-Another key non-functional requirement is \textbf{scalability}.
-The system must sustain acceptable performance levels as the number of participating nodes increases, ensuring that the aggregate computation cycle executes periodically without noticeable degradation on mobile devices. 
+\end{itemize}
 
-In addition, the codebase must exhibit high \textbf{maintainability} and \textbf{extensibility}, enabling future developers to easily understand, modify, and enhance the system. These qualities are achieved through modular architectural design, comprehensive documentation, and adherence to established coding standards. Furthermore, the system architecture should be flexible enough to support the integration of new communication protocols or additional functionalities without requiring significant refactoring.
 
 \subsection{Analysis}
 To address these requirements and challenges, the system adopts a \textbf{decentralized architecture} through the principles of \textbf{Aggregate Computing}. 
@@ -616,10 +639,10 @@ join or leave the network seamlessly, without any disruption.
 \textbf{\ac{KMP}} is the programming framework adopted for both the implementation of the messaging algorithm and the development of the mobile application. 
 
 Kotlin is a modern, statically typed, cross-platform programming language that supports type inference and emphasizes conciseness, safety, and interoperability. 
-It is fully compatible with Java, as the JVM version of its standard library relies on the Java Class Library, enabling seamless integration with existing Java ecosystems.
+It is fully compatible with Java, as the \ac{JVM} version of its standard library relies on the Java Class Library, enabling seamless integration with existing Java ecosystems.
 
 The primary goal of Kotlin Multiplatform is to streamline the development of cross-platform applications 
-by allowing developers to share common code across multiple targets (such as Android, iOS, JVM, and Web) while maintaining platform-specific implementations only where necessary. 
+by allowing developers to share common code across multiple targets (such as Android, iOS, \ac{JVM}, and Web) while maintaining platform-specific implementations only where necessary. 
 This approach greatly reduces code duplication, accelerates development cycles, and ensures consistency across different environments.
 
 In this project, KMP enables the reuse of the same Aggregate Computing logic and communication components across both the simulation and mobile application. 
@@ -651,7 +674,7 @@ The build process in Gradle is organized around \textit{tasks}, which represent 
 Developers can define custom tasks and establish dependencies among them, allowing precise control over the execution order and workflow of the build process. 
 Gradle also supports parallel task execution and incremental builds, improving efficiency and reducing build times.
 
-In the context of this project, Gradle is used to configure the Kotlin Multiplatform environment, manage platform-specific dependencies, and generate binaries for multiple targets, including Android, JVM, and iOS. 
+In the context of this project, Gradle is used to configure the Kotlin Multiplatform environment, manage platform-specific dependencies, and generate binaries for multiple targets, including Android and iOS. 
 Its integration with the Kotlin DSL ensures a consistent and automated build process across all platforms, simplifying development and maintaining reproducibility across simulation and deployment environments.
 
 \subsubsection{\ac{MQTT}}
@@ -900,7 +923,8 @@ The Transport Layer is responsible for the following functionalities:
 
     \lstinputlisting[float, language=Kotlin, label={lst:cleanHeartBeat-code}, caption={Heartbeat pulse cleanup function.}]{listings/cleanHeartBeat.kt}
 
-    \item \textbf{Message delivery}: Each device subscribes to its dedicated topic \texttt{echo/messages/<deviceId>} to receive messages.
+    \item \textbf{Message delivery}: Each device subscribes to its dedicated topic 
+    \\ \texttt{echo/messages/<deviceId>} to receive messages.
     For this purpose, \ac{QoS} level 1 (\textit{at least once}) is used to ensure reliable delivery:
     \begin{enumerate}
         \item The sender publishes a message to the broker.

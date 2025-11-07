@@ -17,7 +17,7 @@
 }
 
 
-@phdthesis{amslaurea31080,
+@mathesis{amslaurea31080,
   title    = {A Kotlin multi-platform implementation of aggregate computing based on XC},
   keywords = {aggregate computing,kotlin,xc},
   author   = {Cortecchia, Angela},
@@ -39,11 +39,21 @@
               This study sets the stage for future developments that could improve service efficiency and effectiveness.}
 }
 
-@misc{collektive_docs,
-  author = {Cortecchia, Angela},
-  title  = {Collektive Documentation},
-  year   = {2025},
-  url    = {https://collektive.github.io/}
+@inproceedings{DBLP:conf/acsos/Cortecchia24,
+  author    = {Angela Cortecchia},
+  title     = {Multiplatform Self-Organizing Systems Through a Kotlin-MP Implementation
+               of Aggregate Computing},
+  booktitle = {{IEEE} International Conference on Autonomic Computing and Self-Organizing
+               Systems, {ACSOS} 2024 - Companion, Aarhus, Denmark, September 16-20,
+               2024},
+  pages     = {155--157},
+  publisher = {{IEEE}},
+  year      = {2024},
+  url       = {https://doi.org/10.1109/ACSOS-C63493.2024.00048},
+  doi       = {10.1109/ACSOS-C63493.2024.00048},
+  timestamp = {Thu, 01 May 2025 20:20:16 +0200},
+  biburl    = {https://dblp.org/rec/conf/acsos/Cortecchia24.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @inproceedings{inproceedings,
@@ -158,4 +168,30 @@
   pages     = {482-491},
   keywords  = {Aggregates;Peer to peer computing;Protocols;Large-scale systems;Temperature sensors;Distributed computing;Computer science;Scalability;Fault tolerant systems;Stress},
   doi       = {10.1109/SFCS.2003.1238221}
+}
+
+@article{AUDRITO2024111976,
+  title    = {The eXchange Calculus (XC): A functional programming language design for distributed collective systems},
+  journal  = {Journal of Systems and Software},
+  volume   = {210},
+  pages    = {111976},
+  year     = {2024},
+  issn     = {0164-1212},
+  doi      = {https://doi.org/10.1016/j.jss.2024.111976},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0164121224000190},
+  author   = {Giorgio Audrito and Roberto Casadei and Ferruccio Damiani and Guido Salvaneschi and Mirko Viroli},
+  keywords = {Distributed programming, Collective computing, Core calculus, Operational semantics, Type soundness, Scala DSL, C＋＋ DSL},
+  abstract = {Distributed collective systems are systems formed by homogeneous dynamic collections of devices acting in a shared environment to pursue a joint task or goal. Typical applications emerge in the context of wireless sensor networks, robot swarms, groups of wearable-augmented people, and computing infrastructures. Programming such systems is notoriously hard, due to requirements of scalability, concurrency, faults, and difficulty in making desired collective behaviour ultimately emerge: ad-hoc languages and mechanisms have been proposed threads like spatial computing, macro-programming, and field-based coordination. In this paper we present the eXchange Calculus (XC), formalising a tiny set of key mechanisms, usable across many different languages and platforms, allowing to express the overall interactive behaviour of distributed collective systems in a declarative way. In this approach, computation (executed in asynchronous rounds), communication (which is neighbour-based), and state over time, are all expressed by a single declarative construct, called exchange. We provide a formalisation of XC in terms of syntax, device-level and network-level semantics, prove a number of properties of the calculus, and discuss applicability considering a smart city scenario. XC is implemented as a DSL in Scala and in C＋＋, with different trade-offs in terms of productivity and platform targetting.}
+}
+
+@inproceedings{9196401,
+  author    = {Audrito, Giorgio},
+  booktitle = {2020 IEEE International Conference on Autonomic Computing and Self-Organizing Systems (ACSOS)},
+  title     = {FCPP: an efficient and extensible Field Calculus framework},
+  year      = {2020},
+  volume    = {},
+  number    = {},
+  pages     = {153-159},
+  keywords  = {Aggregates;Calculus;C++ languages;Tools;Programming;Cloud computing;Libraries;edge computing;aggregate computing;programming languages;field calculus;toolchains},
+  doi       = {10.1109/ACSOS49614.2020.00037}
 }
