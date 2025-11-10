@@ -445,7 +445,7 @@ Some of the most notable ones include:
     Unlike JVM-based tools, FCPP can target a broader range of platforms, including microcontrollers, thanks to its lightweight design and minimal dependencies. 
     The framework provides layered abstractions for data structures, components, and aggregate functions, facilitating flexible customization for simulation, IoT deployments, or self-organizing cloud systems. 
     Experimental comparisons demonstrate substantial improvements in performance and scalability, with simulations running orders of magnitude faster and using significantly less memory. 
-    Overall, FCPP represents a major step toward practical, high-performance implementations of aggregate computing on heterogeneous and resource-constrained devices
+    Overall, FCPP represents a major step toward practical, high-performance implementations of aggregate computing on heterogeneous and resource-constrained devices.
 \end{itemize}
 
 \subsection{Lightweight communication protocols}
@@ -759,7 +759,7 @@ for every round a neighbor copies your path and then calls \texttt{addHop} to ad
 Message dissemination across the network is achieved using Collektive's \texttt{share} function, a fundamental building block of the framework, used to model stateful and continuous interactions among neighboring devices. 
 It enables each node to maintain and update a local value over time while exchanging this value with its neighbors during each computational round. 
 Starting from an initial value, the construct applies a transformation function that combines the device's current state with the most recent values received from neighboring nodes, producing a new local result that is then shared back with them.
-\texttt{share} broadcasts the same result to all the neighbors, capturing the space-time evolution of collective computations and allowing the emergence of global behaviors from local updates.
+\texttt{share} broadcasts the same result to all the neighbors, capturing the space-time evolution of collective computations, allowing the emergence of global behaviors from local updates.
 
 At each computational round $k$, every node $u$ reads the gossip messages shared by its neighbors (\texttt{neighborsGossip}) and updates its local state accordingly. Based on this information, the node applies a relaxation step to compute the minimum distance to the message source. For each neighbor $v \in \texttt{neighbors}(u)$, the relaxation is defined as:
 \begin{equation}
