@@ -90,9 +90,9 @@ the case of proximity messaging}
 
 \begin{frame}{Aggregate Computing: The paradigm}
     What is Aggregate Computing?
-    \begin{alertblock}{Aggregate Computing}
+    \begin{block}{Aggregate Computing}
         Programming paradigm that treats large, interconnected systems of devices as a single, aggregate machine rather than focusing on individual components.
-    \end{alertblock}
+    \end{block}
     \vspace{0.3cm}
     {\Large\textbf{Key concepts}}
     \begin{itemize}
@@ -152,7 +152,15 @@ the case of proximity messaging}
 %------------------------------------------------
 
 \begin{frame}{Algorithm (Gossip-Gradient)}
-
+    The algorithm is at the core of the system, allowing decentralized proximity messaging.
+    \begin{block}{Description}
+        \begin{itemize}
+            \item \textbf{Objective}: Enable communication between nodes by finding the shortest path (\textbf{gradient}) to the message source.
+            \item \textbf{Algorithm Family}: \textbf{Gossip-based} algorithm, which rely on local interactions between nodes to propagate information throughout the network. It uses a \textbf{Bellman-Ford-like} approach to compute the gradient.
+            \item \textbf{Multiple Sources}: The algorithm can handle multiple message sources simultaneously, allowing nodes to receive messages from different origins.
+            \item \textbf{Parameters}: Maximum propagation distance, expiration time (TTL).
+        \end{itemize}
+    \end{block}
 \end{frame}
 
 %------------------------------------------------
