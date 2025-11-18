@@ -59,8 +59,10 @@ the case of proximity messaging}
 
         \column{0.55\textwidth}
         \begin{itemize}
-            \item Problem of centralized systems: single point of failure, low resilience, useless in the absence of a network.
-            \item Real scenarios: emergencies, crowd messaging, widespread IoT
+            \item \textbf{Context}: The world is increasingly populated by IoT and mobile devices that must communicate in dynamic environments.
+
+            \item \textbf{Problem}: Centralized messaging architectures are fragile, difficult to scale, and unsuitable for pervasive and ubiquitous computing scenarios.
+            \item \textbf{Motivation}: Resilient and more adaptive communication is needed.
         \end{itemize}
 
         \column{0.4\textwidth}
@@ -75,22 +77,28 @@ the case of proximity messaging}
 
 %------------------------------------------------
 
-\begin{frame}{Goal}
+\begin{frame}{Goals}
+    This thesis project has two main goals:
      \begin{block}{Goal 1}
-        Algorithm
+        Design and implement a decentralized, proximity-based messaging algorithm based on the principles of Aggregate Computing.    
     \end{block}
-
     \begin{block}{Goal 2}
-        Multi-platform mobile application with targets Android and iOS.
+        Develop a multiplatform (Android/iOS) mobile application that uses the algorithm as core logic.
     \end{block}
 
 \end{frame}
 
 \begin{frame}{Aggregate Computing: The paradigm}
-    
+    What is Aggregate Computing?
     \begin{alertblock}{Aggregate Computing}
-        definition
+        Programming paradigm that treats large, interconnected systems of devices as a single, aggregate machine rather than focusing on individual components.
     \end{alertblock}
+    \textbf{Key Concepts}:
+    \begin{itemize}
+        \item \textbf{Collective behavior}: The focus is on programming the group, or "aggregate," as a whole.
+        \item \textbf{Abstraction}: It provides a higher level of abstraction that hides the complexity of managing individual devices in a vast and dynamic network.
+        \item \textbf{Logic}: The program logic is expressed as the manipulation of data structures that extend spatially and temporally (\textbf{Field Calculus}).
+    \end{itemize}
     
     % In this slide, some important text will be \alert{highlighted} because it's important. Please, don't abuse it.
     
