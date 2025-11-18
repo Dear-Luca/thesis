@@ -58,13 +58,15 @@ the case of proximity messaging}
     \begin{columns}[c]
 
         \column{0.55\textwidth}
-        \begin{itemize}
+        \begin{block}{}
+            \begin{itemize}
             \item \textbf{Context}: The world is increasingly populated by IoT and mobile devices that must communicate in dynamic environments.
 
             \item \textbf{Problem}: Centralized messaging architectures are fragile, difficult to scale, and unsuitable for pervasive and ubiquitous computing scenarios.
             \item \textbf{Motivation}: Resilient and more adaptive communication is needed.
         \end{itemize}
-
+        \end{block}
+        
         \column{0.4\textwidth}
         \begin{figure}
             \fbox{\includegraphics[width=\linewidth]{../thesis/figures/iot-devices.png}}
@@ -95,11 +97,14 @@ the case of proximity messaging}
     \end{block}
     \vspace{0.3cm}
     {\Large\textbf{Key concepts}}
-    \begin{itemize}
+    \begin{block}{}
+        \begin{itemize}
         \item \textbf{Collective behavior}: The focus is on programming the group, or "aggregate," as a whole.
         \item \textbf{Abstraction}: It provides a higher level of abstraction that hides the complexity of managing individual devices in a vast and dynamic network.
         \item \textbf{Logic}: The program logic is expressed as the manipulation of data structures that extend spatially and temporally (\textbf{Field Calculus}).
     \end{itemize}
+    \end{block}
+    
     
     % In this slide, some important text will be \alert{highlighted} because it's important. Please, don't abuse it.
     
@@ -131,8 +136,9 @@ the case of proximity messaging}
 
     \column{0.47\textwidth}
     {\Large\textbf{Technologies}}
-    \vspace{0.2cm}
-    \begin{itemize}
+    \vspace{0.1cm}
+    \begin{block}{}
+        \begin{itemize}
         \setlength\itemsep{1em}
         \item \textbf{AC framework}: Collektive
         \item \textbf{Programming language}: Kotlin
@@ -141,12 +147,10 @@ the case of proximity messaging}
         \item \textbf{Simulator}: Alchemist Simulator
         \item \textbf{Transport Protocol}: MQTT
     \end{itemize}
-
-\end{columns}
-
-        
+    \end{block}
     
-    
+
+\end{columns}    
 \end{frame}
 
 %------------------------------------------------
@@ -157,7 +161,7 @@ the case of proximity messaging}
         \begin{itemize}
             \item \textbf{Objective}: Enable communication between nodes by finding the shortest path (\textbf{gradient}) to the message source.
             \item \textbf{Algorithm Family}: \textbf{Gossip-based} algorithm, which rely on local interactions between nodes to propagate information throughout the network. It uses a \textbf{Bellman-Ford-like} approach to compute the gradient.
-            \item \textbf{Multiple Sources}: The algorithm can handle multiple message sources simultaneously, allowing nodes to receive messages from different origins.
+            \item \textbf{Multiple Sources}: The algorithm can handle multiple message sources, allowing nodes to receive messages from different origins.
             \item \textbf{Parameters}: Maximum propagation distance, expiration time (TTL).
         \end{itemize}
     \end{block}
@@ -166,13 +170,38 @@ the case of proximity messaging}
 %------------------------------------------------
 
 \begin{frame}{Validation \& CI}
-
+    \begin{columns}[c]
+        \column{0.4\textwidth}
+        \begin{block}{}
+            \begin{itemize}
+            \item \textbf{Simulations}: The correctness of the algorithm has been validated and tested using the Alchemist Simulator.
+            \item \textbf{Continuous Integration}: GitHub Actions is used as CI platform to automate the
+                build processes for both the shared codebase and the mobile application.
+        \end{itemize}
+        \end{block}
+        
+        \column{0.55\textwidth}
+         \begin{figure}
+            \begin{figure}
+                \fbox{\includegraphics[width=\linewidth]{../thesis/figures/vienna-marathon.png}}
+                \caption{\scriptsize Simulation of the messaging system using real-world GPS traces. Image taken from Alchemist
+                Simulator illustrating nodes and their communication links.}
+            \end{figure}
+        \end{figure}
+    \end{columns}
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}{Mobile Application (Echo)}
-
+    \begin{columns}
+        \column{0.4\textwidth}
+        \column{0.6\textwidth}
+            \begin{figure}
+                \fbox{\includegraphics[width=0.75\linewidth, height=0.75\textheight]{../thesis/figures/screenshot-echo.png}}
+                \caption{\scriptsize Illustration of the Echo application interface.}
+            \end{figure}
+    \end{columns}
 \end{frame}
 
 % \begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
