@@ -93,7 +93,8 @@ the case of proximity messaging}
     \begin{alertblock}{Aggregate Computing}
         Programming paradigm that treats large, interconnected systems of devices as a single, aggregate machine rather than focusing on individual components.
     \end{alertblock}
-    \textbf{Key Concepts}:
+    \vspace{0.3cm}
+    {\Large\textbf{Key concepts}}
     \begin{itemize}
         \item \textbf{Collective behavior}: The focus is on programming the group, or "aggregate," as a whole.
         \item \textbf{Abstraction}: It provides a higher level of abstraction that hides the complexity of managing individual devices in a vast and dynamic network.
@@ -114,16 +115,37 @@ the case of proximity messaging}
 %------------------------------------------------
 
 \begin{frame}{Project Specifications}
-    \begin{block}{Multi-platform support}
-        The project must be deployable on multiple platforms and targets.
-        
-    \end{block}
+
+    \begin{columns}[T]
+
+    \column{0.47\textwidth}
+    \Large\textbf{Architecture}
+    \begin{figure}
+        \fbox{\includegraphics[width=0.9\linewidth]{../thesis/figures/layered-design.png}}
+        \caption{\scriptsize High-level overview of the architecture.}
+    \end{figure}
+
+    \column{0.02\textwidth}
+    \centering
+    \rule{0.2pt}{0.7\textheight} % larghezza / altezza della linea
+
+    \column{0.47\textwidth}
+    {\Large\textbf{Technologies}}
+    \vspace{0.2cm}
     \begin{itemize}
-        \item \textbf{Aggregate Computing framework}: Collektive
+        \setlength\itemsep{1em}
+        \item \textbf{AC framework}: Collektive
         \item \textbf{Programming language}: Kotlin
-        \item \textbf{Multi-platform framework}: Kotlin Multiplatform
+        \item \textbf{Multi-platform framework}: KMP
+        \item \textbf{GUI}: Compose Multiplatform
         \item \textbf{Simulator}: Alchemist Simulator
+        \item \textbf{Transport Protocol}: MQTT
     \end{itemize}
+
+\end{columns}
+
+        
+    
     
 \end{frame}
 
