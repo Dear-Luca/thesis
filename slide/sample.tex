@@ -5,6 +5,7 @@
 \documentclass[aspectratio=169,xcolor=dvipsnames]{beamer}
 \usetheme{SimpleDarkBlue}
 
+
 \usepackage{hyperref}
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
@@ -12,6 +13,8 @@
 %----------------------------------------------------------------------------------------
 %    TITLE PAGE
 %----------------------------------------------------------------------------------------
+
+
 \title{Multi-platform distributed systems
 with Aggregate Computing in Kotlin:
 the case of proximity messaging}
@@ -60,7 +63,7 @@ the case of proximity messaging}
 \begin{frame}{Overview and Motivations}
     \begin{columns}[c]
 
-        \column{0.55\textwidth}
+        \column{0.50\textwidth}
         \begin{block}{}
             \begin{itemize}
             \item \textbf{Context}: The world is increasingly populated by IoT and mobile devices that must communicate in dynamic environments.
@@ -70,7 +73,7 @@ the case of proximity messaging}
         \end{itemize}
         \end{block}
         
-        \column{0.4\textwidth}
+        \column{0.50\textwidth}
         \begin{figure}
             \fbox{\includegraphics[width=\linewidth]{../thesis/figures/iot-devices.png}}
             \caption{\scriptsize Example of a centralized system for proximity messaging.}
@@ -87,6 +90,7 @@ the case of proximity messaging}
      \begin{block}{Goal 1}
         Design and implement a decentralized, proximity-based messaging algorithm based on the principles of Aggregate Computing.    
     \end{block}
+    \vspace{0.5cm}
     \begin{block}{Goal 2}
         Develop a multiplatform (Android/iOS) mobile application that uses the algorithm as core logic.
     \end{block}
@@ -197,8 +201,19 @@ the case of proximity messaging}
 %------------------------------------------------
 
 \begin{frame}{Mobile Application (Echo)}
-    \begin{columns}
+    \begin{columns}[c]
         \column{0.4\textwidth}
+        The mobile application serves as the \textbf{GUI} of the messaging system.
+        \begin{block}{Features}
+            \begin{itemize}
+                \item \textbf{Cross-platform}: KMP ensures compatibility with both Android and iOS devices.
+                \item \textbf{AC runtime environment}: Collektive Engine.
+                \item \textbf{GPS}: used to compute distances between devices.
+                \item \textbf{MQTT}: used as transport protocol for message dissemination.
+            \end{itemize}
+            
+        \end{block}
+
         \column{0.6\textwidth}
             \begin{figure}
                 \fbox{\includegraphics[width=0.75\linewidth, height=0.75\textheight]{../thesis/figures/screenshot-echo.png}}
@@ -214,7 +229,22 @@ the case of proximity messaging}
 %     This statement requires citation \cite{p1}.
 % \end{frame}
 %------------------------------------------------
-\begin{frame}{Conclusions \& Future Development}
+\begin{frame}{Conclusions}
+
+    \begin{block}{Final considerations}
+        A decentralized messaging system based on the principles of
+        Aggregate Computing has been successfully implemented.
+        
+    \end{block}
+
+    \vspace{0.2cm}
+
+    \begin{block}{Future development}
+        \begin{itemize}
+            \item \textbf{Fully decentralization}: Replace MQTT with a P2P protocol like Bluetooth or Wi-Fi Direct.
+            \item \textbf{Deployment}: Publish Echo on official app stores to test the application in real-world scenarios.
+        \end{itemize}
+    \end{block}
     
 \end{frame}
 
